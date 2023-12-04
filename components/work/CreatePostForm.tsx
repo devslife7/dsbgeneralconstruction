@@ -15,7 +15,6 @@ export default function CreatePostForm() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    console.log("file: ", file)
     setFile(file)
     setFileList(Array.from(e.target.files || []))
 
@@ -88,7 +87,6 @@ export default function CreatePostForm() {
 
 // Preview first file in array of selected items
 const previewFile = (file: File, fileUrl: string) => {
-  console.log("previewFile:", file, fileUrl)
   return (
     <div className="flex gap-4 items-start pb-4 w-full">
       {file.type.startsWith("image/") ? (
