@@ -27,7 +27,7 @@ export default function MediaGalleryButton({ mediaURLS = testGallery, className 
             <div {...attrs} className="flex items-center">
               <div className="mx-auto my-auto max-w-md w-full">
                 <video width="400" height="350" src={videoUrl} controls autoPlay muted>
-                  Sorry, your browser doesn't support HTML5 <code>video</code>
+                  Sorry, your browser doesn&#39;t support HTML5 <code>video</code>
                 </video>
               </div>
             </div>
@@ -35,7 +35,7 @@ export default function MediaGalleryButton({ mediaURLS = testGallery, className 
         }}
       >
         <video width="350" height="450" src={videoUrl} autoPlay muted hidden={index !== 0}>
-          Sorry, your browser doesn't support HTML5 <code>video</code>
+          Sorry, your browser doesn&#39;t support HTML5 <code>video</code>
         </video>
       </PhotoView>
     )
