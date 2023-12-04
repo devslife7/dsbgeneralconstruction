@@ -1,4 +1,3 @@
-"use client"
 import { ClockSVG, HomeSVG, PeopleSVG } from "@/public/svgs"
 
 export default function KeyPoints() {
