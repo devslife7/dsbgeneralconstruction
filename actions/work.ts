@@ -59,3 +59,7 @@ export async function addWork(formData: FormData) {
 
   revalidatePath("/work")
 }
+
+export async function revalidateWorkPage() {
+  revalidatePath("/work")
+}
