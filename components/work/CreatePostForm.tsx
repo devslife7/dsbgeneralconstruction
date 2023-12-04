@@ -3,7 +3,7 @@ import { useRef, useState } from "react"
 import { addWork } from "@/actions/work"
 import Image from "next/image"
 import Button from "../ui/button"
-import { experimental_useFormStatus as useFormStatus } from "react-dom"
+import { useFormStatus } from "react-dom"
 
 export default function CreatePostForm() {
   const ref = useRef<HTMLFormElement>(null)
