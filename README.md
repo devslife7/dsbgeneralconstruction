@@ -34,15 +34,3 @@ To install and run the project locally, follow these steps:
 ## Usage
 
 Once the server is running, access the website through your web browser. Navigate through the different sections to view services, leave reviews, and use the contact form to get in touch with the company.
-
-## Admin Panel
-
-Access the admin panel by logging in with admin credentials. From there, authorized users can manage and update the content displayed on the website.
-
-## Contact
-
-For any inquiries, feedback, or support, please contact us at [email@example.com](mailto:email@example.com) or use the contact form available on the website.
-
-## License
-
-This project is licensed under the [License Name] License - see the [LICENSE](LICENSE) file for details.
