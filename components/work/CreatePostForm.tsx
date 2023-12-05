@@ -35,8 +35,8 @@ export default function CreatePostForm() {
     await addWork(formData)
     toast({
       title: "You are all set!",
-      description: "Successfully created a new work.",
-      variant: "danger",
+      description: "Successfully add new work.",
+      variant: "success",
     })
     if (previewMediaObj) {
       setPreviewMediaObj(undefined)
@@ -45,57 +45,43 @@ export default function CreatePostForm() {
       })
     }
     ref.current?.reset()
+    window.scrollTo(0, 0)
   }
 
   return (
-    <>
-      <form
-        action={submitAction}
-        ref={ref}
-        className="border border-neutral-500 rounded-lg px-6 py-4 max-w-md m-auto"
-      >
-        {/* Input fields */}
-        <div className="flex gap-4 items-start pb-4 w-full">
-          <div className="flex flex-col gap-6 w-full">
-            <label className="text-center text-xl"> Create Work Post</label>
-            <label className="w-full">
-              <input
-                className="bg-transparent flex-1 w-full border-none outline-none text-xl"
-                type="text"
-                name="title"
-                placeholder="Title"
-              />
-            </label>
-            <label className="w-full">
-              <input
-                className="bg-transparent flex-1 w-full border-none outline-none"
-                type="text"
-                name="description"
-                placeholder="Description"
-              />
-            </label>
+    <form
+      action={submitAction}
+      ref={ref}
+      className="border border-neutral-500 rounded-lg px-6 py-4 max-w-md m-auto"
+    >
+      {/* Input fields */}
+      <div className="flex gap-4 items-start pb-4 w-full">
+        <div className="flex flex-col gap-6 w-full">
+          <label className="text-center text-xl"> Create Work Post</label>
+          <label className="w-full">
+            <input
+              className="bg-transparent flex-1 w-full border-none outline-none text-xl"
+              type="text"
+              name="title"
+              placeholder="Title"
+            />
+          </label>
+          <label className="w-full">
+            <input
+              className="bg-transparent flex-1 w-full border-none outline-none"
+              type="text"
+              name="description"
+              placeholder="Description"
+            />
+          </label>
 
-            {previewMediaObj ? previewFile(previewMediaObj) : null}
-
-            {fileInput(handleChange)}
-          </div>
+          {previewMediaObj ? previewFile(previewMediaObj) : null}
+          {fileInput(handleChange)}
         </div>
+      </div>
 
-        <SubmitButton />
-      </form>
-      <button
-        // className=""
-        onClick={() => {
-          toast({
-            title: "Scheduled: Catch Up",
-            description: "Your meeting is starting soon.",
-            variant: "danger",
-          })
-        }}
-      >
-        toast
-      </button>
-    </>
+      <SubmitButton />
+    </form>
   )
 }
 

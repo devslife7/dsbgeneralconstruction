@@ -24,7 +24,7 @@ const acceptedTypes = [
   "video/webm",
 ]
 
-const maxFileSize = 1024 * 1024 * 10 // 10MB
+const MAX_FILE_SIZE = 1024 * 1024 * 10 // 10MB
 
 // Takes in a list of files and uploads them to S3
 export async function uploadFilesToS3(fileList: File[]) {
@@ -65,7 +65,7 @@ export async function getSignedURL(type: string, size: number, checksum: string)
 
   if (!session) return { error: "Not authenticated" }
   if (!acceptedTypes.includes(type)) return { error: "File type not accepted" }
-  if (size > maxFileSize) return { error: "File size too large" }
+  if (size > MAX_FILE_SIZE) return { error: "File size too large" }
 
   const putObjectCommand = new PutObjectCommand({
     Bucket: process.env.AWS_BUCKET_NAME!,

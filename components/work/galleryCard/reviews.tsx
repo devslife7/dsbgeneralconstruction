@@ -68,24 +68,22 @@ export default function Reviews({ work, deleteReview, createReview }: Props) {
             </div>
           </div>
         </DialogTitle>
-        <DialogDescription>
-          {work.Review.length > 0 ? (
-            renderReviews()
-          ) : (
-            <div className="my-10">
-              <div className="text-center opacity-70 mb-4">No reviews yet, be the first one to review.</div>
-            </div>
-          )}
-          <div className="text-center opacity-70 cursor-pointer mb-10" onClick={toggleReviewForm}>
-            <u>add review</u>
+        {work.Review.length > 0 ? (
+          renderReviews()
+        ) : (
+          <div className="my-10">
+            <div className="text-center opacity-50 mb-4">No reviews yet, be the first one to review.</div>
           </div>
-          <CommentForm
-            isCommentFormOpen={isReviewFormOpen}
-            closeCommentForm={closeReviewForm}
-            workId={work.id.toString()}
-            createReview={createReview}
-          />
-        </DialogDescription>
+        )}
+        <div className="text-center opacity-50 cursor-pointer mb-10" onClick={toggleReviewForm}>
+          <u>add review</u>
+        </div>
+        <CommentForm
+          isCommentFormOpen={isReviewFormOpen}
+          closeCommentForm={closeReviewForm}
+          workId={work.id.toString()}
+          createReview={createReview}
+        />
       </DialogHeader>
     </DialogContent>
   )

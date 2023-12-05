@@ -3,6 +3,7 @@ import { prisma } from "../lib/db"
 import { revalidatePath } from "next/cache"
 import { S3Client, DeleteObjectCommand } from "@aws-sdk/client-s3"
 import { uploadFilesToS3 } from "./s3Upload"
+// import { redirect } from "next/navigation"
 
 const s3 = new S3Client({
   region: process.env.AWS_BUCKET_REGION!,
@@ -58,6 +59,7 @@ export async function addWork(formData: FormData) {
   })
 
   revalidatePath("/work")
+  // redirect("/work")
 }
 
 export async function revalidateWorkPage() {
