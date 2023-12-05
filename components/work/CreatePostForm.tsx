@@ -6,18 +6,18 @@ import Button from "../ui/button"
 import { useFormStatus } from "react-dom"
 import { useOptimistic } from "react"
 
-type PreviewMediaType = {
+type PreviewMedia = {
   type: string
   url: string
 }
 
 export default function CreatePostForm() {
   const ref = useRef<HTMLFormElement>(null)
-  const [previewMediaObj, setPreviewMediaObj] = useState<PreviewMediaType[] | undefined>(undefined)
+  const [previewMediaObj, setPreviewMediaObj] = useState<PreviewMedia[] | undefined>(undefined)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileArr: FileList | null = e.target.files as FileList
-    let fileUrlArr: PreviewMediaType[] = []
+    let fileUrlArr: PreviewMedia[] = []
 
     if (previewMediaObj) {
       setPreviewMediaObj(undefined)
@@ -104,7 +104,7 @@ const SubmitButton = () => {
 }
 
 // Preview first file in array of selected items
-const previewFile = (previewMediaObj: PreviewMediaType[]) => {
+const previewFile = (previewMediaObj: PreviewMedia[]) => {
   return (
     // <div className="gap-4 items-start pb-4 bg-red-100 overflow-auto w-[200px] h-[400px]">
     <div className="flex flex-wrap gap-1 items-start pb-4 w-full">

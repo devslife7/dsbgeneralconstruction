@@ -5,15 +5,7 @@ import { useState } from "react"
 import { DeleteSVG, StarFilledSVG } from "@/public/svgs"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
-
-type WorkProps = {
-  id: number
-  title: string
-  description: string
-  media: string[]
-  rating: number
-  Review: any[]
-}
+import { WorkProps } from "@/types"
 
 type Props = {
   work: WorkProps

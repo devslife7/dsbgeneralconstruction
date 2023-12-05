@@ -1,15 +1,7 @@
 import OptionButtons from "./optionButtons"
 import StarFilledSVG from "@/public/svgs/starFilled.svg"
 import MediaGalleryButton from "./mediaGalleryButton"
-
-type WorkProps = {
-  id: number
-  title: string
-  description: string
-  media: string[]
-  rating: number
-  Review: any[]
-}
+import { WorkProps } from "@/types"
 
 export default function GalleryCard({ work }: { work: WorkProps }) {
   return (

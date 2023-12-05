@@ -3,15 +3,7 @@
 import { DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { removeWork } from "@/actions/work"
 import { DeleteSVG, EditSVG } from "@/public/svgs"
-
-type WorkProps = {
-  id: number
-  title: string
-  description: string
-  media: string[]
-  rating: number
-  Review: any[]
-}
+import { WorkProps } from "@/types"
 
 export default function DropdownMenuOptions({ work }: { work: WorkProps }) {
   const handleWorkDelete = async () => {

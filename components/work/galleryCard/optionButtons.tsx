@@ -6,15 +6,7 @@ import Reviews from "./reviews"
 import DropdownMenuOptions from "./dropdownMenuOptions"
 import { deleteReview } from "@/actions/review"
 import { createReview } from "@/actions/review"
-
-type WorkProps = {
-  id: number
-  title: string
-  description: string
-  media: string[]
-  rating: number
-  Review: any[]
-}
+import { WorkProps } from "@/types"
 
 export default function OptionButtons({ work }: { work: WorkProps }) {
   return (
