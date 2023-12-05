@@ -3,9 +3,9 @@
 import { DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { removeWork } from "@/actions/work"
 import { DeleteSVG, EditSVG } from "@/public/svgs"
-import { WorkProps } from "@/types"
+import { Work } from "@/types"
 
-export default function DropdownMenuOptions({ work }: { work: WorkProps }) {
+export default function DropdownMenuOptions({ work }: { work: Work }) {
   const handleWorkDelete = async () => {
     await removeWork(work)
   }

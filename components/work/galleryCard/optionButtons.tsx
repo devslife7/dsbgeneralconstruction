@@ -6,9 +6,9 @@ import Reviews from "./reviews"
 import DropdownMenuOptions from "./dropdownMenuOptions"
 import { deleteReview } from "@/actions/review"
 import { createReview } from "@/actions/review"
-import { WorkProps } from "@/types"
+import { Work } from "@/types"
 
-export default function OptionButtons({ work }: { work: WorkProps }) {
+export default function OptionButtons({ work }: { work: Work }) {
   return (
     <div className="flex items-center border-t border-black/30">
       <Dialog>

@@ -1,4 +1,4 @@
-export type WorkProps = {
+export type Work = {
   id: number
   title: string
   description: string

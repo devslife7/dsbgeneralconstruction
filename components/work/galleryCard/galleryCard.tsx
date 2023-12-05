@@ -1,9 +1,9 @@
 import OptionButtons from "./optionButtons"
 import StarFilledSVG from "@/public/svgs/starFilled.svg"
 import MediaGalleryButton from "./mediaGalleryButton"
-import { WorkProps } from "@/types"
+import { Work } from "@/types"
 
-export default function GalleryCard({ work }: { work: WorkProps }) {
+export default function GalleryCard({ work }: { work: Work }) {
   return (
     <div className="w-full sm:max-w-md lg:max-w-xs h-full bg-white shadow-lg">
       <MediaGalleryButton mediaURLS={work.media} />

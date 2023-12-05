@@ -5,10 +5,10 @@ import { useState } from "react"
 import { DeleteSVG, StarFilledSVG } from "@/public/svgs"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { WorkProps } from "@/types"
+import { Work } from "@/types"
 
 type Props = {
-  work: WorkProps
+  work: Work
   deleteReview: (reviewId: number) => void
   createReview: (data: any, workId: number) => void
 }
