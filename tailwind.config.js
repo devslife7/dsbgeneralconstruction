@@ -32,6 +32,7 @@ module.exports = {
         titillium: ["var(--font-titillium)", "sans-serif"],
       },
       colors: {
+        background: "#f5f5f5",
         primary: {
           DEFAULT: "#FF9001",
           // DEFAULT: "#ffcd11",

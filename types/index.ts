@@ -6,3 +6,13 @@ export type Work = {
   rating: number
   Review: any[]
 }
+
+export type PreviewMedia = {
+  type: string
+  url: string
+}
+
+export type NavLink = {
+  label: string
+  href: string
+}

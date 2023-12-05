@@ -4,6 +4,7 @@ import Footer from "@/components/layout/Footer"
 import type { Metadata } from "next"
 import { Inter, Roboto, Titillium_Web } from "next/font/google"
 import { cn } from "@/lib/utils"
+import { Toaster } from "@/components/ui/toaster"
 
 const inter = Inter({ subsets: ["latin"] })
 const roboto = Roboto({
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={cn("bg-custom-white", inter.className, titillium.variable, roboto.variable)}>
         <Navbar />
         {children}
+        <Toaster />
         <Footer />
       </body>
     </html>

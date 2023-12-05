@@ -4,11 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import MobileNav from "./MobileNav"
 import { LogoSVG, MenuSVG } from "@/public/svgs"
-
-type NavLink = {
-  label: string
-  href: string
-}
+import { NavLink } from "@/types"
 
 const navLinks: NavLink[] = [
   {

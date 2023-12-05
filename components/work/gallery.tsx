@@ -8,7 +8,7 @@ export default async function Gallery() {
       <div className="my-container">
         <h1 className="text-center text-4xl font-bold opacity-70 mb-1">Our Work</h1>
         <p className=" text-center w-full m-auto opacity-60 mb-10">
-          You’re invited to browse a selection of recently completed projects below.
+          You&#39;re invited to browse a selection of recently completed projects below.
         </p>
       </div>
 

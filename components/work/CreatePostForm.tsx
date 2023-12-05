@@ -4,90 +4,93 @@ import { addWork } from "@/actions/work"
 import Image from "next/image"
 import Button from "../ui/button"
 import { useFormStatus } from "react-dom"
-import { useOptimistic } from "react"
+import { PreviewMedia } from "@/types"
+import { useToast } from "@/components/ui/use-toast"
 
-type PreviewMedia = {
-  type: string
-  url: string
+const initialState = {
+  message: null,
 }
 
 export default function CreatePostForm() {
   const ref = useRef<HTMLFormElement>(null)
+  const { toast } = useToast()
   const [previewMediaObj, setPreviewMediaObj] = useState<PreviewMedia[] | undefined>(undefined)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileArr: FileList | null = e.target.files as FileList
     let fileUrlArr: PreviewMedia[] = []
-
     if (previewMediaObj) {
       setPreviewMediaObj(undefined)
       previewMediaObj.forEach(file => {
         URL.revokeObjectURL(file.url)
       })
     }
-
     for (let i = 0; i < fileArr.length; i++) {
       fileUrlArr.push({ type: fileArr[i].type, url: URL.createObjectURL(fileArr[i]) })
     }
-
     setPreviewMediaObj(fileUrlArr)
   }
 
   const submitAction = async (formData: FormData) => {
     await addWork(formData)
-
     if (previewMediaObj) {
       setPreviewMediaObj(undefined)
       previewMediaObj.forEach(file => {
         URL.revokeObjectURL(file.url)
       })
     }
-
     ref.current?.reset()
   }
 
   return (
-    <form
-      action={submitAction}
-      ref={ref}
-      className="border border-neutral-500 rounded-lg px-6 py-4 max-w-md m-auto"
-    >
-      {/* Status message */}
-      {/* {statusMessage && (
-        <p className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 mb-4 rounded relative">
-          {statusMessage}
-        </p>
-      )} */}
+    <>
+      <form
+        action={submitAction}
+        ref={ref}
+        className="border border-neutral-500 rounded-lg px-6 py-4 max-w-md m-auto"
+      >
+        {/* Input fields */}
+        <div className="flex gap-4 items-start pb-4 w-full">
+          <div className="flex flex-col gap-6 w-full">
+            <label className="text-center text-xl"> Create Work Post</label>
+            <label className="w-full">
+              <input
+                className="bg-transparent flex-1 w-full border-none outline-none text-xl"
+                type="text"
+                name="title"
+                placeholder="Title"
+              />
+            </label>
+            <label className="w-full">
+              <input
+                className="bg-transparent flex-1 w-full border-none outline-none"
+                type="text"
+                name="description"
+                placeholder="Description"
+              />
+            </label>
 
-      {/* Input fields */}
-      <div className="flex gap-4 items-start pb-4 w-full">
-        <div className="flex flex-col gap-6 w-full">
-          <label className="text-center text-xl"> Create Work Post</label>
-          <label className="w-full">
-            <input
-              className="bg-transparent flex-1 w-full border-none outline-none text-xl"
-              type="text"
-              name="title"
-              placeholder="Title"
-            />
-          </label>
-          <label className="w-full">
-            <input
-              className="bg-transparent flex-1 w-full border-none outline-none"
-              type="text"
-              name="description"
-              placeholder="Description"
-            />
-          </label>
+            {previewMediaObj ? previewFile(previewMediaObj) : null}
 
-          {previewMediaObj ? previewFile(previewMediaObj) : null}
-
-          {fileInput(handleChange)}
+            {fileInput(handleChange)}
+          </div>
         </div>
-      </div>
 
-      <SubmitButton />
-    </form>
+        <SubmitButton />
+      </form>
+      <button
+        // className=""
+        onClick={() => {
+          toast({
+            title: "Scheduled: Catch Up",
+            description: "Your meeting is starting soon.",
+            variant: "success",
+          })
+        }}
+      >
+        toast
+      </button>
+    </>
   )
 }
 
