@@ -33,6 +33,11 @@ export default function CreatePostForm() {
 
   const submitAction = async (formData: FormData) => {
     await addWork(formData)
+    toast({
+      title: "You are all set!",
+      description: "Successfully created a new work.",
+      variant: "danger",
+    })
     if (previewMediaObj) {
       setPreviewMediaObj(undefined)
       previewMediaObj.forEach(file => {
@@ -84,7 +89,7 @@ export default function CreatePostForm() {
           toast({
             title: "Scheduled: Catch Up",
             description: "Your meeting is starting soon.",
-            variant: "success",
+            variant: "danger",
           })
         }}
       >
