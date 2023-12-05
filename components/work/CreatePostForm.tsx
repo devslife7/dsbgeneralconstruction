@@ -4,38 +4,47 @@ import { addWork } from "@/actions/work"
 import Image from "next/image"
 import Button from "../ui/button"
 import { useFormStatus } from "react-dom"
+import { useOptimistic } from "react"
+
+type PreviewMediaType = {
+  type: string
+  url: string
+}
 
 export default function CreatePostForm() {
   const ref = useRef<HTMLFormElement>(null)
-  const [file, setFile] = useState<File | undefined>(undefined)
-  const [fileList, setFileList] = useState<File[]>([])
-  const [fileUrl, setFileUrl] = useState<string | undefined>(undefined)
-  const [statusMessage, setStatusMessage] = useState("")
-  const { pending } = useFormStatus()
+  const [previewMediaObj, setPreviewMediaObj] = useState<PreviewMediaType[] | undefined>(undefined)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    setFile(file)
-    setFileList(Array.from(e.target.files || []))
+    const fileArr: FileList | null = e.target.files as FileList
+    let fileUrlArr: PreviewMediaType[] = []
 
-    if (fileUrl) {
-      URL.revokeObjectURL(fileUrl)
+    if (previewMediaObj) {
+      setPreviewMediaObj(undefined)
+      previewMediaObj.forEach(file => {
+        URL.revokeObjectURL(file.url)
+      })
     }
 
-    if (file) {
-      const url = URL.createObjectURL(file)
-      setFileUrl(url)
-    } else {
-      setFileUrl(undefined)
+    for (let i = 0; i < fileArr.length; i++) {
+      fileUrlArr.push({ type: fileArr[i].type, url: URL.createObjectURL(fileArr[i]) })
     }
+
+    setPreviewMediaObj(fileUrlArr)
   }
 
   const submitAction = async (formData: FormData) => {
-    setStatusMessage("creating")
     await addWork(formData)
-    setStatusMessage("created")
+
+    if (previewMediaObj) {
+      setPreviewMediaObj(undefined)
+      previewMediaObj.forEach(file => {
+        URL.revokeObjectURL(file.url)
+      })
+    }
+
+    ref.current?.reset()
   }
-  // redeploy
 
   return (
     <form
@@ -44,11 +53,11 @@ export default function CreatePostForm() {
       className="border border-neutral-500 rounded-lg px-6 py-4 max-w-md m-auto"
     >
       {/* Status message */}
-      {statusMessage && (
+      {/* {statusMessage && (
         <p className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 mb-4 rounded relative">
           {statusMessage}
         </p>
-      )}
+      )} */}
 
       {/* Input fields */}
       <div className="flex gap-4 items-start pb-4 w-full">
@@ -71,33 +80,44 @@ export default function CreatePostForm() {
             />
           </label>
 
-          {fileUrl && file ? previewFile(file, fileUrl) : null}
+          {previewMediaObj ? previewFile(previewMediaObj) : null}
 
           {fileInput(handleChange)}
         </div>
       </div>
 
-      <div className="flex justify-between items-center mt-5">
-        <Button aria-disabled={pending} type="submit">
-          Submit
-        </Button>
-      </div>
+      <SubmitButton />
     </form>
   )
 }
 
-// Preview first file in array of selected items
-const previewFile = (file: File, fileUrl: string) => {
+// Submit button using pending state from useFormStatus
+const SubmitButton = () => {
+  const { pending } = useFormStatus()
   return (
-    <div className="flex gap-4 items-start pb-4 w-full">
-      {file.type.startsWith("image/") ? (
-        <div className="rounded-lg h-32 w-32 overflow-hidden relative">
-          <Image className="object-cover" src={fileUrl} alt="preview" priority={true} fill={true} />
-        </div>
-      ) : (
-        <div className="rounded-lg overflow-hidden w-200 h-300 relative">
-          <video className="object-cover" src={fileUrl} autoPlay loop muted />
-        </div>
+    <div className="flex justify-between items-center mt-5">
+      <Button aria-disabled={pending} type="submit">
+        {pending ? "Loading..." : "Submit"}
+      </Button>
+    </div>
+  )
+}
+
+// Preview first file in array of selected items
+const previewFile = (previewMediaObj: PreviewMediaType[]) => {
+  return (
+    // <div className="gap-4 items-start pb-4 bg-red-100 overflow-auto w-[200px] h-[400px]">
+    <div className="flex flex-wrap gap-1 items-start pb-4 w-full">
+      {previewMediaObj.map((file, idx) =>
+        file.type.startsWith("image/") ? (
+          <div key={idx} className="rounded-lg h-32 w-32 overflow-hidden relative">
+            <Image className="object-cover" src={file.url} alt="preview" priority={true} fill={true} />
+          </div>
+        ) : (
+          <div key={idx} className="rounded-lg overflow-hidden w-200 h-300 relative">
+            <video className="object-cover" src={file.url} autoPlay loop muted />
+          </div>
+        )
       )}
     </div>
   )
