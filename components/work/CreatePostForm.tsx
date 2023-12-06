@@ -1,20 +1,20 @@
 "use client"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { addWork } from "@/actions/work"
 import Image from "next/image"
 import Button from "../ui/button"
-import { useFormStatus } from "react-dom"
+import { useFormState, useFormStatus } from "react-dom"
 import { PreviewMedia } from "@/types"
-import { useToast } from "@/components/ui/use-toast"
+import { toast } from "sonner"
 
 const initialState = {
-  message: null,
+  message: "",
 }
 
 export default function CreatePostForm() {
   const ref = useRef<HTMLFormElement>(null)
-  const { toast } = useToast()
   const [previewMediaObj, setPreviewMediaObj] = useState<PreviewMedia[] | undefined>(undefined)
+  // const [formState, formAction] = useFormState(addWork, initialState)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileArr: FileList | null = e.target.files as FileList
@@ -32,12 +32,12 @@ export default function CreatePostForm() {
   }
 
   const submitAction = async (formData: FormData) => {
-    await addWork(formData)
-    toast({
-      title: "You are all set!",
-      description: "Successfully add new work.",
-      variant: "success",
-    })
+    const server = await addWork(formData)
+
+    if (server.status === 200) toast.success(server.message)
+    else toast.error(server.message)
+
+    // reset Form
     if (previewMediaObj) {
       setPreviewMediaObj(undefined)
       previewMediaObj.forEach(file => {

@@ -43,23 +43,32 @@ export async function removeWork(work: any) {
 }
 
 export async function addWork(formData: FormData) {
+  // validate form data
   const title = formData.get("title") as string
   const description = formData.get("description") as string
   const media = formData.getAll("media") as File[]
 
-  // upload media to s3
-  const mediaURLS: string[] | undefined = await uploadFilesToS3(media)
+  try {
+    // upload media to s3
+    throw new Error("Required")
 
-  await prisma.work.create({
-    data: {
-      title,
-      description,
-      media: mediaURLS,
-    },
-  })
+    const mediaURLS: string[] | undefined = await uploadFilesToS3(media)
 
-  revalidatePath("/work")
-  // redirect("/work")
+    await prisma.work.create({
+      data: {
+        title,
+        description,
+        media: mediaURLS,
+      },
+    })
+
+    revalidatePath("/work")
+    // redirect("/work")
+    return { status: 200, message: "Successfully added Work" }
+  } catch (e) {
+    console.error(e)
+    return { status: 500, message: "Failed to add Work" }
+  }
 }
 
 export async function revalidateWorkPage() {
