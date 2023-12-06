@@ -1,6 +1,6 @@
 "use server"
 // import { auth } from "@/auth"
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import crypto from "crypto"
 const generateFileName = (bytes = 32) => crypto.randomBytes(bytes).toString("hex")
@@ -80,6 +80,16 @@ export async function getSignedURL(type: string, size: number, checksum: string)
   })
 
   return { success: { url: signedURL } }
+}
+
+export async function deleteFilesFromS3(work: any) {
+  for (const file of work.media) {
+    const deleteObjectCommand = new DeleteObjectCommand({
+      Bucket: process.env.AWS_BUCKET_NAME!,
+      Key: file.split("/").pop()!,
+    })
+    await s3.send(deleteObjectCommand)
+  }
 }
 
 // Takes an input and produces a fixed-size string of bytes. Output is unique to the input.

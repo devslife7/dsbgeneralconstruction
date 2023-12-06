@@ -1,16 +1,18 @@
 "use server"
 import { prisma } from "../lib/db"
 import { revalidatePath } from "next/cache"
-import { S3Client, DeleteObjectCommand } from "@aws-sdk/client-s3"
-import { uploadFilesToS3 } from "./s3Upload"
+import { deleteFilesFromS3, uploadFilesToS3 } from "./s3Upload"
+import z from "zod"
 // import { redirect } from "next/navigation"
 
-const s3 = new S3Client({
-  region: process.env.AWS_BUCKET_REGION!,
-  credentials: {
-    accessKeyId: process.env.AWS_BUCKET_ACCESS_KEY!,
-    secretAccessKey: process.env.AWS_BUCKET_SECRET_ACCESS_KEY!,
-  },
+const WorkSchema = z.object({
+  title: z.string().trim().min(1, "Title field is required"),
+  description: z.string().min(1, "Description field is required"),
+  media: z
+    .string({
+      required_error: "Media field are required.",
+    })
+    .array(),
 })
 
 export async function getWorkList() {
@@ -24,15 +26,7 @@ export async function getWorkList() {
   })
 }
 export async function removeWork(work: any) {
-  // delete from s3
-  for (const file of work.media) {
-    const deleteObjectCommand = new DeleteObjectCommand({
-      Bucket: process.env.AWS_BUCKET_NAME!,
-      Key: file.split("/").pop()!,
-    })
-    await s3.send(deleteObjectCommand)
-  }
-
+  await deleteFilesFromS3(work)
   await prisma.work.delete({
     where: {
       id: work.id,
@@ -52,6 +46,18 @@ export async function addWork(prevState: any, formData: FormData) {
     // upload media to s3
     const mediaURLS: string[] | undefined = await uploadFilesToS3(media)
 
+    const response = WorkSchema.safeParse({ title, description, media: mediaURLS })
+    if (!response.success) {
+      let errorMessage = ""
+
+      console.log(response.error)
+
+      response.error.issues.forEach(issue => {
+        errorMessage = errorMessage + "\n" + issue.message + "."
+      })
+      return { status: 406, message: errorMessage }
+    }
+
     await prisma.work.create({
       data: {
         title,
@@ -63,7 +69,6 @@ export async function addWork(prevState: any, formData: FormData) {
     revalidatePath("/work")
     // redirect("/work")
     return { status: 200, message: "Successfully added Work" }
-    return { status: 406, message: "validation error here" }
   } catch (e) {
     console.error(e)
     return { status: 500, message: "Failed to add Work" }

@@ -33,9 +33,13 @@ export default function CreatePostForm() {
   }
 
   useEffect(() => {
+    if (formState.status === 406) {
+      toast.error("Validation Error", { description: formState.message })
+      return
+    }
+
     if (formState.status === 200) toast.success(formState.message)
     if (formState.status === 500) toast.error(formState.message)
-    if (formState.status === 406) toast.error(formState.message)
 
     // Reset Form
     setPreviewMediaObj(undefined)
