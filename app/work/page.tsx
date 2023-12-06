@@ -11,12 +11,12 @@ export default function page() {
   }
   return (
     <>
+      <CreatePostForm />
       <Suspense fallback={<div>Loading...</div>}>
         <Gallery />
       </Suspense>
       {/* <AddWorkButton/> */}
       {/* <Button onClick={revalidate}>Revalidate</Button> */}
-      <CreatePostForm />
     </>
   )
 }

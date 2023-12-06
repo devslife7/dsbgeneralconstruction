@@ -6,11 +6,11 @@ import z from "zod"
 // import { redirect } from "next/navigation"
 
 const WorkSchema = z.object({
-  title: z.string().trim().min(1, "Title field is required"),
-  description: z.string().min(1, "Description field is required"),
+  title: z.string().trim().min(1, "Title field is required."),
+  description: z.string().min(1, "Description field is required."),
   media: z
     .string({
-      required_error: "Media field are required.",
+      required_error: "Media field is required.",
     })
     .array(),
 })
@@ -36,7 +36,7 @@ export async function removeWork(work: any) {
   revalidatePath("/work")
 }
 
-export async function addWork(prevState: any, formData: FormData) {
+export async function addWork(formData: FormData) {
   // validate form data
   const title = formData.get("title") as string
   const description = formData.get("description") as string
@@ -53,7 +53,7 @@ export async function addWork(prevState: any, formData: FormData) {
       console.log(response.error)
 
       response.error.issues.forEach(issue => {
-        errorMessage = errorMessage + "\n" + issue.message + "."
+        errorMessage = errorMessage + "\n" + issue.message
       })
       return { status: 406, message: errorMessage }
     }

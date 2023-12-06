@@ -47,8 +47,8 @@ export default function MediaGalleryButton({ mediaURLS = testGallery, className 
         <Image
           src={imageURL}
           alt="Work Image"
-          width={384}
-          height={479}
+          width={640}
+          height={640}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 40vw, 20vw"
           hidden={index !== 0}
           priority={index === 0}
