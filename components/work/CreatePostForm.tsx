@@ -8,13 +8,14 @@ import { PreviewMedia } from "@/types"
 import { toast } from "sonner"
 
 const initialState = {
+  status: 404,
   message: "",
 }
 
 export default function CreatePostForm() {
   const ref = useRef<HTMLFormElement>(null)
   const [previewMediaObj, setPreviewMediaObj] = useState<PreviewMedia[] | undefined>(undefined)
-  // const [formState, formAction] = useFormState(addWork, initialState)
+  const [formState, formAction] = useFormState(addWork, initialState)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileArr: FileList | null = e.target.files as FileList
@@ -31,26 +32,37 @@ export default function CreatePostForm() {
     setPreviewMediaObj(fileUrlArr)
   }
 
-  const submitAction = async (formData: FormData) => {
-    const server = await addWork(formData)
+  useEffect(() => {
+    if (formState.status === 200) toast.success(formState.message)
+    if (formState.status === 500) toast.error(formState.message)
+    if (formState.status === 406) toast.error(formState.message)
 
-    if (server.status === 200) toast.success(server.message)
-    else toast.error(server.message)
-
-    // reset Form
-    if (previewMediaObj) {
-      setPreviewMediaObj(undefined)
-      previewMediaObj.forEach(file => {
-        URL.revokeObjectURL(file.url)
-      })
-    }
-    ref.current?.reset()
+    // Reset Form
+    setPreviewMediaObj(undefined)
     window.scrollTo(0, 0)
-  }
+    ref.current?.reset()
+  }, [formState])
+
+  // const submitAction = async (formData: FormData) => {
+  //   const server = await addWork(formData)
+
+  //   if (server.status === 200) toast.success(server.message)
+  //   else toast.error(server.message)
+
+  //   // reset Form
+  //   if (previewMediaObj) {
+  //     setPreviewMediaObj(undefined)
+  //     previewMediaObj.forEach(file => {
+  //       URL.revokeObjectURL(file.url)
+  //     })
+  //   }
+  //   ref.current?.reset()
+  //   window.scrollTo(0, 0)
+  // }
 
   return (
     <form
-      action={submitAction}
+      action={formAction}
       ref={ref}
       className="border border-neutral-500 rounded-lg px-6 py-4 max-w-md m-auto"
     >
