@@ -32,11 +32,8 @@ export async function addWork(formData: FormData) {
   const media = formData.getAll("media") as File[]
 
   try {
-    // upload media to s3
-    const mediaURLS: string[] | undefined = await uploadFilesToS3(media)
-
     // server-side validation
-    const response = WorkSchema.safeParse({ title, description, media: mediaURLS })
+    const response = WorkSchema.safeParse(formData)
     if (!response.success) {
       let errorMessage = ""
       response.error.issues.forEach(issue => {
@@ -45,6 +42,10 @@ export async function addWork(formData: FormData) {
       return { status: 406, message: errorMessage }
     }
 
+    // upload media to s3
+    const mediaURLS: string[] | undefined = await uploadFilesToS3(media)
+
+    // add work to db
     await prisma.work.create({
       data: {
         title,

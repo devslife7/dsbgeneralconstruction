@@ -10,9 +10,8 @@ export const WorkSchema = z.object({
     .string()
     .min(3, "Description must be at least 3 characters long.")
     .max(128, "Description must be less than 128 characters long."),
-  media: z
-    .array(z.object({ size: z.number().min(1, "Media must have at least one image/video.") }))
-    .or(z.array(z.object({}))),
+  // media: z.array(z.object({ size: z.number().min(1, "Media must have at least one image/video.") })),
+  media: z.array(z.instanceof(File)),
 })
 
 export type WorkType = z.infer<typeof WorkSchema>

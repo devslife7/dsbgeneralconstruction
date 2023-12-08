@@ -48,6 +48,8 @@ export default function CreatePostForm() {
 
     // client-side validation
     const data = WorkSchema.safeParse({ title, description, media })
+    console.log("data: ", data)
+    console.log("media: ", media)
     if (!data.success) {
       let errors: Errors = {}
       data.error.issues.forEach(issue => {
@@ -56,8 +58,10 @@ export default function CreatePostForm() {
       setErrors(errors)
       return
     }
+    // if (media[0].size === 0) errors.media = "Media is required"
 
     const response = await addWork(formData)
+    // console.log("response: ", response)
     if (response.status === 406) {
       toast.error("Validation Error", { description: response.message })
       return
