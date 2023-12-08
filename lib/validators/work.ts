@@ -1,5 +1,4 @@
 import z from "zod"
-import { ReviewSchema } from "./review"
 
 export const WorkSchema = z.object({
   title: z
@@ -11,13 +10,10 @@ export const WorkSchema = z.object({
     .string()
     .min(3, "Description must be at least 3 characters long.")
     .max(128, "Description must be less than 128 characters long."),
-  media: z
-    .string({
-      required_error: "Media must have at least one image/video.",
-    })
-    .array(),
-  rating: z.number(),
-  Review: z.array(ReviewSchema),
+  // media: z.any().array().min(1, "Media must have at least one image/video."),
+  media: z.array(z.object({})).min(1, "Media must have at least one image/video."),
 })
 
 export type WorkType = z.infer<typeof WorkSchema>
+
+// "Media must have at least one image/video."

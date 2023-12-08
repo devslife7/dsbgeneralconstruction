@@ -8,26 +8,15 @@ import { PreviewMedia } from "@/lib/types"
 import { toast } from "sonner"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { PlusSVG } from "@/public/svgs"
-import { useForm, SubmitHandler } from "react-hook-form"
-import { ZodType, z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { WorkSchema, WorkType } from "@/lib/validators/work"
+import { WorkSchema } from "@/lib/validators/work"
 
 export default function CreatePostForm() {
   const ref = useRef<HTMLFormElement>(null)
-  const refDialog = useRef<HTMLFormElement>(null)
   const [previewMediaObj, setPreviewMediaObj] = useState<PreviewMedia[] | undefined>(undefined)
   const [openDialog, setOpenDialog] = useState(false)
+  const [errors, setErrors] = useState<Object>({})
 
   const closerDialog = () => setOpenDialog(false)
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(WorkSchema),
-  })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileArr: FileList | null = e.target.files as FileList
@@ -45,20 +34,39 @@ export default function CreatePostForm() {
   }
 
   const formAction = async (formData: FormData) => {
-    const response = await addWork(formData)
-    if (response.status === 406) {
-      toast.error("Validation Error", { description: response.message })
-      return
-    }
+    // client-side validation
+    const title = formData.get("title") as string
+    const description = formData.get("description") as string
+    const media = formData.getAll("media") as File[]
 
-    if (response.status === 200) toast.success(response.message)
-    if (response.status === 500) toast.error(response.message)
+    const data = WorkSchema.safeParse({ title, description, media })
 
-    // Reset Form
-    closerDialog()
-    setPreviewMediaObj(undefined)
-    window.scrollTo(0, 0)
-    ref.current?.reset()
+    console.log("data: ", data)
+    console.log("media: ", media.entries())
+
+    // const response = WorkSchema.safeParse({ title, description, media: mediaURLS })
+    // if (!response.success) {
+    //   let errorMessage = ""
+    //   response.error.issues.forEach(issue => {
+    //     errorMessage = errorMessage + "\n" + issue.message
+    //   })
+    //   return { status: 406, message: errorMessage }
+    // }
+
+    // const response = await addWork(formData)
+    // if (response.status === 406) {
+    //   toast.error("Validation Error", { description: response.message })
+    //   return
+    // }
+
+    // if (response.status === 200) toast.success(response.message)
+    // if (response.status === 500) toast.error(response.message)
+
+    // // Reset Form
+    // closerDialog()
+    // setPreviewMediaObj(undefined)
+    // window.scrollTo(0, 0)
+    // ref.current?.reset()
   }
 
   return (
@@ -83,6 +91,7 @@ export default function CreatePostForm() {
                 name="title"
                 placeholder="Title"
               />
+              {/* <span className="text-red-400 text-sm">{errors.name?.message}</span> */}
             </div>
             <div>
               <label className="text-gray-700 text-sm font-bold mb-2">Description</label>
@@ -155,7 +164,7 @@ const fileInput = (handleChange: (e: React.ChangeEvent<HTMLInputElement>) => voi
       </svg> */}
       {/* <AttachMediaSVG /> */}
       <input
-        className=" border-none outline-none text-sm"
+        className="border-none outline-none text-sm"
         name="media"
         type="file"
         multiple
