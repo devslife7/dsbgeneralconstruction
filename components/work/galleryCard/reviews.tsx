@@ -5,10 +5,10 @@ import { useState } from "react"
 import { DeleteSVG, StarFilledSVG } from "@/public/svgs"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { Work } from "@/types"
+import { WorkType } from "@/lib/validators/work"
 
 type Props = {
-  work: Work
+  work: WorkType
   deleteReview: (reviewId: number) => void
   createReview: (data: any, workId: number) => void
 }
@@ -44,10 +44,10 @@ export default function Reviews({ work, deleteReview, createReview }: Props) {
             <span className="text-base">{review.rating}</span>
             <StarFilledSVG className="text-primary text-xl mt-[0.1rem]" />
           </div>
-          <DeleteSVG
+          {/* <DeleteSVG
             className="text-red-500 text-3xl hover:cursor-pointer hover:bg-gray-100 rounded-sm"
             onClick={() => handleReviewDelete(review.id)}
-          />
+          /> */}
         </div>
       </div>
     ))
@@ -78,12 +78,12 @@ export default function Reviews({ work, deleteReview, createReview }: Props) {
         <div className="text-center opacity-50 cursor-pointer mb-10" onClick={toggleReviewForm}>
           <u>add review</u>
         </div>
-        <CommentForm
+        {/* <CommentForm
           isCommentFormOpen={isReviewFormOpen}
           closeCommentForm={closeReviewForm}
-          workId={work.id.toString()}
+          // workId={work.id.toString()}
           createReview={createReview}
-        />
+        /> */}
       </DialogHeader>
     </DialogContent>
   )

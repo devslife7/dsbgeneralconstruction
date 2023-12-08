@@ -46,12 +46,10 @@ export async function addWork(formData: FormData) {
     // upload media to s3
     const mediaURLS: string[] | undefined = await uploadFilesToS3(media)
 
+    // server-side validation
     const response = WorkSchema.safeParse({ title, description, media: mediaURLS })
     if (!response.success) {
       let errorMessage = ""
-
-      console.log(response.error)
-
       response.error.issues.forEach(issue => {
         errorMessage = errorMessage + "\n" + issue.message
       })

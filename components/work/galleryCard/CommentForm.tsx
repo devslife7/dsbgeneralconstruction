@@ -15,7 +15,7 @@ type Props = {
 export default function CommentForm({
   isCommentFormOpen,
   closeCommentForm,
-  workId,
+  // workId,
   setWork,
   createReview,
 }: Props) {
@@ -32,7 +32,7 @@ export default function CommentForm({
       comment,
       rating,
     }
-    await createReview(data, Number(workId))
+    // await createReview(data, Number(workId))
     router.refresh()
     resetForm()
     setIsLoading(false)
