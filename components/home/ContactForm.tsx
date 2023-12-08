@@ -4,7 +4,7 @@ import React, { useState } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { ZodType, z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import Button, { buttonStyles } from "../ui/button"
+import Button from "../ui/button"
 import { SpinnerSVG } from "@/public/svgs"
 
 type FormTypes = {
@@ -66,17 +66,17 @@ export default function ContactForm() {
     )
   }
 
-  const inputSyle =
+  const inputStyle =
     "block w-full px-3 py-2 text-sm text-gray-700 bg-backgroundGray border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500"
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="max-w-xl mx-auto space-y-4">
-      <input className={inputSyle} placeholder="Name*" {...register("name")} />
+      <input className={inputStyle} placeholder="Name*" {...register("name")} />
       <span className="text-red-400 text-sm">{errors.name?.message}</span>
-      <input className={inputSyle} placeholder="Email*" {...register("email")} />
+      <input className={inputStyle} placeholder="Email*" {...register("email")} />
       <span className="text-red-400 text-sm">{errors.email?.message}</span>
-      <input className={inputSyle} placeholder="Phone (optional)" {...register("phone")} />
-      <textarea className={inputSyle} placeholder="Message*" rows={5} {...register("message")} />
+      <input className={inputStyle} placeholder="Phone (optional)" {...register("phone")} />
+      <textarea className={inputStyle} placeholder="Message*" rows={5} {...register("message")} />
       <span className="text-red-400 text-sm">{errors.message?.message}</span>
       <Button type="submit" mobile disabled={isLoading}>
         {isLoading && <SpinnerSVG className="text-xl animate-spin" />}

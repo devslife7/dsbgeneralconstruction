@@ -1,24 +1,18 @@
 "use client"
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import { addWork } from "@/actions/work"
 import Image from "next/image"
-import Button from "../ui/button"
-import { useFormState, useFormStatus } from "react-dom"
-import { PreviewMedia } from "@/types"
+import Button, { buttonStyles } from "../ui/button"
+import { useFormStatus } from "react-dom"
+import { PreviewMedia } from "@/lib/types"
 import { toast } from "sonner"
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/dialog"
 import { PlusSVG } from "@/public/svgs"
-
-// const initialState = {
-//   status: 404,
-//   message: "",
-// }
 
 export default function CreatePostForm() {
   const ref = useRef<HTMLFormElement>(null)
   const refDialog = useRef<HTMLFormElement>(null)
   const [previewMediaObj, setPreviewMediaObj] = useState<PreviewMedia[] | undefined>(undefined)
-  // const [formState, formAction] = useFormState(addWork, initialState)
   const [openDialog, setOpenDialog] = useState(false)
 
   const closerDialog = () => setOpenDialog(false)
@@ -57,10 +51,14 @@ export default function CreatePostForm() {
 
   return (
     <Dialog open={openDialog}>
-      <DialogTrigger onClick={() => setOpenDialog(true)} className="w-full text-right pr-5 pb-5 lg:pr-32">
-        {/* <Button>Add Work</Button> */}
-        add work
-      </DialogTrigger>
+      <div className="w-full text-right pr-5 pb-5 lg:pr-32">
+        <DialogTrigger onClick={() => setOpenDialog(true)}>
+          <div className={buttonStyles()}>
+            <PlusSVG className="text-2xl" />
+            Add Work
+          </div>
+        </DialogTrigger>
+      </div>
       <DialogContent>
         <form action={formAction} ref={ref} className="rounded-lg">
           <div className="flex flex-col gap-6 w-full">
