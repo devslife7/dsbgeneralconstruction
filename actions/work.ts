@@ -2,18 +2,7 @@
 import { prisma } from "../lib/db"
 import { revalidatePath } from "next/cache"
 import { deleteFilesFromS3, uploadFilesToS3 } from "./s3Upload"
-import z from "zod"
-// import { redirect } from "next/navigation"
-
-const WorkSchema = z.object({
-  title: z.string().trim().min(1, "Title field is required."),
-  description: z.string().min(1, "Description field is required."),
-  media: z
-    .string({
-      required_error: "Media field is required.",
-    })
-    .array(),
-})
+import { WorkSchema } from "@/lib/validators/work"
 
 export async function getWorkList() {
   return await prisma.work.findMany({

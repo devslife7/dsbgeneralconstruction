@@ -18,7 +18,7 @@ export default function Contact({ className }: { className?: string }) {
         <h3 className="font-medium text-lg opacity-70 lg:text-2xl ">Service Areas:</h3>
         <p className="opacity-60 mb-8 lg:text-lg">
           Northern Virginia, Fairfax, Alexandria, <br />
-          Arlington, Sprinfield, Annandale
+          Arlington, Springfield, Annandale
         </p>
       </div>
 
