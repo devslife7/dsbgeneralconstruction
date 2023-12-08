@@ -9,6 +9,7 @@ import { toast } from "sonner"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { PlusSVG } from "@/public/svgs"
 import { WorkSchema } from "@/lib/validators/work"
+import { Input } from "../ui/input"
 
 type Errors = {
   media?: string
@@ -87,22 +88,21 @@ export default function CreatePostForm() {
             <label className="text-xl opacity-80 font-medium"> Add Work</label>
             <div>
               <label className="text-gray-700 text-sm font-bold mb-2">Title</label>
-              <input
-                className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              <Input
+                placeholder="Title*"
                 type="text"
                 name="title"
-                placeholder="Title"
                 onFocus={() => setErrors({ ...errors, title: "" })}
               />
               <span className="text-red-400 text-sm">{errors.title}</span>
             </div>
             <div>
               <label className="text-gray-700 text-sm font-bold mb-2">Description</label>
-              <input
-                className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+
+              <Input
+                placeholder="Description*"
                 type="text"
                 name="description"
-                placeholder="Description"
                 onFocus={() => setErrors({ ...errors, description: "" })}
               />
               <span className="text-red-400 text-sm">{errors.description}</span>

@@ -6,6 +6,7 @@ import { ZodType, z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Button from "../ui/button"
 import { SpinnerSVG } from "@/public/svgs"
+import { Input } from "../ui/input"
 
 type FormTypes = {
   name: string
@@ -71,14 +72,17 @@ export default function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="max-w-xl mx-auto space-y-4">
-      <input className={inputStyle} placeholder="Name*" {...register("name")} />
+      {/* <input className={inputStyle} placeholder="Name*" {...register("name")} /> */}
+      <Input placeholder="Name*" {...register("name")} />
       <span className="text-red-400 text-sm">{errors.name?.message}</span>
-      <input className={inputStyle} placeholder="Email*" {...register("email")} />
+      {/* <input className={inputStyle} placeholder="Email*" {...register("email")} /> */}
+      <Input placeholder="Email*" {...register("email")} />
       <span className="text-red-400 text-sm">{errors.email?.message}</span>
-      <input className={inputStyle} placeholder="Phone (optional)" {...register("phone")} />
+      {/* <input className={inputStyle} placeholder="Phone (optional)" {...register("phone")} /> */}
+      <Input placeholder="Phone (optional)" {...register("phone")} />
       <textarea className={inputStyle} placeholder="Message*" rows={5} {...register("message")} />
       <span className="text-red-400 text-sm">{errors.message?.message}</span>
-      <Button type="submit" mobile disabled={isLoading}>
+      <Button type="submit" mobile disabled={isLoading} className="block">
         {isLoading && <SpinnerSVG className="text-xl animate-spin" />}
         Submit
       </Button>
