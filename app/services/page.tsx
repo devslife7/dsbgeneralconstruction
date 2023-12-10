@@ -9,7 +9,7 @@ export default function page() {
     <div className="grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-4 xl:container lg:mx-auto xl:px-8 max-sm:space-y-4">
       {servicesData.map((service, idx) => {
         return (
-          <div key={idx} className="text-center sm:max-w-sm sm:pb-20 relative bg-green-200">
+          <div key={idx} className="text-center sm:max-w-sm sm:pb-20 relative">
             <div className="h-[12rem] sm:h-[18rem] max-w-xl sm:max-w-sm relative mx-auto bg-red-200">
               <Image
                 src={service.src}
