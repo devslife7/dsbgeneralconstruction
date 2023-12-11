@@ -8,9 +8,8 @@ import { PreviewMedia } from "@/lib/validators/types"
 import { toast } from "sonner"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { PlusSVG } from "@/public/svgs"
-import { WorkSchema } from "@/lib/validators/work"
+import { WorkSchema, WorkErrors } from "@/lib/validators/work"
 import { Input } from "../ui/input"
-import { WorkErrors } from "@/lib/validators/work"
 import { ACCEPTED_MEDIA_TYPES } from "@/lib/constants"
 
 export default function CreatePostForm() {
@@ -71,7 +70,7 @@ export default function CreatePostForm() {
   }
 
   return (
-    <Dialog open={openDialog}>
+    <Dialog open={true}>
       <div className="w-full text-right pr-5 pb-5 lg:pr-32">
         <DialogTrigger onClick={() => setOpenDialog(true)}>
           <div className={buttonStyles()}>
@@ -106,9 +105,8 @@ export default function CreatePostForm() {
               <span className="text-red-400 text-sm">{errors.description}</span>
             </div>
 
-            {previewMediaObj ? previewFile(previewMediaObj) : null}
-            <div>asdf</div>
-            <label className="my-4">
+            <div>
+              {previewMediaObj ? previewFile(previewMediaObj) : null}
               <input
                 className="border-none outline-none text-sm"
                 name="media"
@@ -119,7 +117,7 @@ export default function CreatePostForm() {
                 onFocus={() => setErrors({ ...errors, media: "" })}
               />
               <span className="text-red-400 text-sm block">{errors.media}</span>
-            </label>
+            </div>
           </div>
 
           <SubmitButton />
@@ -134,7 +132,7 @@ const SubmitButton = () => {
   const { pending } = useFormStatus()
   return (
     <div className="flex justify-between items-center mt-7">
-      <Button aria-disabled={pending} type="submit">
+      <Button aria-disabled={pending} disabled={pending} type="submit">
         {pending ? "Loading..." : "Submit"}
       </Button>
     </div>

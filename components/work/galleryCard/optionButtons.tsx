@@ -27,7 +27,7 @@ export default function OptionButtons({ work }: { work: WorkType }) {
       </div>
       <DropdownMenu>
         <DropdownMenuTrigger className="flex justify-center w-1/6 py-2 text-xs border-l border-black/40">
-          {/* <OptionsSVG className="w-auto text-base opacity-70" /> */}
+          <OptionsSVG className="w-auto text-base opacity-70" />
         </DropdownMenuTrigger>
         <DropdownMenuOptions work={work} />
       </DropdownMenu>

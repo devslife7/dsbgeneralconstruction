@@ -12,7 +12,7 @@ export default function Footer() {
         rel="noopener noreferrer"
         aria-label={link.label}
       >
-        {/* {link.icon} */}
+        {link.icon}
       </Link>
     ))
   }
