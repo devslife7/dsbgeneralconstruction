@@ -4,14 +4,14 @@ import { addWork } from "@/actions/work"
 import Image from "next/image"
 import Button, { buttonStyles } from "../ui/button"
 import { useFormStatus } from "react-dom"
-import { PreviewMedia } from "@/lib/types"
+import { PreviewMedia } from "@/lib/validators/types"
 import { toast } from "sonner"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { PlusSVG } from "@/public/svgs"
 import { WorkSchema } from "@/lib/validators/work"
 import { Input } from "../ui/input"
-import { WorkErrors } from "@/lib/types"
-import { WorkFormType } from "@/lib/types"
+import { WorkErrors } from "@/lib/validators/work"
+import { WorkFormType } from "@/lib/validators/work"
 
 export default function CreatePostForm() {
   const ref = useRef<HTMLFormElement>(null)
@@ -38,14 +38,23 @@ export default function CreatePostForm() {
 
   const formAction = async (formData: FormData) => {
     // client-side validation
-    const parsedData = validateForm(formData)
-    if (!parsedData.success) {
-      setErrors(parsedData.errors)
-      return
-    } else setErrors({})
 
-    const response = await addWork(parsedData.data)
-    console.log("response: ", response)
+    const parsedData = WorkSchema.safeParse({
+      title: formData.get("title") as string,
+      description: formData.get("description") as string,
+      media: formData.getAll("media") as File[],
+    })
+
+    console.log("paredData:", parsedData)
+
+    // const parsedData = validateForm(formData)
+    // if (!parsedData.success) {
+    //   setErrors(parsedData.errors)
+    //   return
+    // } else setErrors({})
+
+    // const response = await addWork(parsedData.data)
+    // console.log("response: ", response)
     // if (response.status === 406) {
     //   toast.error("Validation Error", { description: response.message })
     //   return
@@ -54,10 +63,10 @@ export default function CreatePostForm() {
     // if (response.status === 500) toast.error(response.message)
 
     // Reset Form
-    closerDialog()
-    setPreviewMediaObj(undefined)
-    window.scrollTo(0, 0)
-    ref.current?.reset()
+    // closerDialog()
+    // setPreviewMediaObj(undefined)
+    // window.scrollTo(0, 0)
+    // ref.current?.reset()
   }
 
   return (

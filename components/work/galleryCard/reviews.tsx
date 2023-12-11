@@ -5,7 +5,7 @@ import { useState } from "react"
 import { DeleteSVG, StarFilledSVG } from "@/public/svgs"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { Work } from "@/lib/types"
+import { Work } from "@/lib/validators/types"
 
 type Props = {
   work: Work

@@ -1,7 +1,7 @@
 import OptionButtons from "./optionButtons"
 import StarFilledSVG from "@/public/svgs/starFilled.svg"
 import MediaGalleryButton from "./mediaGalleryButton"
-import { Work } from "@/lib/types"
+import { Work } from "@/lib/validators/types"
 
 export default function GalleryCard({ work }: { work: Work }) {
   return (

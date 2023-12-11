@@ -1,4 +1,6 @@
 import z from "zod"
+import { ReviewType } from "./review"
+import { ACCEPTED_MEDIA_TYPES, MAX_FILE_SIZE } from "../constants"
 
 export const WorkSchema = z.object({
   title: z
@@ -11,7 +13,29 @@ export const WorkSchema = z.object({
     .trim()
     .min(3, "Description must be at least 3 characters long.")
     .max(128, "Description must be less than 128 characters long."),
-  media: z.array(z.instanceof(File)),
+  media: z
+    .array(z.instanceof(File))
+    .refine(files => files.every(file => file.size > 0), "Media requires to have at least one image/video.")
+    .refine(files => files.every(file => file.size > MAX_FILE_SIZE), "Media size should be less than 10MB.")
+    .refine(
+      files => files.every(file => ACCEPTED_MEDIA_TYPES.includes(file.type)),
+      "Only these types are allowed .jpg, .jpeg, .png .webp .gif .mp4 .mov .webm"
+    ),
 })
 
-export type WorkType = z.infer<typeof WorkSchema>
+export type WorkFormType = z.infer<typeof WorkSchema>
+
+export type WorkType = {
+  id: number
+  title: string
+  description: string
+  media: string[]
+  rating: number
+  Review: ReviewType[]
+}
+
+export type WorkErrors = {
+  media?: string
+  title?: string
+  description?: string
+}

@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache"
 import { deleteFilesFromS3, uploadFilesToS3 } from "./s3Upload"
 import { WorkSchema } from "@/lib/validators/work"
 import { WorkType } from "@/lib/validators/work"
-import { WorkFormType } from "@/lib/types"
+import { WorkFormType } from "@/lib/validators/work"
 import { Work } from "@prisma/client"
 
 export async function getWorkList() {
@@ -29,8 +29,32 @@ export async function removeWork(work: any) {
 }
 
 export async function addWork(formData: FormData) {
+  // const validateForm = (formData: FormData) => {
+  //   const title = formData.get("title") as string
+  //   const description = formData.get("description") as string
+  //   const media = formData.getAll("media") as File[]
+
+  //   const resp = WorkSchema.safeParse({ title, description, media })
+  //   let errors: WorkErrors = {}
+  //   if (!resp.success) {
+  //     resp.error.issues.forEach(issue => {
+  //       errors = { ...errors, [issue.path[0]]: issue.message }
+  //     })
+  //   }
+  //   if (media[0].size === 0) errors.media = "Media requires to have at least one image/video"
+
+  //   const isErrsEmpty = Object.keys(errors).length === 0
+  //   return isErrsEmpty
+  //     ? { success: true, errors: {}, data: formData }
+  //     : { success: false, errors: { ...errors }, data: formData }
+  // }
+
   // server-side validation
-  const parsedData = WorkSchema.safeParse(formData)
+  const title = formData.get("title") as string
+  const description = formData.get("description") as string
+  const media = formData.getAll("media") as File[]
+
+  const parsedData = WorkSchema.safeParse({ title, description, media })
   if (!parsedData.success) {
     let errorMessage = ""
     parsedData.error.issues.forEach(issue => {
@@ -38,7 +62,6 @@ export async function addWork(formData: FormData) {
     })
     return { status: 406, message: errorMessage }
   }
-  console.log("parsedData", parsedData)
 
   try {
     // // upload media to s3
@@ -54,7 +77,6 @@ export async function addWork(formData: FormData) {
     // })
 
     revalidatePath("/work")
-    // redirect("/work")
     return { status: 200, message: "Successfully added Work" }
   } catch (e) {
     console.error(e)
