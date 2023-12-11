@@ -10,18 +10,14 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { PlusSVG } from "@/public/svgs"
 import { WorkSchema } from "@/lib/validators/work"
 import { Input } from "../ui/input"
-
-type Errors = {
-  media?: string
-  title?: string
-  description?: string
-}
+import { WorkErrors } from "@/lib/types"
+import { WorkFormType } from "@/lib/types"
 
 export default function CreatePostForm() {
   const ref = useRef<HTMLFormElement>(null)
   const [previewMediaObj, setPreviewMediaObj] = useState<PreviewMedia[] | undefined>(undefined)
   const [openDialog, setOpenDialog] = useState(false)
-  const [errors, setErrors] = useState<Errors>({})
+  const [errors, setErrors] = useState<WorkErrors>({})
 
   const closerDialog = () => setOpenDialog(false)
 
@@ -41,33 +37,21 @@ export default function CreatePostForm() {
   }
 
   const formAction = async (formData: FormData) => {
-    setErrors({})
-    const title = formData.get("title") as string
-    const description = formData.get("description") as string
-    const media = formData.getAll("media") as File[]
-
     // client-side validation
-    const data = WorkSchema.safeParse({ title, description, media })
-    console.log("data: ", data)
-    console.log("media: ", media)
-    if (!data.success) {
-      let errors: Errors = {}
-      data.error.issues.forEach(issue => {
-        errors = { ...errors, [issue.path[0]]: issue.message }
-      })
-      setErrors(errors)
+    const parsedData = validateForm(formData)
+    if (!parsedData.success) {
+      setErrors(parsedData.errors)
       return
-    }
-    // if (media[0].size === 0) errors.media = "Media is required"
+    } else setErrors({})
 
-    const response = await addWork(formData)
-    // console.log("response: ", response)
-    if (response.status === 406) {
-      toast.error("Validation Error", { description: response.message })
-      return
-    }
-    if (response.status === 200) toast.success(response.message)
-    if (response.status === 500) toast.error(response.message)
+    const response = await addWork(parsedData.data)
+    console.log("response: ", response)
+    // if (response.status === 406) {
+    //   toast.error("Validation Error", { description: response.message })
+    //   return
+    // }
+    // if (response.status === 200) toast.success(response.message)
+    // if (response.status === 500) toast.error(response.message)
 
     // Reset Form
     closerDialog()
@@ -132,6 +116,27 @@ export default function CreatePostForm() {
       </DialogContent>
     </Dialog>
   )
+}
+
+// Validates Form Data and returns a validated FormData object
+const validateForm = (formData: FormData) => {
+  const title = formData.get("title") as string
+  const description = formData.get("description") as string
+  const media = formData.getAll("media") as File[]
+
+  const resp = WorkSchema.safeParse({ title, description, media })
+  let errors: WorkErrors = {}
+  if (!resp.success) {
+    resp.error.issues.forEach(issue => {
+      errors = { ...errors, [issue.path[0]]: issue.message }
+    })
+  }
+  if (media[0].size === 0) errors.media = "Media requires to have at least one image/video"
+
+  const isErrsEmpty = Object.keys(errors).length === 0
+  return isErrsEmpty
+    ? { success: true, errors: {}, data: formData }
+    : { success: false, errors: { ...errors }, data: formData }
 }
 
 // Submit button using pending state from useFormStatus

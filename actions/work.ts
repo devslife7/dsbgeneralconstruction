@@ -3,6 +3,9 @@ import { prisma } from "../lib/db"
 import { revalidatePath } from "next/cache"
 import { deleteFilesFromS3, uploadFilesToS3 } from "./s3Upload"
 import { WorkSchema } from "@/lib/validators/work"
+import { WorkType } from "@/lib/validators/work"
+import { WorkFormType } from "@/lib/types"
+import { Work } from "@prisma/client"
 
 export async function getWorkList() {
   return await prisma.work.findMany({
@@ -26,33 +29,29 @@ export async function removeWork(work: any) {
 }
 
 export async function addWork(formData: FormData) {
-  // validate form data
-  const title = formData.get("title") as string
-  const description = formData.get("description") as string
-  const media = formData.getAll("media") as File[]
+  // server-side validation
+  const parsedData = WorkSchema.safeParse(formData)
+  if (!parsedData.success) {
+    let errorMessage = ""
+    parsedData.error.issues.forEach(issue => {
+      errorMessage = errorMessage + "\n" + issue.message
+    })
+    return { status: 406, message: errorMessage }
+  }
+  console.log("parsedData", parsedData)
 
   try {
-    // server-side validation
-    const response = WorkSchema.safeParse(formData)
-    if (!response.success) {
-      let errorMessage = ""
-      response.error.issues.forEach(issue => {
-        errorMessage = errorMessage + "\n" + issue.message
-      })
-      return { status: 406, message: errorMessage }
-    }
+    // // upload media to s3
+    // const mediaURLS: string[] | undefined = await uploadFilesToS3(media)
 
-    // upload media to s3
-    const mediaURLS: string[] | undefined = await uploadFilesToS3(media)
-
-    // add work to db
-    await prisma.work.create({
-      data: {
-        title,
-        description,
-        media: mediaURLS,
-      },
-    })
+    // // add work to db
+    // await prisma.work.create({
+    //   data: {
+    //     title,
+    //     description,
+    //     media: mediaURLS,
+    //   },
+    // })
 
     revalidatePath("/work")
     // redirect("/work")

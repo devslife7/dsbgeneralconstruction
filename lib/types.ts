@@ -14,6 +14,16 @@ export type Work = {
   rating: number
   Review: Review[]
 }
+export type WorkFormType = {
+  title: string
+  description: string
+  media: File[]
+}
+export type WorkErrors = {
+  media?: string
+  title?: string
+  description?: string
+}
 
 export type PreviewMedia = {
   type: string
