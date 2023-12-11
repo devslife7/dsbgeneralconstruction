@@ -16,12 +16,17 @@ export const WorkSchema = z.object({
   media: z
     .array(z.instanceof(File))
     .refine(files => files.every(file => file.size > 0), "Media requires to have at least one image/video.")
-    .refine(files => files.every(file => file.size > MAX_FILE_SIZE), "Media size should be less than 10MB.")
+    .refine(files => files.every(file => file.size < MAX_FILE_SIZE, "File size must be less than 10MB."))
     .refine(
       files => files.every(file => ACCEPTED_MEDIA_TYPES.includes(file.type)),
       "Only these types are allowed .jpg, .jpeg, .png .webp .gif .mp4 .mov .webm"
     ),
 })
+
+// const longString = z.string().refine(
+//   (val) => val.length > 10,
+//   (val) => ({ message: `${val} is not more than 10 characters` })
+// );
 
 export type WorkFormType = z.infer<typeof WorkSchema>
 
