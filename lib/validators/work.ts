@@ -16,7 +16,10 @@ export const WorkSchema = z.object({
   media: z
     .array(z.instanceof(File))
     .refine(files => files.every(file => file.size > 0), "Media requires to have at least one image/video.")
-    .refine(files => files.every(file => file.size < MAX_FILE_SIZE, "File size must be less than 10MB."))
+    .refine(
+      files => files.every(file => file.size < MAX_FILE_SIZE),
+      `Media must be less than ${MAX_FILE_SIZE / 1000000} Megabytes.`
+    )
     .refine(
       files => files.every(file => ACCEPTED_MEDIA_TYPES.includes(file.type)),
       "Only these types are allowed .jpg, .jpeg, .png .webp .gif .mp4 .mov .webm"
