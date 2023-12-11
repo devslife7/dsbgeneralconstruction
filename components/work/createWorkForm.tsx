@@ -127,27 +127,6 @@ export default function CreatePostForm() {
   )
 }
 
-// Validates Form Data and returns a validated FormData object
-const validateForm = (formData: FormData) => {
-  const title = formData.get("title") as string
-  const description = formData.get("description") as string
-  const media = formData.getAll("media") as File[]
-
-  const resp = WorkSchema.safeParse({ title, description, media })
-  let errors: WorkErrors = {}
-  if (!resp.success) {
-    resp.error.issues.forEach(issue => {
-      errors = { ...errors, [issue.path[0]]: issue.message }
-    })
-  }
-  if (media[0].size === 0) errors.media = "Media requires to have at least one image/video"
-
-  const isErrsEmpty = Object.keys(errors).length === 0
-  return isErrsEmpty
-    ? { success: true, errors: {}, data: formData }
-    : { success: false, errors: { ...errors }, data: formData }
-}
-
 // Submit button using pending state from useFormStatus
 const SubmitButton = () => {
   const { pending } = useFormStatus()
