@@ -11,6 +11,7 @@ import { PlusSVG } from "@/public/svgs"
 import { WorkSchema } from "@/lib/validators/work"
 import { Input } from "../ui/input"
 import { WorkErrors } from "@/lib/validators/work"
+import { ACCEPTED_MEDIA_TYPES } from "@/lib/constants"
 
 export default function CreatePostForm() {
   const ref = useRef<HTMLFormElement>(null)
@@ -106,13 +107,14 @@ export default function CreatePostForm() {
             </div>
 
             {previewMediaObj ? previewFile(previewMediaObj) : null}
+            <div>asdf</div>
             <label className="my-4">
               <input
                 className="border-none outline-none text-sm"
                 name="media"
                 type="file"
                 multiple
-                accept="image/jpeg,image/jpg,image/png,image/webp,image/gif,video/mp4,video/webm,video/mov"
+                accept={ACCEPTED_MEDIA_TYPES.join(", ")}
                 onChange={handleChange}
                 onFocus={() => setErrors({ ...errors, media: "" })}
               />

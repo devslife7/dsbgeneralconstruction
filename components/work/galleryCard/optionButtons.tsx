@@ -6,9 +6,9 @@ import Reviews from "./reviews"
 import DropdownMenuOptions from "./dropdownMenuOptions"
 import { deleteReview } from "@/actions/review"
 import { createReview } from "@/actions/review"
-import { Work } from "@/types"
+import { WorkType } from "@/lib/validators/work"
 
-export default function OptionButtons({ work }: { work: Work }) {
+export default function OptionButtons({ work }: { work: WorkType }) {
   return (
     <div className="flex items-center border-t border-black/30">
       <Dialog>
@@ -27,7 +27,7 @@ export default function OptionButtons({ work }: { work: Work }) {
       </div>
       <DropdownMenu>
         <DropdownMenuTrigger className="flex justify-center w-1/6 py-2 text-xs border-l border-black/40">
-          <OptionsSVG className="w-auto text-base opacity-70" />
+          {/* <OptionsSVG className="w-auto text-base opacity-70" /> */}
         </DropdownMenuTrigger>
         <DropdownMenuOptions work={work} />
       </DropdownMenu>

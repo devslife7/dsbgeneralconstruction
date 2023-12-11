@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import MobileNav from "./MobileNav"
 import { LogoSVG, MenuSVG } from "@/public/svgs"
-import { NavLink } from "@/types"
+import { NavLink } from "@/lib/validators/types"
 
 const navLinks: NavLink[] = [
   {
