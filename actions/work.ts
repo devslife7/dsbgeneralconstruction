@@ -3,9 +3,6 @@ import { prisma } from "../lib/db"
 import { revalidatePath } from "next/cache"
 import { deleteFilesFromS3, uploadFilesToS3 } from "./s3Upload"
 import { WorkSchema } from "@/lib/validators/work"
-import { WorkType } from "@/lib/validators/work"
-import { WorkFormType } from "@/lib/validators/work"
-import { Work } from "@prisma/client"
 
 export async function getWorkList() {
   return await prisma.work.findMany({

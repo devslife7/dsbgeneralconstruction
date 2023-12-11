@@ -26,11 +26,6 @@ export const WorkSchema = z.object({
     ),
 })
 
-// const longString = z.string().refine(
-//   (val) => val.length > 10,
-//   (val) => ({ message: `${val} is not more than 10 characters` })
-// );
-
 export type WorkFormType = z.infer<typeof WorkSchema>
 
 export type WorkType = {

@@ -11,8 +11,6 @@ import { PlusSVG } from "@/public/svgs"
 import { WorkSchema } from "@/lib/validators/work"
 import { Input } from "../ui/input"
 import { WorkErrors } from "@/lib/validators/work"
-import { WorkFormType } from "@/lib/validators/work"
-import { MAX_FILE_SIZE } from "@/lib/constants"
 
 export default function CreatePostForm() {
   const ref = useRef<HTMLFormElement>(null)
@@ -39,22 +37,22 @@ export default function CreatePostForm() {
 
   const formAction = async (formData: FormData) => {
     // client-side validation
-    // const parsedData = WorkSchema.safeParse({
-    //   title: formData.get("title"),
-    //   description: formData.get("description"),
-    //   media: formData.getAll("media"),
-    // })
+    const parsedData = WorkSchema.safeParse({
+      title: formData.get("title"),
+      description: formData.get("description"),
+      media: formData.getAll("media"),
+    })
 
-    // if (!parsedData.success) {
-    //   let errors: WorkErrors = {}
-    //   parsedData.error.issues.forEach(issue => {
-    //     errors = { ...errors, [issue.path[0]]: issue.message }
-    //   })
-    //   console.log("errors: ", errors)
-    //   console.log("parsedData: ", parsedData)
-    //   setErrors(errors)
-    //   return
-    // } else setErrors({})
+    if (!parsedData.success) {
+      let errors: WorkErrors = {}
+      parsedData.error.issues.forEach(issue => {
+        errors = { ...errors, [issue.path[0]]: issue.message }
+      })
+      console.log("errors: ", errors)
+      console.log("parsedData: ", parsedData)
+      setErrors(errors)
+      return
+    } else setErrors({})
 
     const response = await addWork(formData)
     if (response.status === 406) {
