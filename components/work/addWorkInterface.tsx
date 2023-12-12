@@ -1,11 +1,11 @@
-"use client";
-import { useState } from "react";
-import { Modal } from "../ui/modal";
-import CreateWorkForm from "./forms/createWorkForm";
-import Button from "../ui/button";
+'use client'
+import { useState } from 'react'
+import { Modal } from '../ui/modal'
+import CreateWorkForm from './forms/createWorkForm'
+import Button from '../ui/button'
 
 export default function AddWorkInterface() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
   return (
     <Modal open={open} onOpenChange={setOpen}>
@@ -16,5 +16,5 @@ export default function AddWorkInterface() {
         <CreateWorkForm />
       </Modal.Content>
     </Modal>
-  );
+  )
 }
