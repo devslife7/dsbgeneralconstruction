@@ -1,16 +1,6 @@
 "use client";
 import { Modal } from "@/components/ui/modal";
 import { useState } from "react";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Button from "@/components/ui/button";
@@ -44,9 +34,7 @@ function TestForm() {
         placeholder="Enter your phone number."
       />
       <Modal.Footer>
-        <Modal.Close>
-          <Button variant="cancel">Cancel</Button>
-        </Modal.Close>
+        <Modal.Close className="mr-5 opacity-70">Cancel</Modal.Close>
         <Button type="submit">Submit</Button>
       </Modal.Footer>
     </form>
