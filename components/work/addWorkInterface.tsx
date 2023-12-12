@@ -9,8 +9,8 @@ export default function AddWorkInterface() {
 
   return (
     <Modal open={open} onOpenChange={setOpen}>
-      <Modal.Button asChild>
-        <Button>Open Modal</Button>
+      <Modal.Button asChild className="flex w-full">
+        <Button>Add Work</Button>
       </Modal.Button>
       <Modal.Content title="Add Work">
         <CreateWorkForm />
