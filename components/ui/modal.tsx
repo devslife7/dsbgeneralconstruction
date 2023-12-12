@@ -11,5 +11,5 @@ export function Modal({
   title = "Title",
   children = <div>Modal Content</div>,
 }: Props) {
-  return <div>My Modal here</div>
+  return <dialog>My Modal here</dialog>
 }
