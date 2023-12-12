@@ -1,9 +1,9 @@
 type Props = {
-  closeModal?: () => void
-  isModalOpen?: boolean
-  title?: string
-  children?: React.ReactNode
-}
+  closeModal?: () => void;
+  isModalOpen?: boolean;
+  title?: string;
+  children?: React.ReactNode;
+};
 
 export function Modal({
   closeModal,
@@ -11,5 +11,5 @@ export function Modal({
   title = "Title",
   children = <div>Modal Content</div>,
 }: Props) {
-  return <dialog>My Modal here</dialog>
+  return <div>My Modal here</div>;
 }
