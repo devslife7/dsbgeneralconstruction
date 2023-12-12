@@ -1,39 +1,46 @@
 "use client";
 import { Modal } from "@/components/ui/modal";
-import { useRef, useState } from "react";
+import { useState } from "react";
+import * as Dialog from "@radix-ui/react-dialog";
 
 export default function TestingModal() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const closeModal = () => setIsModalOpen(false);
-  const dialogRef = useRef<HTMLDialogElement>(null);
+  const [open, setOpen] = useState(false);
+
   return (
-    <div>
-      <button
-        className="bg-orange-400 px-6 py-4 text-xl font-semibold text-white"
-        onClick={() => dialogRef.current?.showModal()}
-      >
-        Open Modal
-      </button>
-      <dialog
-        ref={dialogRef}
-        className="pointer-events-none inset-0 block w-1/3 translate-y-20 bg-green-200
-        p-4 opacity-0 transition-[opacity,transform] duration-300
-        backdrop:backdrop-blur-sm [&[open]]:pointer-events-auto [&[open]]:translate-y-0 [&[open]]:opacity-100"
-      >
-        <button
-          type="button"
-          className="absolute right-0 top-0 m-4"
-          onClick={() => dialogRef.current?.close()}
-        >
-          X
-        </button>
-        <form className="flex flex-col gap-4 bg-blue-300">
-          <input type="text" placeholder="name" />
-          <input type="text" placeholder="email" />
-          <input type="text" placeholder="phone" />
-          <button type="submit">Submit</button>
-        </form>
-      </dialog>
-    </div>
+    <Dialog.Root>
+      <Dialog.Trigger>trigger</Dialog.Trigger>
+
+      <Dialog.Portal>
+        <Dialog.Overlay className="fixed inset-0 bg-black/50 data-[state=closed]:animate-[dialog-overlay-hide_200ms] data-[state=open]:animate-[dialog-overlay-show_200ms]" />
+        <Dialog.Content className="fixed left-1/2 top-1/2 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-8 text-gray-900 shadow data-[state=closed]:animate-[dialog-content-hide_200ms] data-[state=open]:animate-[dialog-content-show_200ms]">
+          <div className="flex items-center justify-between">
+            <Dialog.Title className="text-xl">Title</Dialog.Title>
+            <Dialog.Close className="text-gray-400 hover:text-gray-500">
+              X
+            </Dialog.Close>
+          </div>
+          asdfasdf
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
+  );
+}
+
+// <Modal open={open} onOpenChange={setOpen}>
+//   <Modal.Button>button trigger here</Modal.Button>
+
+//   <Modal.Content title="Edit Contact">
+//     <TestForm />
+//   </Modal.Content>
+// </Modal>
+function TestForm() {
+  return (
+    <form className="flex flex-col gap-4 bg-blue-300">
+      <input type="text" placeholder="name" />
+      <input type="text" placeholder="email" />
+      <input type="text" placeholder="phone" />
+      <button type="submit">Submit</button>
+      <Modal.Close>Cancel</Modal.Close>
+    </form>
   );
 }
