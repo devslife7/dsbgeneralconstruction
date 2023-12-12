@@ -70,7 +70,7 @@ export default function CreatePostForm() {
   }
 
   return (
-    <Dialog open={true}>
+    <Dialog open={openDialog}>
       <div className="w-full text-right pr-5 pb-5 lg:pr-32">
         <DialogTrigger onClick={() => setOpenDialog(true)}>
           <div className={buttonStyles()}>
