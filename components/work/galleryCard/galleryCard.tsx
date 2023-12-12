@@ -1,7 +1,7 @@
-import OptionButtons from "./optionButtons";
-import StarFilledSVG from "@/public/svgs/starFilled.svg";
-import MediaGalleryButton from "./mediaGalleryButton";
-import { WorkType } from "@/lib/validators/work";
+import OptionButtons from "./optionButtons"
+import StarFilledSVG from "@/public/svgs/starFilled.svg"
+import MediaGalleryButton from "./mediaGalleryButton"
+import { WorkType } from "@/lib/validators/work"
 
 export default function GalleryCard({ work }: { work: WorkType }) {
   return (
@@ -22,5 +22,5 @@ export default function GalleryCard({ work }: { work: WorkType }) {
       </div>
       <OptionButtons work={work} />
     </div>
-  );
+  )
 }

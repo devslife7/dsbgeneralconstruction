@@ -1,6 +1,6 @@
-import { Suspense } from "react";
-import Gallery from "@/components/work/gallery";
-import AddWorkInterface from "@/components/work/addWorkInterface";
+import { Suspense } from "react"
+import Gallery from "@/components/work/gallery"
+import AddWorkInterface from "@/components/work/addWorkInterface"
 
 export default function page() {
   return (
@@ -10,5 +10,5 @@ export default function page() {
         <Gallery />
       </Suspense>
     </>
-  );
+  )
 }
