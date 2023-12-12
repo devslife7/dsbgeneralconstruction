@@ -6,9 +6,13 @@ export default function page() {
   return (
     <>
       {/* <AddWorkInterface /> */}
-      <Suspense fallback={<div>Loading...</div>}>
+      {/* <Suspense fallback={<div>Loading...</div>}>
         <Gallery />
-      </Suspense>
+      </Suspense> */}
+      <div>here</div>
+      <div>here</div>
+      <div>here</div>
+      <div>here</div>
     </>
   )
 }
