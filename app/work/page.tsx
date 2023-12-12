@@ -5,8 +5,8 @@ import AddWorkInterface from "@/components/work/addWorkInterface"
 export default function page() {
   return (
     <>
-      {/* <AddWorkInterface />
-      <Suspense fallback={<div>Loading...</div>}>
+      <AddWorkInterface />
+      {/* <Suspense fallback={<div>Loading...</div>}>
         <Gallery />
       </Suspense> */}
       <div>some here</div>

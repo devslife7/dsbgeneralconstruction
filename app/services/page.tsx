@@ -6,11 +6,11 @@ import { servicesData } from "@/lib/data/services"
 
 export default function page() {
   const renderServices = () => (
-    <div className="grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-4 xl:container lg:mx-auto xl:px-8 max-sm:space-y-4">
+    <div className="grid xl:container max-sm:space-y-4 sm:grid-cols-2 sm:gap-4 lg:mx-auto lg:grid-cols-3 xl:px-8">
       {servicesData.map((service, idx) => {
         return (
-          <div key={idx} className="text-center sm:max-w-sm sm:pb-20 relative">
-            <div className="h-[12rem] sm:h-[18rem] max-w-xl sm:max-w-sm relative mx-auto bg-red-200">
+          <div key={idx} className="relative text-center sm:max-w-sm sm:pb-20">
+            <div className="relative mx-auto h-[12rem] max-w-xl sm:h-[18rem] sm:max-w-sm">
               <Image
                 src={service.src}
                 alt={service.title}
@@ -21,11 +21,11 @@ export default function page() {
               />
             </div>
             <div className="my-container hidden sm:block">
-              <h2 className="opacity-80 text-2xl font-medium mb-6 mt-10">{service.title}</h2>
-              <p className="opacity-60  font-light">{service.Description}</p>
+              <h2 className="mb-6 mt-10 text-2xl font-medium opacity-80">{service.title}</h2>
+              <p className="font-light  opacity-60">{service.Description}</p>
             </div>
 
-            <div className="my-container sm:hidden absolute inset-0 flex items-center justify-center bg-black/30 text-3xl text-white font-medium">
+            <div className="my-container absolute inset-0 flex items-center justify-center bg-black/30 text-3xl font-medium text-white sm:hidden">
               {service.title}
             </div>
           </div>
@@ -35,21 +35,21 @@ export default function page() {
   )
 
   return (
-    <div className="pt-10 lg:py-20 space-y-10">
+    <div className="space-y-10 pt-10 lg:py-20">
       <div className="my-container">
-        <h1 className="text-3xl text-center font-semibold opacity-80 mb-2 lg:text-4xl">Our Services</h1>
-        <p className="text-center opacity-60 font-light">Let us help you make your dreams a reality.</p>
+        <h1 className="mb-2 text-center text-3xl font-semibold opacity-80 lg:text-4xl">Our Services</h1>
+        <p className="text-center font-light opacity-60">Let us help you make your dreams a reality.</p>
       </div>
 
       {renderServices()}
 
-      <div className="text-center lg:mt-20 bg-black text-white py-20">
-        <h2 className="font-semibold text-2xl">
+      <div className="bg-black py-20 text-center text-white lg:mt-20">
+        <h2 className="text-2xl font-semibold">
           Create your dream home. <br /> Tell us about your project <br /> today.
         </h2>
 
         <div className="my-container text-center">
-          <Link href="/contact" className={cn(buttonStyles(), "font-light lg:text-lg mt-10")}>
+          <Link href="/contact" className={cn(buttonStyles(), "mt-10 font-light lg:text-lg")}>
             Get A Free Estimate
           </Link>
         </div>
