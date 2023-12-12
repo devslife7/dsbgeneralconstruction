@@ -10,6 +10,7 @@ import { WorkSchema, WorkErrors } from "@/lib/validators/work";
 import { Input } from "../../ui/input";
 import { ACCEPTED_MEDIA_TYPES } from "@/lib/constants";
 import { Label } from "@/components/ui/label";
+import { Modal } from "@/components/ui/modal";
 
 export default function CreateWorkForm() {
   const ref = useRef<HTMLFormElement>(null);
@@ -78,7 +79,6 @@ export default function CreateWorkForm() {
       <div>
         <Label>Title</Label>
         <Input
-          placeholder="Title*"
           type="text"
           name="title"
           onFocus={() => setErrors({ ...errors, title: "" })}
@@ -88,7 +88,6 @@ export default function CreateWorkForm() {
       <div>
         <Label>Description</Label>
         <Input
-          placeholder="Description*"
           type="text"
           name="description"
           onFocus={() => setErrors({ ...errors, description: "" })}
@@ -109,8 +108,10 @@ export default function CreateWorkForm() {
         />
         <span className="block text-sm text-red-400">{errors.media}</span>
       </div>
-
-      <SubmitButton />
+      <Modal.Footer>
+        <Modal.Close className="mr-5 opacity-70">Cancel</Modal.Close>
+        <SubmitButton />
+      </Modal.Footer>
     </form>
   );
 }
@@ -119,7 +120,7 @@ export default function CreateWorkForm() {
 const SubmitButton = () => {
   const { pending } = useFormStatus();
   return (
-    <div className="mt-7 flex items-center justify-between">
+    <div className="flex items-center justify-between">
       <Button aria-disabled={pending} disabled={pending} type="submit">
         {pending ? "Loading..." : "Submit"}
       </Button>
