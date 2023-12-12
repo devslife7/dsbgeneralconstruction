@@ -5,10 +5,11 @@ import AddWorkInterface from "@/components/work/addWorkInterface"
 export default function page() {
   return (
     <>
-      <AddWorkInterface />
+      {/* <AddWorkInterface />
       <Suspense fallback={<div>Loading...</div>}>
         <Gallery />
-      </Suspense>
+      </Suspense> */}
+      <div>some here</div>
     </>
   )
 }
