@@ -13,7 +13,7 @@ export default function GalleryCard({ work }: { work: WorkType }) {
           <div className="mt-2 text-xl opacity-80">{work.title}</div>
           <div className="flex items-center ">
             <span className="mr-[0.1rem] mt-[0.1rem] text-center text-sm opacity-70">
-              {work.rating > 0 ? work.rating.toFixed(1) : work.rating}
+              {work.rating && work.rating > 0 ? work.rating.toFixed(1) : work.rating}
             </span>
             <StarFilledSVG className="text-primary" />
           </div>
