@@ -45,7 +45,7 @@ function ModalContent({
   )
 }
 
-Modal.Button = DialogTrigger
+Modal.Trigger = DialogTrigger
 Modal.Content = ModalContent
 Modal.Close = DialogClose
 Modal.Footer = DialogFooter
