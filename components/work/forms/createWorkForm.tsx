@@ -39,11 +39,12 @@ export default function CreateWorkForm() {
   }
 
   const formAction = async (formData: FormData) => {
-    const title = formData.get("title")
-    const description = formData.get("description")
-    const media = formData.getAll("media")
     // client-side validation
-    const parsedData = WorkSchema.safeParse({ title, description, media })
+    const parsedData = WorkSchema.safeParse({
+      title: formData.get("title"),
+      description: formData.get("description"),
+      media: formData.getAll("media")
+    })
     console.log("parsedData:", parsedData)
     if (!parsedData.success) {
       let errors: WorkErrors = {}
@@ -71,37 +72,36 @@ export default function CreateWorkForm() {
   }
 
   return (
-    <div>form here</div>
-    // <form action={formAction} ref={ref} className="flex w-full flex-col gap-6">
-    //   <div>
-    //     <Label>Title</Label>
-    //     <Input type="text" name="title" onFocus={() => setErrors({ ...errors, title: "" })} />
-    //     <span className="text-sm text-red-400">{errors.title}</span>
-    //   </div>
-    //   <div>
-    //     <Label>Description</Label>
-    //     <Input type="text" name="description" onFocus={() => setErrors({ ...errors, description: "" })} />
-    //     <span className="text-sm text-red-400">{errors.description}</span>
-    //   </div>
+    <form action={formAction} ref={ref} className="flex w-full flex-col gap-6">
+      <div>
+        <Label>Title</Label>
+        <Input type="text" name="title" onFocus={() => setErrors({ ...errors, title: "" })} />
+        <span className="text-sm text-red-400">{errors.title}</span>
+      </div>
+      <div>
+        <Label>Description</Label>
+        <Input type="text" name="description" onFocus={() => setErrors({ ...errors, description: "" })} />
+        <span className="text-sm text-red-400">{errors.description}</span>
+      </div>
 
-    //   <div>
-    //     {previewMediaObj ? previewFile(previewMediaObj) : null}
-    //     <input
-    //       className="border-none text-sm outline-none"
-    //       name="media"
-    //       type="file"
-    //       multiple
-    //       accept={ACCEPTED_MEDIA_TYPES.join(", ")}
-    //       onChange={handleChange}
-    //       onFocus={() => setErrors({ ...errors, media: "" })}
-    //     />
-    //     <span className="block text-sm text-red-400">{errors.media}</span>
-    //   </div>
-    //   <Modal.Footer>
-    //     <Modal.Close className="mr-5 opacity-70">Cancel</Modal.Close>
-    //     <SubmitButton />
-    //   </Modal.Footer>
-    // </form>
+      <div>
+        {previewMediaObj ? previewFile(previewMediaObj) : null}
+        <input
+          className="border-none text-sm outline-none"
+          name="media"
+          type="file"
+          multiple
+          accept={ACCEPTED_MEDIA_TYPES.join(", ")}
+          onChange={handleChange}
+          onFocus={() => setErrors({ ...errors, media: "" })}
+        />
+        <span className="block text-sm text-red-400">{errors.media}</span>
+      </div>
+      <Modal.Footer>
+        <Modal.Close className="mr-5 opacity-70">Cancel</Modal.Close>
+        <SubmitButton />
+      </Modal.Footer>
+    </form>
   )
 }
 
