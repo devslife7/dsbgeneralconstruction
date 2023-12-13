@@ -42,33 +42,32 @@ export default function CreateWorkForm() {
     const title = formData.get("title")
     const description = formData.get("description")
     const media = formData.getAll("media")
-    // throw new Error("formAction not implemented")
     // client-side validation
     const parsedData = WorkSchema.safeParse({ title, description, media })
     console.log("parsedData:", parsedData)
-    // if (!parsedData.success) {
-    //   let errors: WorkErrors = {}
-    //   parsedData.error.issues.forEach(issue => {
-    //     errors = { ...errors, [issue.path[0]]: issue.message }
-    //   })
-    //   console.log("errors: ", errors)
-    //   console.log("parsedData: ", parsedData)
-    //   setErrors(errors)
-    //   return
-    // } else setErrors({})
+    if (!parsedData.success) {
+      let errors: WorkErrors = {}
+      parsedData.error.issues.forEach(issue => {
+        errors = { ...errors, [issue.path[0]]: issue.message }
+      })
+      console.log("errors: ", errors)
+      console.log("parsedData: ", parsedData)
+      setErrors(errors)
+      return
+    } else setErrors({})
     // server action: add work
-    // const response = await addWork(formData)
-    // if (response.status === 406) {
-    //   toast.error("Validation Error", { description: response.message })
-    //   return
-    // }
-    // if (response.status === 200) toast.success(response.message)
-    // if (response.status === 500) toast.error(response.message)
+    const response = await addWork(formData)
+    if (response.status === 406) {
+      toast.error("Validation Error", { description: response.message })
+      return
+    }
+    if (response.status === 200) toast.success(response.message)
+    if (response.status === 500) toast.error(response.message)
     // Reset Form
-    // closerDialog()
-    // setPreviewMediaObj(undefined)
-    // window.scrollTo(0, 0)
-    // ref.current?.reset()
+    closerDialog()
+    setPreviewMediaObj(undefined)
+    window.scrollTo(0, 0)
+    ref.current?.reset()
   }
 
   return (
