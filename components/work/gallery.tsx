@@ -1,8 +1,8 @@
-// import GalleryCard from "./galleryCard/galleryCard"
+import GalleryCard from "./galleryCard/galleryCard"
 import { getWorkList } from "@/actions/work"
 
 export default async function Gallery() {
-  // const gallery = await getWorkList()
+  const gallery = await getWorkList()
   return (
     <div className="mx-auto lg:container lg:mt-10 lg:px-8">
       <div className="my-container">
@@ -12,11 +12,11 @@ export default async function Gallery() {
         </p>
       </div>
 
-      {/* <div className="flex flex-wrap justify-center gap-20 lg:gap-10 lg:justify-start">
-      {gallery.map((work: any, index: number) => (
-        <GalleryCard key={index} work={work} />
-      ))}
-    </div> */}
+      <div className="flex flex-wrap justify-center gap-20 lg:justify-start lg:gap-10">
+        {gallery.map((work: any, index: number) => (
+          <GalleryCard key={index} work={work} />
+        ))}
+      </div>
     </div>
   )
 }
