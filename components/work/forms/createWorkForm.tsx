@@ -13,64 +13,64 @@ import { Label } from "@/components/ui/label"
 import { Modal } from "@/components/ui/modal"
 
 export default function CreateWorkForm() {
-  const ref = useRef<HTMLFormElement>(null)
-  const [previewMediaObj, setPreviewMediaObj] = useState<PreviewMedia[] | undefined>(undefined)
-  const [openDialog, setOpenDialog] = useState(false)
-  const [errors, setErrors] = useState<WorkErrors>({})
+  // const ref = useRef<HTMLFormElement>(null)
+  // const [previewMediaObj, setPreviewMediaObj] = useState<PreviewMedia[] | undefined>(undefined)
+  // const [openDialog, setOpenDialog] = useState(false)
+  // const [errors, setErrors] = useState<WorkErrors>({})
 
-  const closerDialog = () => setOpenDialog(false)
+  // const closerDialog = () => setOpenDialog(false)
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const fileArr: FileList | null = e.target.files as FileList
-    let fileUrlArr: PreviewMedia[] = []
-    if (previewMediaObj) {
-      setPreviewMediaObj(undefined)
-      previewMediaObj.forEach(file => {
-        URL.revokeObjectURL(file.url)
-      })
-    }
-    for (let i = 0; i < fileArr.length; i++) {
-      fileUrlArr.push({
-        type: fileArr[i].type,
-        url: URL.createObjectURL(fileArr[i])
-      })
-    }
-    setPreviewMediaObj(fileUrlArr)
-  }
+  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const fileArr: FileList | null = e.target.files as FileList
+  //   let fileUrlArr: PreviewMedia[] = []
+  //   if (previewMediaObj) {
+  //     setPreviewMediaObj(undefined)
+  //     previewMediaObj.forEach(file => {
+  //       URL.revokeObjectURL(file.url)
+  //     })
+  //   }
+  //   for (let i = 0; i < fileArr.length; i++) {
+  //     fileUrlArr.push({
+  //       type: fileArr[i].type,
+  //       url: URL.createObjectURL(fileArr[i])
+  //     })
+  //   }
+  //   setPreviewMediaObj(fileUrlArr)
+  // }
 
-  const formAction = async (formData: FormData) => {
-    // client-side validation
-    const parsedData = WorkSchema.safeParse({
-      title: formData.get("title"),
-      description: formData.get("description"),
-      media: formData.getAll("media")
-    })
+  // const formAction = async (formData: FormData) => {
+  //   // client-side validation
+  //   const parsedData = WorkSchema.safeParse({
+  //     title: formData.get("title"),
+  //     description: formData.get("description"),
+  //     media: formData.getAll("media")
+  //   })
 
-    if (!parsedData.success) {
-      let errors: WorkErrors = {}
-      parsedData.error.issues.forEach(issue => {
-        errors = { ...errors, [issue.path[0]]: issue.message }
-      })
-      console.log("errors: ", errors)
-      console.log("parsedData: ", parsedData)
-      setErrors(errors)
-      return
-    } else setErrors({})
+  //   if (!parsedData.success) {
+  //     let errors: WorkErrors = {}
+  //     parsedData.error.issues.forEach(issue => {
+  //       errors = { ...errors, [issue.path[0]]: issue.message }
+  //     })
+  //     console.log("errors: ", errors)
+  //     console.log("parsedData: ", parsedData)
+  //     setErrors(errors)
+  //     return
+  //   } else setErrors({})
 
-    const response = await addWork(formData)
-    if (response.status === 406) {
-      toast.error("Validation Error", { description: response.message })
-      return
-    }
-    if (response.status === 200) toast.success(response.message)
-    if (response.status === 500) toast.error(response.message)
+  //   const response = await addWork(formData)
+  //   if (response.status === 406) {
+  //     toast.error("Validation Error", { description: response.message })
+  //     return
+  //   }
+  //   if (response.status === 200) toast.success(response.message)
+  //   if (response.status === 500) toast.error(response.message)
 
-    // Reset Form
-    closerDialog()
-    setPreviewMediaObj(undefined)
-    window.scrollTo(0, 0)
-    ref.current?.reset()
-  }
+  //   // Reset Form
+  //   closerDialog()
+  //   setPreviewMediaObj(undefined)
+  //   window.scrollTo(0, 0)
+  //   ref.current?.reset()
+  // }
 
   return (
     <div>form here</div>
