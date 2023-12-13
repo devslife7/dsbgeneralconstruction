@@ -2,7 +2,7 @@
 import { getWorkList } from "@/actions/work"
 
 export default async function Gallery() {
-  const gallery = await getWorkList()
+  // const gallery = await getWorkList()
   return (
     <div className="mx-auto lg:container lg:mt-10 lg:px-8">
       <div className="my-container">
