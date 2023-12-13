@@ -40,11 +40,11 @@ export default function CreateWorkForm() {
 
   const formAction = async (formData: FormData) => {
     // client-side validation
-    // const parsedData = WorkSchema.safeParse({
-    //   title: formData.get("title"),
-    //   description: formData.get("description"),
-    //   media: formData.getAll("media")
-    // })
+    const parsedData = WorkSchema.safeParse({
+      title: formData.get("title"),
+      description: formData.get("description"),
+      media: formData.getAll("media")
+    })
     // if (!parsedData.success) {
     //   let errors: WorkErrors = {}
     //   parsedData.error.issues.forEach(issue => {
