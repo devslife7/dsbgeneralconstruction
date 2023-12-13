@@ -74,7 +74,8 @@ export default function CreateWorkForm() {
 
   return (
     <form action={formAction} ref={ref} className="flex w-full flex-col gap-6">
-      <div>
+      <div>form here</div>
+      {/* <div>
         <Label>Title</Label>
         <Input type="text" name="title" onFocus={() => setErrors({ ...errors, title: "" })} />
         <span className="text-sm text-red-400">{errors.title}</span>
@@ -101,7 +102,7 @@ export default function CreateWorkForm() {
       <Modal.Footer>
         <Modal.Close className="mr-5 opacity-70">Cancel</Modal.Close>
         <SubmitButton />
-      </Modal.Footer>
+      </Modal.Footer> */}
     </form>
   )
 }
