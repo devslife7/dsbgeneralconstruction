@@ -15,7 +15,8 @@ export default function AddWorkInterface() {
       </Modal.Button>
       <Modal.Content title="Add Work">
         {/* <CreateWorkForm /> */}
-        <Temp />
+        {/* <Temp /> */}
+        <div>asdf</div>
       </Modal.Content>
     </Modal>
   )
