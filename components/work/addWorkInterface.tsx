@@ -13,8 +13,7 @@ export default function AddWorkInterface() {
         <Button>Add Work</Button>
       </Modal.Button>
       <Modal.Content title="Add Work">
-        {/* <CreateWorkForm /> */}
-        <div>form here</div>
+        <CreateWorkForm />
       </Modal.Content>
     </Modal>
   )
