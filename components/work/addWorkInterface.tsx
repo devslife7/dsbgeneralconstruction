@@ -1,8 +1,9 @@
 "use client"
 import { useState } from "react"
 import { Modal } from "../ui/modal"
-import CreateWorkForm from "./forms/createWorkForm"
 import Button from "../ui/button"
+import Temp from "./forms/Temp"
+// import CreateWorkForm from "./forms/CreateWorkForm"
 
 export default function AddWorkInterface() {
   const [open, setOpen] = useState(false)
@@ -13,7 +14,8 @@ export default function AddWorkInterface() {
         <Button>Add Work</Button>
       </Modal.Button>
       <Modal.Content title="Add Work">
-        <CreateWorkForm />
+        {/* <CreateWorkForm /> */}
+        <Temp />
       </Modal.Content>
     </Modal>
   )
