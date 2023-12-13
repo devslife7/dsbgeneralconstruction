@@ -13,30 +13,30 @@ import { Label } from "@/components/ui/label"
 import { Modal } from "@/components/ui/modal"
 
 export default function CreateWorkForm() {
-  // const ref = useRef<HTMLFormElement>(null)
-  // const [previewMediaObj, setPreviewMediaObj] = useState<PreviewMedia[] | undefined>(undefined)
-  // const [openDialog, setOpenDialog] = useState(false)
-  // const [errors, setErrors] = useState<WorkErrors>({})
+  const ref = useRef<HTMLFormElement>(null)
+  const [previewMediaObj, setPreviewMediaObj] = useState<PreviewMedia[] | undefined>(undefined)
+  const [openDialog, setOpenDialog] = useState(false)
+  const [errors, setErrors] = useState<WorkErrors>({})
 
-  // const closerDialog = () => setOpenDialog(false)
+  const closerDialog = () => setOpenDialog(false)
 
-  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const fileArr: FileList | null = e.target.files as FileList
-  //   let fileUrlArr: PreviewMedia[] = []
-  //   if (previewMediaObj) {
-  //     setPreviewMediaObj(undefined)
-  //     previewMediaObj.forEach(file => {
-  //       URL.revokeObjectURL(file.url)
-  //     })
-  //   }
-  //   for (let i = 0; i < fileArr.length; i++) {
-  //     fileUrlArr.push({
-  //       type: fileArr[i].type,
-  //       url: URL.createObjectURL(fileArr[i])
-  //     })
-  //   }
-  //   setPreviewMediaObj(fileUrlArr)
-  // }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const fileArr: FileList | null = e.target.files as FileList
+    let fileUrlArr: PreviewMedia[] = []
+    if (previewMediaObj) {
+      setPreviewMediaObj(undefined)
+      previewMediaObj.forEach(file => {
+        URL.revokeObjectURL(file.url)
+      })
+    }
+    for (let i = 0; i < fileArr.length; i++) {
+      fileUrlArr.push({
+        type: fileArr[i].type,
+        url: URL.createObjectURL(fileArr[i])
+      })
+    }
+    setPreviewMediaObj(fileUrlArr)
+  }
 
   // const formAction = async (formData: FormData) => {
   //   // client-side validation
