@@ -12,10 +12,9 @@ export default function AddWorkInterface() {
       <Modal.Button asChild className="flex w-full">
         <Button>Add Work</Button>
       </Modal.Button>
-      {/* <Modal.Content title="Add Work">
+      <Modal.Content title="Add Work">
         <CreateWorkForm />
-      </Modal.Content> */}
+      </Modal.Content>
     </Modal>
-    // <div>work interface</div>
   )
 }
