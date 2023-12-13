@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog"
+import { cn } from "@/lib/utils"
 
 export function Modal({
   open,
@@ -28,14 +29,16 @@ export function Modal({
 function ModalContent({
   title,
   description,
+  className,
   children
 }: {
   title: string
   description?: string
+  className?: string
   children: React.ReactNode
 }) {
   return (
-    <DialogContent className="sm:max-w-md">
+    <DialogContent className={cn("sm:max-w-md", className)}>
       <DialogHeader>
         <DialogTitle>{title}</DialogTitle>
         <DialogDescription>{description}</DialogDescription>
@@ -47,5 +50,7 @@ function ModalContent({
 
 Modal.Trigger = DialogTrigger
 Modal.Content = ModalContent
-Modal.Close = DialogClose
+Modal.Title = DialogTitle
+Modal.Description = DialogDescription
 Modal.Footer = DialogFooter
+Modal.Close = DialogClose
