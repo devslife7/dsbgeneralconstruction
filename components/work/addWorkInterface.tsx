@@ -3,7 +3,7 @@ import { useState } from "react"
 import { Modal } from "../ui/modal"
 import Button from "../ui/button"
 import Temp from "./forms/Temp"
-// import CreateWorkForm from "./forms/CreateWorkForm"
+import CreateWorkForm from "./forms/createWorkForm"
 
 export default function AddWorkInterface() {
   const [open, setOpen] = useState(false)
@@ -14,9 +14,7 @@ export default function AddWorkInterface() {
         <Button>Add Work</Button>
       </Modal.Button>
       <Modal.Content title="Add Work">
-        {/* <CreateWorkForm /> */}
-        <Temp />
-        <div>asdf</div>
+        <CreateWorkForm />
       </Modal.Content>
     </Modal>
   )
