@@ -42,6 +42,7 @@ export default function CreateWorkForm() {
     const title = formData.get("title")
     const description = formData.get("description")
     const media = formData.getAll("media")
+    throw new Error("formAction not implemented")
     // client-side validation
     // const parsedData = WorkSchema.safeParse({
     //   title: formData.get("title"),
