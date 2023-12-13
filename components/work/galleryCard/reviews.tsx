@@ -23,7 +23,7 @@ export default function Reviews({ work }: { work: WorkType }) {
 
   const renderReviews = () => {
     return work.Review.map((review, index) => (
-      <div key={index} className="my-10">
+      <div key={index} className="py-8">
         <div className="flex gap-2">
           <div className="inline-flex h-10 w-14 items-center justify-center rounded-full bg-gray-800">
             <span className="text-xl uppercase text-white">{review.name.charAt(0)}</span>
@@ -48,7 +48,8 @@ export default function Reviews({ work }: { work: WorkType }) {
   }
 
   return (
-    <DialogContent className={cn("", { "h-full": work.Review.length > 0 })}>
+    // <DialogContent className={cn("", { "h-full": work.Review.length > 0 })}>
+    <DialogContent>
       <DialogHeader>
         <DialogTitle>
           <div className="flex justify-between">
@@ -62,25 +63,23 @@ export default function Reviews({ work }: { work: WorkType }) {
             </div>
           </div>
         </DialogTitle>
-        {work.Review.length > 0
-          ? renderReviews()
-          : !isReviewFormOpen && (
-              <>
-                <div className="my-10">
-                  <div className="mb-4 text-center opacity-50">
-                    No reviews yet, be the first one to review.
-                  </div>
-                </div>
-                <div className="mb-10 cursor-pointer text-center opacity-50" onClick={toggleReviewForm}>
-                  <u>add review</u>
-                </div>
-              </>
-            )}
+        {work.Review.length > 0 ? (
+          renderReviews()
+        ) : (
+          <div className={cn("pb-1 pt-8", { hidden: isReviewFormOpen })}>
+            <div className=" text-center opacity-50">No reviews yet, be the first one to review.</div>
+          </div>
+        )}
+        <div
+          className={cn("cursor-pointer pb-2 text-center opacity-50", { hidden: isReviewFormOpen })}
+          onClick={toggleReviewForm}
+        >
+          <u>add review</u>
+        </div>
         <CommentForm
           isCommentFormOpen={isReviewFormOpen}
           closeCommentForm={closeReviewForm}
           workId={work.id.toString()}
-          // createReview={createReview}
         />
       </DialogHeader>
     </DialogContent>

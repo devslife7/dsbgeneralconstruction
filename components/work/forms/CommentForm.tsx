@@ -63,6 +63,9 @@ export default function CommentForm({ isCommentFormOpen, closeCommentForm, workI
         className="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm placeholder-slate-400 shadow-sm invalid:border-pink-500 invalid:text-pink-600 focus:outline-none focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:border-slate-200 disabled:bg-slate-50 disabled:text-slate-500 disabled:shadow-none"
       />
       <div className="flex justify-end space-x-2">
+        <Button variant="cancel" onClick={resetForm}>
+          Cancel
+        </Button>
         <Button variant="primary" onClick={handleCommentSubmit} disabled={isLoading}>
           {isLoading && <SpinnerSVG className="animate-spin" />}
           Post
