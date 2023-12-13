@@ -39,12 +39,15 @@ export default function CreateWorkForm() {
   }
 
   const formAction = async (formData: FormData) => {
+    const title = formData.get("title")
+    const description = formData.get("description")
+    const media = formData.getAll("media")
     // client-side validation
-    const parsedData = WorkSchema.safeParse({
-      title: formData.get("title"),
-      description: formData.get("description")
-      // media: formData.getAll("media")
-    })
+    // const parsedData = WorkSchema.safeParse({
+    //   title: formData.get("title"),
+    //   description: formData.get("description")
+    //   media: formData.getAll("media")
+    // })
     // if (!parsedData.success) {
     //   let errors: WorkErrors = {}
     //   parsedData.error.issues.forEach(issue => {
