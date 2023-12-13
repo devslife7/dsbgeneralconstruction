@@ -42,8 +42,8 @@ export default function CreateWorkForm() {
     // client-side validation
     const parsedData = WorkSchema.safeParse({
       title: formData.get("title"),
-      description: formData.get("description"),
-      media: formData.getAll("media")
+      description: formData.get("description")
+      // media: formData.getAll("media")
     })
     // if (!parsedData.success) {
     //   let errors: WorkErrors = {}
