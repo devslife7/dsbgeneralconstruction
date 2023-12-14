@@ -76,6 +76,7 @@ export default function MyRating({
         ) : (
           <span className="">{parentRating.toFixed(1)}</span>
         )}
+        sin
       </div>
     </div>
   )

@@ -72,11 +72,7 @@ export default function Reviews({ work }: { work: WorkType }) {
         <u>add review</u>
       </div>
 
-      <ReviewForm
-        isCommentFormOpen={isReviewFormOpen}
-        closeCommentForm={closeReviewForm}
-        workId={work.id.toString()}
-      />
+      <ReviewForm isReviewFormOpen={isReviewFormOpen} closeReviewForm={closeReviewForm} workId={work.id} />
     </Modal.Content>
   )
 }

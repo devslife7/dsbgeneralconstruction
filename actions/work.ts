@@ -7,31 +7,31 @@ import { WorkSchema } from "@/lib/validators/work"
 export async function getWorkList() {
   return await prisma.work.findMany({
     orderBy: {
-      id: "desc",
+      id: "desc"
     },
     include: {
-      Review: true,
-    },
+      Review: true
+    }
   })
 }
 export async function removeWork(work: any) {
   await deleteFilesFromS3(work)
   await prisma.work.delete({
     where: {
-      id: work.id,
-    },
+      id: work.id
+    }
   })
 
   revalidatePath("/work")
 }
 
-export async function addWork(formData: FormData) {
+export async function addWork(data: FormData) {
   // server-side validation
-  const title = formData.get("title") as string
-  const description = formData.get("description") as string
-  const media = formData.getAll("media") as File[]
+  // const title = formData.get("title") as string
+  // const description = formData.get("description") as string
+  // const media = formData.getAll("media") as File[]
 
-  const parsedData = WorkSchema.safeParse({ title, description, media })
+  const parsedData = WorkSchema.safeParse(data)
   if (!parsedData.success) {
     let errorMessage = ""
     parsedData.error.issues.forEach(issue => {
@@ -41,17 +41,17 @@ export async function addWork(formData: FormData) {
   }
 
   try {
-    // // upload media to s3
-    const mediaURLS: string[] | undefined = await uploadFilesToS3(media)
+    // // // upload media to s3
+    // const mediaURLS: string[] | undefined = await uploadFilesToS3(media)
 
-    // // add work to db
-    await prisma.work.create({
-      data: {
-        title,
-        description,
-        media: mediaURLS,
-      },
-    })
+    // // // add work to db
+    // await prisma.work.create({
+    //   data: {
+    //     title,
+    //     description,
+    //     media: mediaURLS
+    //   }
+    // })
 
     revalidatePath("/work")
     return { status: 200, message: "Successfully added Work" }
