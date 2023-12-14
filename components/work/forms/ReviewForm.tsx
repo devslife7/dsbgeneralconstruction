@@ -90,10 +90,19 @@ export default function ReviewForm({ isReviewFormOpen, closeReviewForm, workId }
         <Button variant="cancel" onClick={resetForm}>
           Cancel
         </Button>
-        <Button type="submit" disabled={pending}>
-          {pending ? <SpinnerSVG className="animate-spin" /> : "Post"}
-        </Button>
+        <SubmitButton />
       </div>
     </form>
+  )
+}
+
+const SubmitButton = () => {
+  const { pending } = useFormStatus()
+  return (
+    <div className="flex items-center justify-between">
+      <Button aria-disabled={pending} disabled={pending} type="submit">
+        {pending ? "Loading..." : "Submit"}
+      </Button>
+    </div>
   )
 }
