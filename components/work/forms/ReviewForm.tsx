@@ -1,11 +1,12 @@
 import Button from "@/components/ui/button"
-import { useState } from "react"
-import MyRating from "../../_oldcomponents/work/MyRating"
-import { useRouter } from "next/navigation"
+import { useRef, useState } from "react"
 import { SpinnerSVG } from "@/public/svgs"
 import { cn } from "@/lib/utils"
-import { reviewSchema } from "@/lib/validators/review"
+import { ReviewErrors, reviewSchema } from "@/lib/validators/review"
 import { addReview } from "@/actions/review"
+import { toast } from "sonner"
+import { useFormStatus } from "react-dom"
+import Rating from "@/components/ui/rating"
 
 type Props = {
   isReviewFormOpen: boolean
@@ -13,13 +14,9 @@ type Props = {
   workId: number
 }
 
-export type ReviewErrors = {
-  name?: string
-  comment?: string
-  rating?: string
-}
-
 export default function ReviewForm({ isReviewFormOpen, closeReviewForm, workId }: Props) {
+  const { pending } = useFormStatus()
+  const ref = useRef<HTMLFormElement>(null)
   const [rating, setRating] = useState<number>(0)
   const [errors, setErrors] = useState<ReviewErrors>({})
 
@@ -41,23 +38,31 @@ export default function ReviewForm({ isReviewFormOpen, closeReviewForm, workId }
       return
     } else setErrors({})
 
-    await addReview(parsedData.data)
-    // resetForm()
+    const response = await addReview(parsedData.data)
+    if (response.status === 406) {
+      toast.error("Validation Error", { description: response.message })
+      return
+    }
+    if (response.status === 200) toast.success(response.message)
+    if (response.status === 500) toast.error(response.message)
+
+    resetForm()
   }
 
   const resetForm = () => {
-    setRating(0)
     closeReviewForm()
+    setRating(0)
+    ref.current?.reset()
   }
 
   return (
     <form
       action={submitAction}
-      // className={`mt-5 flex max-w-md flex-col gap-2 ${!isReviewFormOpen && "hidden"}`}
-      className={cn("mt-5 flex max-w-md flex-col gap-2", { hidden: !isReviewFormOpen })}
+      ref={ref}
+      className={cn("mt-5 flex max-w-md flex-col gap-1", { hidden: !isReviewFormOpen })}
     >
       <label className="text-lg font-semibold text-gray-700">Add Review</label>
-      <MyRating
+      <Rating
         readOnly={false}
         reverse
         setRatingParent={setRating}
@@ -85,10 +90,8 @@ export default function ReviewForm({ isReviewFormOpen, closeReviewForm, workId }
         <Button variant="cancel" onClick={resetForm}>
           Cancel
         </Button>
-        {/* <Button variant="primary" onClick={submitAction}> */}
-        <Button type="submit">
-          {/* {isLoading && <SpinnerSVG className="animate-spin" />} */}
-          Post
+        <Button type="submit" disabled={pending}>
+          {pending ? <SpinnerSVG className="animate-spin" /> : "Post"}
         </Button>
       </div>
     </form>

@@ -11,7 +11,7 @@ export default function MediaViewer({ mediaURLS }: { mediaURLS: string[] }) {
         render={({ attrs }) => {
           return (
             <div {...attrs} className="flex items-center">
-              <div className="mx-auto my-auto max-w-[400px] w-[400px]">
+              <div className="mx-auto my-auto w-[400px] max-w-[400px]">
                 <video width="400" height="350" src={videoUrl} controls autoPlay muted>
                   Sorry, your browser doesn&#39;t support HTML5 <code>video</code>
                 </video>
@@ -36,7 +36,7 @@ export default function MediaViewer({ mediaURLS }: { mediaURLS: string[] }) {
           width="0"
           height="0"
           sizes="500px 700px"
-          className="w-full h-auto"
+          className="h-auto w-full"
         />
       </PhotoView>
     )

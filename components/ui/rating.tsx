@@ -17,7 +17,7 @@ type Props = {
   onClick?: () => void
 }
 
-export default function MyRating({
+export default function Rating({
   className,
   readOnly,
   reverse,

@@ -16,3 +16,9 @@ export type ReviewType = {
   rating: number
   workId: number
 }
+
+export type ReviewErrors = {
+  name?: string
+  comment?: string
+  rating?: string
+}
