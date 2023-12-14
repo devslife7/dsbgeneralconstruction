@@ -16,11 +16,9 @@ export default function ReviewForm({ isCommentFormOpen, closeCommentForm, workId
   const [name, setName] = useState("")
   const [comment, setComment] = useState("")
   const [rating, setRating] = useState(0)
-  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
   const handleCommentSubmit = async () => {
-    setIsLoading(true)
     const data = {
       name,
       comment,
@@ -29,7 +27,6 @@ export default function ReviewForm({ isCommentFormOpen, closeCommentForm, workId
     await createReview(data, Number(workId))
     router.refresh()
     resetForm()
-    setIsLoading(false)
   }
 
   const resetForm = () => {
@@ -40,14 +37,9 @@ export default function ReviewForm({ isCommentFormOpen, closeCommentForm, workId
   }
 
   return (
-    <div
-      id="Comments_form"
-      className={`mt-5 flex max-w-md flex-col gap-4 ${!isCommentFormOpen && "hidden"}  p-4`}
-    >
-      <div className="flex justify-between">
-        <label className="text-xl text-gray-700">Comment</label>
-        <MyRating readOnly={false} setRatingParent={setRating} parentRating={rating} />
-      </div>
+    <form className={`mt-5 flex max-w-md flex-col ${!isCommentFormOpen && "hidden"}`}>
+      <label className="text-xl text-gray-700">Add Review</label>
+      <MyRating readOnly={false} reverse setRatingParent={setRating} parentRating={rating} />
       <input
         type="text"
         placeholder="Name..."
@@ -66,11 +58,11 @@ export default function ReviewForm({ isCommentFormOpen, closeCommentForm, workId
         <Button variant="cancel" onClick={resetForm}>
           Cancel
         </Button>
-        <Button variant="primary" onClick={handleCommentSubmit} disabled={isLoading}>
-          {isLoading && <SpinnerSVG className="animate-spin" />}
+        <Button variant="primary" onClick={handleCommentSubmit}>
+          {/* {isLoading && <SpinnerSVG className="animate-spin" />} */}
           Post
         </Button>
       </div>
-    </div>
+    </form>
   )
 }
