@@ -25,12 +25,8 @@ export async function removeWork(work: any) {
   revalidatePath("/work")
 }
 
-export async function addWork(data: FormData) {
+export async function addWork(data: unknown) {
   // server-side validation
-  // const title = formData.get("title") as string
-  // const description = formData.get("description") as string
-  // const media = formData.getAll("media") as File[]
-
   const parsedData = WorkSchema.safeParse(data)
   if (!parsedData.success) {
     let errorMessage = ""
@@ -42,16 +38,16 @@ export async function addWork(data: FormData) {
 
   try {
     // // // upload media to s3
-    // const mediaURLS: string[] | undefined = await uploadFilesToS3(media)
+    const mediaURLS: string[] | undefined = await uploadFilesToS3(parsedData.data.media)
 
-    // // // add work to db
-    // await prisma.work.create({
-    //   data: {
-    //     title,
-    //     description,
-    //     media: mediaURLS
-    //   }
-    // })
+    // // add work to db
+    await prisma.work.create({
+      data: {
+        title: parsedData.data.title,
+        description: parsedData.data.description,
+        media: mediaURLS
+      }
+    })
 
     revalidatePath("/work")
     return { status: 200, message: "Successfully added Work" }

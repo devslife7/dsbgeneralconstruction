@@ -7,7 +7,7 @@ export const reviewSchema = z.object({
   workId: z.number()
 })
 
-export type ReviewSchemaType = z.infer<typeof reviewSchema>
+export type ReviewFormType = z.infer<typeof reviewSchema>
 
 export type ReviewType = {
   id: number
