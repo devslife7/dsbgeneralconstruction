@@ -15,6 +15,7 @@ export const WorkSchema = z.object({
     .max(128, "Description must be less than 128 characters long."),
   media: z
     .array(z.instanceof(File))
+    .max(15, "Media files must be less than 15 files.")
     .refine(files => files.every(file => file.size > 0), "Media requires to have at least one image/video.")
     .refine(
       files => files.every(file => file.size < MAX_FILE_SIZE),
@@ -23,7 +24,7 @@ export const WorkSchema = z.object({
     .refine(
       files => files.every(file => ACCEPTED_MEDIA_TYPES.includes(file.type)),
       "Only these types are allowed .jpg, .jpeg, .png .webp .gif .mp4 .mov .webm"
-    ),
+    )
 })
 
 export type WorkFormType = z.infer<typeof WorkSchema>
