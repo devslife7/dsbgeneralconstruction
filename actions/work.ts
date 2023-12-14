@@ -25,9 +25,14 @@ export async function removeWork(work: any) {
   revalidatePath("/work")
 }
 
-export async function addWork(data: unknown) {
+export async function addWork(formData: FormData) {
+  const newWork = {
+    title: formData.get("title"),
+    description: formData.get("description"),
+    media: formData.getAll("media")
+  }
   // server-side validation
-  const parsedData = WorkSchema.safeParse(data)
+  const parsedData = WorkSchema.safeParse(newWork)
   if (!parsedData.success) {
     let errorMessage = ""
     parsedData.error.issues.forEach(issue => {
