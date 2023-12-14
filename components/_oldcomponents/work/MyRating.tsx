@@ -14,6 +14,7 @@ type Props = {
   size?: number
   setRatingParent?: (star: number) => void
   parentRating?: number
+  onClick?: () => void
 }
 
 export default function MyRating({
@@ -23,7 +24,8 @@ export default function MyRating({
   ratings = [],
   size = 25,
   setRatingParent = () => {},
-  parentRating = 0
+  parentRating = 0,
+  onClick
 }: Props) {
   const getWorkRating = () => {
     if (ratings.length <= 0) return 0
@@ -64,7 +66,10 @@ export default function MyRating({
   }
 
   return (
-    <div className={cn("flex flex-row-reverse text-lg text-gray-600", className, { "justify-end": reverse })}>
+    <div
+      onClick={onClick}
+      className={cn("flex flex-row-reverse text-lg text-gray-600", className, { "justify-end": reverse })}
+    >
       <span className={cn("ml-2", { hidden: !reverse })}>{parentRating.toFixed(1)}</span>
       {renderStars()}
       <div className={cn("mr-2", { hidden: reverse })}>

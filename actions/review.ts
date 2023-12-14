@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache"
 import { prisma } from "../lib/db"
-import { ReviewFormType, reviewSchema } from "@/lib/validators/review"
+import { reviewSchema } from "@/lib/validators/review"
 
 export async function deleteReview(reviewId: number) {
   const deleted = await prisma.review.delete({
@@ -26,19 +26,24 @@ export async function deleteReview(reviewId: number) {
 export async function addReview(data: unknown) {
   const parsedData = reviewSchema.safeParse(data)
   if (!parsedData.success) {
-    return
+    let errorMessage = ""
+    parsedData.error.issues.forEach(issue => {
+      errorMessage = errorMessage + "\n " + issue.message
+    })
+    return { status: 406, message: errorMessage }
   }
-
-  const created = await prisma.review.create({
-    data: {
-      ...parsedData.data,
-      workId: parsedData.data.workId as number
-    }
-  })
-  // const rating = await prisma.review.aggregate({ _avg: { rating: true }, where: { workId } })
-  // await prisma.work.update({
-  //   where: { id: workId },
-  //   data: { rating: rating._avg.rating }
-  // })
-  // return created
+  const workId = parsedData.data.workId as number
+  try {
+    const newReview = await prisma.review.create({ data: parsedData.data })
+    const rating = await prisma.review.aggregate({ _avg: { rating: true }, where: { workId } })
+    await prisma.work.update({
+      where: { id: workId },
+      data: { rating: rating._avg.rating }
+    })
+    revalidatePath("/work")
+    return { status: 200, message: "Successfully added Work" }
+  } catch (e) {
+    console.error(e)
+    return { status: 500, message: "Failed to add Review" }
+  }
 }

@@ -53,13 +53,13 @@ export default function WorkForm({ onOpenChange }: { onOpenChange: (open: boolea
     } else setErrors({})
 
     // server action: add work
-    // const response = await addWork(parsedData.data)
-    // if (response.status === 406) {
-    //   toast.error("Validation Error", { description: response.message })
-    //   return
-    // }
-    // if (response.status === 200) toast.success(response.message)
-    // if (response.status === 500) toast.error(response.message)
+    const response = await addWork(parsedData.data)
+    if (response.status === 406) {
+      toast.error("Validation Error", { description: response.message })
+      return
+    }
+    if (response.status === 200) toast.success(response.message)
+    if (response.status === 500) toast.error(response.message)
 
     // Reset Form
     onOpenChange(false)
