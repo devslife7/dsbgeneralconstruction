@@ -15,7 +15,6 @@ type Props = {
 }
 
 export default function ReviewForm({ isReviewFormOpen, closeReviewForm, workId }: Props) {
-  const { pending } = useFormStatus()
   const ref = useRef<HTMLFormElement>(null)
   const [rating, setRating] = useState<number>(0)
   const [errors, setErrors] = useState<ReviewErrors>({})
@@ -99,10 +98,8 @@ export default function ReviewForm({ isReviewFormOpen, closeReviewForm, workId }
 const SubmitButton = () => {
   const { pending } = useFormStatus()
   return (
-    <div className="flex items-center justify-between">
-      <Button aria-disabled={pending} disabled={pending} type="submit">
-        {pending ? "Loading..." : "Submit"}
-      </Button>
-    </div>
+    <Button disabled={pending} type="submit">
+      {pending ? <SpinnerSVG className="animate-spin" /> : "Post"}
+    </Button>
   )
 }

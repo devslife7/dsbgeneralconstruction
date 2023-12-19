@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import Button from "../ui/button"
 import { SpinnerSVG } from "@/public/svgs"
 import { Input } from "../ui/input"
+import { toast } from "sonner"
 
 type FormTypes = {
   name: string
@@ -23,14 +24,14 @@ const schema: ZodType<FormTypes> = z.object({
     .max(20),
   email: z.string().email(),
   phone: z.string(),
-  message: z.string().max(50).nonempty({ message: "Message is required" }),
+  message: z.string().max(50).nonempty({ message: "Message is required" })
 })
 
 const defaultValues = {
   name: "",
   email: "",
   phone: "",
-  message: "",
+  message: ""
 }
 
 export default function ContactForm() {
@@ -38,10 +39,10 @@ export default function ContactForm() {
     register,
     reset,
     handleSubmit,
-    formState: { errors },
+    formState: { errors }
   } = useForm<FormTypes>({
     resolver: zodResolver(schema),
-    defaultValues: defaultValues,
+    defaultValues: defaultValues
   })
 
   const [isLoading, setIsLoading] = useState(false)
@@ -59,6 +60,7 @@ export default function ContactForm() {
     emailjs.sendForm("service_drybrep", "template_y49hums", formData, "hpeVPBIjR0dTtIqex").then(
       result => {
         setIsLoading(false)
+        toast.success("Message sent successfully")
         reset(defaultValues)
       },
       error => {
@@ -71,20 +73,19 @@ export default function ContactForm() {
     "block w-full px-3 py-2 text-sm text-gray-700 bg-backgroundGray border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500"
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="max-w-xl mx-auto space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="mx-auto max-w-xl space-y-4">
       {/* <input className={inputStyle} placeholder="Name*" {...register("name")} /> */}
       <Input placeholder="Name*" {...register("name")} />
-      <span className="text-red-400 text-sm">{errors.name?.message}</span>
+      <span className="text-sm text-red-400">{errors.name?.message}</span>
       {/* <input className={inputStyle} placeholder="Email*" {...register("email")} /> */}
       <Input placeholder="Email*" {...register("email")} />
-      <span className="text-red-400 text-sm">{errors.email?.message}</span>
+      <span className="text-sm text-red-400">{errors.email?.message}</span>
       {/* <input className={inputStyle} placeholder="Phone (optional)" {...register("phone")} /> */}
       <Input placeholder="Phone (optional)" {...register("phone")} />
       <textarea className={inputStyle} placeholder="Message*" rows={5} {...register("message")} />
-      <span className="text-red-400 text-sm">{errors.message?.message}</span>
-      <Button type="submit" mobile disabled={isLoading} className="block">
-        {isLoading && <SpinnerSVG className="text-xl animate-spin" />}
-        Submit
+      <span className="text-sm text-red-400">{errors.message?.message}</span>
+      <Button type="submit" mobile disabled={isLoading} className="flex">
+        {isLoading ? <SpinnerSVG className="animate-spin text-2xl" /> : "Send"}
       </Button>
     </form>
   )
