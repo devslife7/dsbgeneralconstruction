@@ -60,9 +60,7 @@ export default function Reviews({ work }: { work: WorkType }) {
         <div className="my-2">{renderReviews()}</div>
       ) : (
         <div className={cn("pt-8", { hidden: isReviewFormOpen })}>
-          <div className="text-center text-[1rem] opacity-50">
-            No reviews yet, be the first one to review.
-          </div>
+          <div className="text-center text-sm opacity-50">No reviews yet, be the first one to review.</div>
         </div>
       )}
       <div

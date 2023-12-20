@@ -10,17 +10,17 @@ const inter = Inter({ subsets: ["latin"] })
 const roboto = Roboto({
   subsets: ["latin"],
   weight: ["100", "300", "400", "500", "700", "900"],
-  variable: "--font-roboto",
+  variable: "--font-roboto"
 })
 const titillium = Titillium_Web({
   subsets: ["latin"],
   weight: ["600"],
-  variable: "--font-titillium",
+  variable: "--font-titillium"
 })
 
 export const metadata: Metadata = {
   title: "dsbgeneralconstruction",
-  description: "Home improvement contractor",
+  description: "Home improvement contractor"
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -70,16 +70,33 @@ export default function WorkForm({ onOpenChange }: { onOpenChange: (open: boolea
 
   return (
     <form action={formAction} ref={ref} className="flex w-full flex-col gap-6">
-      <div>
+      {/* <div>
         <Label>Title</Label>
         <Input type="text" name="title" onFocus={() => setErrors({ ...errors, title: "" })} />
         <span className="text-sm text-red-400">{errors.title}</span>
-      </div>
-      <div>
+      </div> */}
+      <Label>
+        <Input
+          type="text"
+          name="title"
+          placeholder="Title*"
+          onFocus={() => setErrors({ ...errors, title: "" })}
+        />
+        <span className="text-sm text-red-400">{errors.title}</span>
+        <Input
+          type="text"
+          name="description"
+          placeholder="Description*"
+          className="mt-4"
+          onFocus={() => setErrors({ ...errors, description: "" })}
+        />
+        <span className="text-sm text-red-400">{errors.description}</span>
+      </Label>
+      {/* <div>
         <Label>Description</Label>
         <Input type="text" name="description" onFocus={() => setErrors({ ...errors, description: "" })} />
         <span className="text-sm text-red-400">{errors.description}</span>
-      </div>
+      </div> */}
 
       <div>
         {previewMediaObj ? previewFile(previewMediaObj) : null}

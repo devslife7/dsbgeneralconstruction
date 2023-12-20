@@ -49,38 +49,41 @@ export default function ContactForm() {
 
   const onSubmit: SubmitHandler<FormTypes> = data => {
     setIsLoading(true)
-    let formData = document.createElement("form")
-    formData.innerHTML = ` 
-            <input name="from_name" value="${data.name}" />
-            <input name="from_email" value="${data.email}" />
-            <input name="from_phone" value="${data.phone}" />
-            <textarea name="from_message">${data.message}</textarea>
-        
-        `
-    emailjs.sendForm("service_drybrep", "template_y49hums", formData, "hpeVPBIjR0dTtIqex").then(
-      result => {
-        setIsLoading(false)
-        toast.success("Message sent successfully")
-        reset(defaultValues)
-      },
-      error => {
-        console.log(error.text)
-      }
-    )
+    // set timer for 3 seconds
+    setTimeout(() => {
+      setIsLoading(false)
+      toast.success("Message sent successfully")
+      reset(defaultValues)
+    }, 3000)
+    // let formData = document.createElement("form")
+    // formData.innerHTML = `
+    //         <input name="from_name" value="${data.name}" />
+    //         <input name="from_email" value="${data.email}" />
+    //         <input name="from_phone" value="${data.phone}" />
+    //         <textarea name="from_message">${data.message}</textarea>
+
+    //     `
+    // emailjs.sendForm("service_drybrep", "template_y49hums", formData, "hpeVPBIjR0dTtIqex").then(
+    //   result => {
+    //     setIsLoading(false)
+    //     toast.success("Message sent successfully")
+    //     reset(defaultValues)
+    //   },
+    //   error => {
+    //     console.log(error.text)
+    //   }
+    // )
   }
 
   const inputStyle =
-    "block w-full px-3 py-2 text-sm text-gray-700 bg-backgroundGray border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500"
+    "block w-full px-3 py-2 text-sm text-gray-700 bg-backgroundGray border rounded-none placeholder-slate-400 focus:outline-none disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500"
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mx-auto max-w-xl space-y-4">
-      {/* <input className={inputStyle} placeholder="Name*" {...register("name")} /> */}
       <Input placeholder="Name*" {...register("name")} />
       <span className="text-sm text-red-400">{errors.name?.message}</span>
-      {/* <input className={inputStyle} placeholder="Email*" {...register("email")} /> */}
       <Input placeholder="Email*" {...register("email")} />
       <span className="text-sm text-red-400">{errors.email?.message}</span>
-      {/* <input className={inputStyle} placeholder="Phone (optional)" {...register("phone")} /> */}
       <Input placeholder="Phone (optional)" {...register("phone")} />
       <textarea className={inputStyle} placeholder="Message*" rows={5} {...register("message")} />
       <span className="text-sm text-red-400">{errors.message?.message}</span>
