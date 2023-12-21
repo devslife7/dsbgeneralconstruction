@@ -5,14 +5,21 @@ import Image from "next/image"
 import Button from "../../ui/button"
 import { PreviewMedia } from "@/lib/validators/types"
 import { toast } from "sonner"
-import { WorkSchema, WorkErrors } from "@/lib/validators/work"
+import { WorkSchema, WorkErrors, WorkType } from "@/lib/validators/work"
 import { Input } from "../../ui/input"
 import { ACCEPTED_MEDIA_TYPES } from "@/lib/constants"
 import { Modal } from "@/components/ui/modal"
 import { useFormStatus } from "react-dom"
 import { SpinnerSVG } from "@/public/svgs"
+import { cn } from "@/lib/utils"
 
-export default function WorkForm({ onOpenChange }: { onOpenChange: (open: boolean) => void }) {
+export default function WorkForm({
+  onOpenChange,
+  work
+}: {
+  onOpenChange?: (open: boolean) => void
+  work?: WorkType
+}) {
   const ref = useRef<HTMLFormElement>(null)
   const [previewMediaObj, setPreviewMediaObj] = useState<PreviewMedia[] | undefined>(undefined)
   const [errors, setErrors] = useState<WorkErrors>({})
@@ -62,7 +69,7 @@ export default function WorkForm({ onOpenChange }: { onOpenChange: (open: boolea
     if (response.status === 500) toast.error(response.message)
 
     // Reset Form
-    onOpenChange(false)
+    onOpenChange && onOpenChange(false)
     setPreviewMediaObj(undefined)
     window.scrollTo(0, 0)
     ref.current?.reset()
@@ -71,29 +78,34 @@ export default function WorkForm({ onOpenChange }: { onOpenChange: (open: boolea
   return (
     <form action={formAction} ref={ref} className="w-full space-y-6">
       <Input
+        autoFocus={false}
         name="title"
         placeholder="Title*"
         onFocus={() => setErrors({ ...errors, title: "" })}
         errors={errors.title}
+        defaultValue={work?.title}
       />
       <Input
         name="description"
         placeholder="Description*"
         onFocus={() => setErrors({ ...errors, description: "" })}
         errors={errors.description}
+        defaultValue={work?.description}
       />
 
-      {previewMediaObj ? previewFile(previewMediaObj) : null}
-      <Input
-        className="cursor-pointer"
-        name="media"
-        type="file"
-        multiple
-        accept={ACCEPTED_MEDIA_TYPES.join(", ")}
-        onChange={handleChange}
-        onFocus={() => setErrors({ ...errors, media: "" })}
-        errors={errors.media}
-      />
+      <div className={cn({ hidden: work })}>
+        {previewMediaObj ? previewFile(previewMediaObj) : null}
+        <Input
+          className="cursor-pointer"
+          name="media"
+          type="file"
+          multiple
+          accept={ACCEPTED_MEDIA_TYPES.join(", ")}
+          onChange={handleChange}
+          onFocus={() => setErrors({ ...errors, media: "" })}
+          errors={errors.media}
+        />
+      </div>
       <FormButtons />
     </form>
   )

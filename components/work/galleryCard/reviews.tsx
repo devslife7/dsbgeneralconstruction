@@ -1,7 +1,6 @@
 "use client"
 import { useState } from "react"
 import { DeleteSVG, StarFilledSVG } from "@/public/svgs"
-import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { WorkType } from "@/lib/validators/work"
 import { deleteReview } from "@/actions/review"
@@ -13,10 +12,6 @@ export default function Reviews({ work }: { work: WorkType }) {
 
   const closeReviewForm = () => setIsReviewFormOpen(false)
   const toggleReviewForm = () => setIsReviewFormOpen(prevState => !prevState)
-
-  // const handleReviewDelete = async (reviewId: number) => {
-  //   await deleteReview(reviewId)
-  // }
 
   const renderReviews = () => {
     return work.Review.map((review, index) => (
@@ -46,16 +41,6 @@ export default function Reviews({ work }: { work: WorkType }) {
 
   return (
     <Modal.Content title="Reviews" className="sm:max-w-sm">
-      {/* <div className="flex justify-between">
-        <div>
-          <div className="mb-0 text-xl opacity-70">{work.title}</div>
-          <div className="text-lg font-normal opacity-50">{work.description}</div>
-        </div>
-        <div className="flex">
-          <div className="mr-1 mt-[0.1rem] text-xl font-normal opacity-70">{work.rating.toFixed(1)}</div>
-          <StarFilledSVG className="text-[1.7rem] text-primary" />
-        </div>
-      </div> */}
       {work.Review.length > 0 ? (
         <div className="my-2">{renderReviews()}</div>
       ) : (

@@ -25,12 +25,12 @@ export default function OptionButtons({ work }: { work: WorkType }) {
         </div>
       </div>
 
-      {/* <DropdownMenu>
+      <DropdownMenu>
         <DropdownMenuTrigger className="flex w-1/6 justify-center border-l border-black/40 py-2 text-xs">
           <OptionsSVG className="w-auto text-base opacity-70" />
         </DropdownMenuTrigger>
         <DropdownMenuOptions work={work} />
-      </DropdownMenu> */}
+      </DropdownMenu>
     </div>
   )
 }
