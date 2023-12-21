@@ -76,20 +76,22 @@ export default function ContactForm() {
   }
 
   const inputStyle =
-    "block w-full px-3 py-2 text-sm text-gray-700 bg-backgroundGray border rounded-none placeholder-slate-400 focus:outline-none disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500"
+    "border-input placeholder:text-muted-foreground focus-visible:ring-ring flex w-full rounded-none border px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mx-auto max-w-xl space-y-4">
-      <Input placeholder="Name*" {...register("name")} />
-      <span className="text-sm text-red-400">{errors.name?.message}</span>
-      <Input placeholder="Email*" {...register("email")} />
-      <span className="text-sm text-red-400">{errors.email?.message}</span>
-      <Input placeholder="Phone (optional)" {...register("phone")} />
-      <textarea className={inputStyle} placeholder="Message*" rows={5} {...register("message")} />
-      <span className="text-sm text-red-400">{errors.message?.message}</span>
-      <Button type="submit" mobile disabled={isLoading} className="flex">
-        {isLoading ? <SpinnerSVG className="animate-spin text-2xl" /> : "Send"}
-      </Button>
+      <fieldset className="group space-y-4" disabled={isLoading}>
+        <Input placeholder="Name*" {...register("name")} />
+        <span className="text-sm text-red-400">{errors.name?.message}</span>
+        <Input placeholder="Email*" {...register("email")} />
+        <span className="text-sm text-red-400">{errors.email?.message}</span>
+        <Input placeholder="Phone (optional)" {...register("phone")} />
+        <textarea className={inputStyle} placeholder="Message*" rows={5} {...register("message")} />
+        <span className="text-sm text-red-400">{errors.message?.message}</span>
+        <Button type="submit" mobile disabled={isLoading} className="flex">
+          {isLoading ? <SpinnerSVG className="animate-spin text-2xl" /> : "Send"}
+        </Button>
+      </fieldset>
     </form>
   )
 }
