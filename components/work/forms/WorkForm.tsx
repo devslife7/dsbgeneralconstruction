@@ -9,6 +9,8 @@ import { WorkSchema, WorkErrors } from "@/lib/validators/work"
 import { Input } from "../../ui/input"
 import { ACCEPTED_MEDIA_TYPES } from "@/lib/constants"
 import { Modal } from "@/components/ui/modal"
+import { useFormStatus } from "react-dom"
+import { SpinnerSVG } from "@/public/svgs"
 
 export default function WorkForm({ onOpenChange }: { onOpenChange: (open: boolean) => void }) {
   const ref = useRef<HTMLFormElement>(null)
@@ -92,13 +94,25 @@ export default function WorkForm({ onOpenChange }: { onOpenChange: (open: boolea
         onFocus={() => setErrors({ ...errors, media: "" })}
         errors={errors.media}
       />
-      <Modal.Footer>
-        <Modal.Close asChild>
-          <Button variant="cancel">Close</Button>
-        </Modal.Close>
-        <Button type="submit">Submit</Button>
-      </Modal.Footer>
+      <FormButtons />
     </form>
+  )
+}
+
+// Form Buttons for Cancel and Submit
+const FormButtons = () => {
+  const { pending } = useFormStatus()
+  return (
+    <Modal.Footer>
+      <Modal.Close asChild>
+        <Button aria-disabled={pending} disabled={pending} variant="cancel">
+          Close
+        </Button>
+      </Modal.Close>
+      <Button type="submit" aria-disabled={pending} disabled={pending}>
+        {pending ? <SpinnerSVG className="animate-spin" /> : "Submit"}
+      </Button>
+    </Modal.Footer>
   )
 }
 

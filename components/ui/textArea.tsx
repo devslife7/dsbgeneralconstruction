@@ -1,5 +1,6 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
+import { useFormStatus } from "react-dom"
 
 export interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   errors?: string
@@ -7,6 +8,7 @@ export interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextArea
 
 const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
   ({ className, errors, ...props }, ref) => {
+    const { pending } = useFormStatus()
     return (
       <>
         <textarea
@@ -15,6 +17,8 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
             className
           )}
           ref={ref}
+          aria-disabled={pending}
+          disabled={pending}
           {...props}
         />
         <span className="text-sm text-red-400">{errors}</span>
