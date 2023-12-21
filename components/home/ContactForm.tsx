@@ -8,6 +8,7 @@ import Button from "../ui/button"
 import { SpinnerSVG } from "@/public/svgs"
 import { Input } from "../ui/input"
 import { toast } from "sonner"
+import { TextArea } from "../ui/textArea"
 
 type FormTypes = {
   name: string
@@ -49,46 +50,34 @@ export default function ContactForm() {
 
   const onSubmit: SubmitHandler<FormTypes> = data => {
     setIsLoading(true)
-    // set timer for 3 seconds
-    setTimeout(() => {
-      setIsLoading(false)
-      toast.success("Message sent successfully")
-      reset(defaultValues)
-    }, 3000)
-    // let formData = document.createElement("form")
-    // formData.innerHTML = `
-    //         <input name="from_name" value="${data.name}" />
-    //         <input name="from_email" value="${data.email}" />
-    //         <input name="from_phone" value="${data.phone}" />
-    //         <textarea name="from_message">${data.message}</textarea>
+    let formData = document.createElement("form")
+    formData.innerHTML = `
+            <input name="from_name" value="${data.name}" />
+            <input name="from_email" value="${data.email}" />
+            <input name="from_phone" value="${data.phone}" />
+            <textarea name="from_message">${data.message}</textarea>
 
-    //     `
-    // emailjs.sendForm("service_drybrep", "template_y49hums", formData, "hpeVPBIjR0dTtIqex").then(
-    //   result => {
-    //     setIsLoading(false)
-    //     toast.success("Message sent successfully")
-    //     reset(defaultValues)
-    //   },
-    //   error => {
-    //     console.log(error.text)
-    //   }
-    // )
+        `
+    emailjs.sendForm("service_drybrep", "template_y49hums", formData, "hpeVPBIjR0dTtIqex").then(
+      result => {
+        setIsLoading(false)
+        toast.success("Message sent successfully")
+        reset(defaultValues)
+      },
+      error => {
+        console.log(error.text)
+      }
+    )
   }
 
-  const inputStyle =
-    "border-input placeholder:text-muted-foreground focus-visible:ring-ring flex w-full rounded-none border px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="mx-auto max-w-xl space-y-4">
-      <fieldset className="group space-y-4" disabled={isLoading}>
-        <Input placeholder="Name*" {...register("name")} />
-        <span className="text-sm text-red-400">{errors.name?.message}</span>
-        <Input placeholder="Email*" {...register("email")} />
-        <span className="text-sm text-red-400">{errors.email?.message}</span>
+    <form onSubmit={handleSubmit(onSubmit)} className="mx-auto max-w-xl">
+      <fieldset className="space-y-4" disabled={isLoading}>
+        <Input placeholder="Name*" {...register("name")} errors={errors.name?.message} />
+        <Input placeholder="Email*" {...register("email")} errors={errors.email?.message} />
         <Input placeholder="Phone (optional)" {...register("phone")} />
-        <textarea className={inputStyle} placeholder="Message*" rows={5} {...register("message")} />
-        <span className="text-sm text-red-400">{errors.message?.message}</span>
-        <Button type="submit" mobile disabled={isLoading} className="flex">
+        <TextArea placeholder="Message*" rows={5} {...register("message")} errors={errors.message?.message} />
+        <Button type="submit" className="flex">
           {isLoading ? <SpinnerSVG className="animate-spin text-2xl" /> : "Send"}
         </Button>
       </fieldset>
