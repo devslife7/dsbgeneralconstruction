@@ -27,7 +27,7 @@ export async function removeWork(work: any) {
 
 export async function addWork(formData: FormData) {
   // timer for 3 seconds
-  await new Promise(resolve => setTimeout(resolve, 3000))
+  // await new Promise(resolve => setTimeout(resolve, 3000))
 
   const newWork = {
     title: formData.get("title"),

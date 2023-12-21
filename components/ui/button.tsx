@@ -3,9 +3,12 @@
     size(sm, md, lg): determines the style size
     mobile(true, false): determines the full width in small screens
 */
+"use client"
 import { cn } from "@/lib/utils"
+import { SpinnerSVG } from "@/public/svgs"
 import { VariantProps, cva } from "class-variance-authority"
 import { forwardRef } from "react"
+import { useFormStatus } from "react-dom"
 
 const buttonStyles = cva(
   "inline-flex cursor-pointer items-center gap-2 justify-center w-full sm:w-auto px-auto transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 border border-transparent disabled:cursor-not-allowed disabled:opacity-60",
@@ -37,9 +40,18 @@ interface ButtonProps
     VariantProps<typeof buttonStyles> {}
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ variant, size, mobile, wide, className, ...props }, ref) => {
+  ({ variant, size, mobile, wide, className, children, ...props }, ref) => {
+    const { pending } = useFormStatus()
     return (
-      <button ref={ref} className={cn(buttonStyles({ variant, size, mobile, wide, className }))} {...props} />
+      <button
+        ref={ref}
+        className={cn(buttonStyles({ variant, size, mobile, wide, className }))}
+        {...props}
+        aria-disabled={pending}
+        disabled={pending}
+      >
+        {pending && variant !== "cancel" ? <SpinnerSVG className="animate-spin" /> : children}
+      </button>
     )
   }
 )

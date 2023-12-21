@@ -3,13 +3,11 @@ import { useRef, useState } from "react"
 import { addWork } from "@/actions/work"
 import Image from "next/image"
 import Button from "../../ui/button"
-import { useFormStatus } from "react-dom"
 import { PreviewMedia } from "@/lib/validators/types"
 import { toast } from "sonner"
 import { WorkSchema, WorkErrors } from "@/lib/validators/work"
 import { Input } from "../../ui/input"
 import { ACCEPTED_MEDIA_TYPES } from "@/lib/constants"
-import { Label } from "@/components/ui/label"
 import { Modal } from "@/components/ui/modal"
 
 export default function WorkForm({ onOpenChange }: { onOpenChange: (open: boolean) => void }) {
@@ -94,23 +92,13 @@ export default function WorkForm({ onOpenChange }: { onOpenChange: (open: boolea
         onFocus={() => setErrors({ ...errors, media: "" })}
         errors={errors.media}
       />
-      <Modal.Footer className="pt-1">
-        <Modal.Close className="mr-5 h-10 w-full opacity-70 sm:w-auto">Cancel</Modal.Close>
-        <SubmitButton />
+      <Modal.Footer>
+        <Modal.Close asChild>
+          <Button variant="cancel">Close</Button>
+        </Modal.Close>
+        <Button type="submit">Submit</Button>
       </Modal.Footer>
     </form>
-  )
-}
-
-// Submit button using pending state from useFormStatus
-const SubmitButton = () => {
-  const { pending } = useFormStatus()
-  return (
-    <div className="flex items-center justify-between">
-      <Button aria-disabled={pending} disabled={pending} type="submit">
-        {pending ? "Loading..." : "Submit"}
-      </Button>
-    </div>
   )
 }
 
