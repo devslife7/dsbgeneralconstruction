@@ -56,7 +56,6 @@ export default function ContactForm() {
             <input name="from_email" value="${data.email}" />
             <input name="from_phone" value="${data.phone}" />
             <textarea name="from_message">${data.message}</textarea>
-
         `
     emailjs.sendForm("service_drybrep", "template_y49hums", formData, "hpeVPBIjR0dTtIqex").then(
       result => {

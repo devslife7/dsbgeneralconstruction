@@ -69,50 +69,33 @@ export default function WorkForm({ onOpenChange }: { onOpenChange: (open: boolea
   }
 
   return (
-    <form action={formAction} ref={ref} className="flex w-full flex-col gap-6">
-      {/* <div>
-        <Label>Title</Label>
-        <Input type="text" name="title" onFocus={() => setErrors({ ...errors, title: "" })} />
-        <span className="text-sm text-red-400">{errors.title}</span>
-      </div> */}
-      <Label>
-        <Input
-          type="text"
-          name="title"
-          placeholder="Title*"
-          onFocus={() => setErrors({ ...errors, title: "" })}
-        />
-        <span className="text-sm text-red-400">{errors.title}</span>
-        <Input
-          type="text"
-          name="description"
-          placeholder="Description*"
-          className="mt-4"
-          onFocus={() => setErrors({ ...errors, description: "" })}
-        />
-        <span className="text-sm text-red-400">{errors.description}</span>
-      </Label>
-      {/* <div>
-        <Label>Description</Label>
-        <Input type="text" name="description" onFocus={() => setErrors({ ...errors, description: "" })} />
-        <span className="text-sm text-red-400">{errors.description}</span>
-      </div> */}
+    <form action={formAction} ref={ref} className="w-full space-y-6">
+      <Input
+        name="title"
+        placeholder="Title*"
+        onFocus={() => setErrors({ ...errors, title: "" })}
+        errors={errors.title}
+      />
+      <Input
+        name="description"
+        placeholder="Description*"
+        onFocus={() => setErrors({ ...errors, description: "" })}
+        errors={errors.description}
+      />
 
-      <div>
-        {previewMediaObj ? previewFile(previewMediaObj) : null}
-        <input
-          className="border-none text-sm outline-none"
-          name="media"
-          type="file"
-          multiple
-          accept={ACCEPTED_MEDIA_TYPES.join(", ")}
-          onChange={handleChange}
-          onFocus={() => setErrors({ ...errors, media: "" })}
-        />
-        <span className="block text-sm text-red-400">{errors.media}</span>
-      </div>
-      <Modal.Footer>
-        <Modal.Close className="mr-5 opacity-70">Cancel</Modal.Close>
+      {previewMediaObj ? previewFile(previewMediaObj) : null}
+      <Input
+        className="cursor-pointer"
+        name="media"
+        type="file"
+        multiple
+        accept={ACCEPTED_MEDIA_TYPES.join(", ")}
+        onChange={handleChange}
+        onFocus={() => setErrors({ ...errors, media: "" })}
+        errors={errors.media}
+      />
+      <Modal.Footer className="pt-1">
+        <Modal.Close className="mr-5 h-10 w-full opacity-70 sm:w-auto">Cancel</Modal.Close>
         <SubmitButton />
       </Modal.Footer>
     </form>

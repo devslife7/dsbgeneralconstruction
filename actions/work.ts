@@ -26,6 +26,9 @@ export async function removeWork(work: any) {
 }
 
 export async function addWork(formData: FormData) {
+  // timer for 3 seconds
+  await new Promise(resolve => setTimeout(resolve, 3000))
+
   const newWork = {
     title: formData.get("title"),
     description: formData.get("description"),
@@ -42,10 +45,10 @@ export async function addWork(formData: FormData) {
   }
 
   try {
-    // // // upload media to s3
+    // upload media to s3
     const mediaURLS: string[] | undefined = await uploadFilesToS3(parsedData.data.media)
 
-    // // add work to db
+    // add work to db
     await prisma.work.create({
       data: {
         title: parsedData.data.title,

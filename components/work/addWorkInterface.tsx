@@ -9,7 +9,7 @@ export default function AddWorkInterface() {
 
   return (
     <Modal open={open} onOpenChange={setOpen}>
-      <Modal.Trigger asChild className="flex w-full">
+      <Modal.Trigger asChild className="mx-auto flex w-full">
         <Button>Add Work</Button>
       </Modal.Trigger>
       <Modal.Content title="Add Work">

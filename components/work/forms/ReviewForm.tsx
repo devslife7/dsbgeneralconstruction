@@ -50,6 +50,7 @@ export default function ReviewForm({ isReviewFormOpen, closeReviewForm, workId }
 
   const resetForm = () => {
     closeReviewForm()
+    setErrors({})
     setRating(0)
     ref.current?.reset()
   }
