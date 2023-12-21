@@ -22,33 +22,31 @@ export default function ReviewForm({ isReviewFormOpen, closeReviewForm, workId }
   const [errors, setErrors] = useState<ReviewErrors>({})
 
   const submitAction = async (formData: FormData) => {
-    await new Promise(resolve => setTimeout(resolve, 3000))
+    const newReview = {
+      name: formData.get("name"),
+      comment: formData.get("comment"),
+      rating: rating,
+      workId: workId
+    }
 
-    // const newReview = {
-    //   name: formData.get("name"),
-    //   comment: formData.get("comment"),
-    //   rating: rating,
-    //   workId: workId
-    // }
+    const parsedData = reviewSchema.safeParse(newReview)
+    if (!parsedData.success) {
+      let errors: ReviewErrors = {}
+      parsedData.error.issues.forEach(issue => {
+        errors = { ...errors, [issue.path[0]]: issue.message }
+      })
+      setErrors(errors)
+      return
+    } else setErrors({})
 
-    // const parsedData = reviewSchema.safeParse(newReview)
-    // if (!parsedData.success) {
-    //   let errors: ReviewErrors = {}
-    //   parsedData.error.issues.forEach(issue => {
-    //     errors = { ...errors, [issue.path[0]]: issue.message }
-    //   })
-    //   setErrors(errors)
-    //   return
-    // } else setErrors({})
+    const response = await addReview(parsedData.data)
 
-    // const response = await addReview(parsedData.data)
-
-    // if (response.status === 406) {
-    //   toast.error("Validation Error", { description: response.message })
-    //   return
-    // }
-    // if (response.status === 200) toast.success(response.message)
-    // if (response.status === 500) toast.error(response.message)
+    if (response.status === 406) {
+      toast.error("Validation Error", { description: response.message })
+      return
+    }
+    if (response.status === 200) toast.success(response.message)
+    if (response.status === 500) toast.error(response.message)
 
     resetForm()
   }
@@ -98,10 +96,10 @@ const FormButtons = ({ resetForm }: { resetForm: () => void }) => {
   const { pending } = useFormStatus()
   return (
     <div className="flex justify-end space-x-2">
-      <Button variant="cancel" onClick={resetForm} aria-disabled={pending} disabled={pending}>
+      <Button variant="cancel" type="button" onClick={resetForm} aria-disabled={pending} disabled={pending}>
         Cancel
       </Button>
-      <Button aria-disabled={pending} disabled={pending} type="submit">
+      <Button aria-disabled={pending} disabled={pending}>
         {pending ? <SpinnerSVG className="animate-spin" /> : "Post"}
       </Button>
     </div>
