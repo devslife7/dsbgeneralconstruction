@@ -1,23 +1,24 @@
 "use client"
 import { useRef, useState } from "react"
-import { addWork } from "@/actions/work"
+import { addWork, updateWork } from "@/actions/work"
 import Image from "next/image"
 import Button from "../../ui/button"
 import { PreviewMedia } from "@/lib/validators/types"
 import { toast } from "sonner"
-import { WorkSchema, WorkErrors, WorkType } from "@/lib/validators/work"
+import { WorkSchema, WorkErrors, WorkType, EditWorkSchema } from "@/lib/validators/work"
 import { Input } from "../../ui/input"
 import { ACCEPTED_MEDIA_TYPES } from "@/lib/constants"
 import { Modal } from "@/components/ui/modal"
 import { useFormStatus } from "react-dom"
 import { SpinnerSVG } from "@/public/svgs"
 import { cn } from "@/lib/utils"
+import { TextArea } from "@/components/ui/textArea"
 
 export default function WorkForm({
   onOpenChange,
   work
 }: {
-  onOpenChange?: (open: boolean) => void
+  onOpenChange: (open: boolean) => void
   work?: WorkType
 }) {
   const ref = useRef<HTMLFormElement>(null)
@@ -43,6 +44,38 @@ export default function WorkForm({
   }
 
   const formAction = async (formData: FormData) => {
+    if (work) editWorkClient(formData)
+    else addWorkClient(formData)
+    resetForm()
+  }
+
+  const editWorkClient = async (formData: FormData) => {
+    const newWork = {
+      title: formData.get("title"),
+      description: formData.get("description")
+    }
+    // client-side validation
+    const parsedData = EditWorkSchema.safeParse(newWork)
+    if (!parsedData.success) {
+      let errors: WorkErrors = {}
+      parsedData.error.issues.forEach(issue => {
+        errors = { ...errors, [issue.path[0]]: issue.message }
+      })
+      setErrors(errors)
+      return
+    } else setErrors({})
+
+    // server action: add work
+    const response = await updateWork(formData, work!)
+    if (response.status === 406) {
+      toast.error("Validation Error", { description: response.message })
+      return
+    }
+    if (response.status === 200) toast.success(response.message)
+    if (response.status === 500) toast.error(response.message)
+  }
+
+  const addWorkClient = async (formData: FormData) => {
     const newWork = {
       title: formData.get("title"),
       description: formData.get("description"),
@@ -56,8 +89,10 @@ export default function WorkForm({
         errors = { ...errors, [issue.path[0]]: issue.message }
       })
       setErrors(errors)
+      console.log("parsedData: ", parsedData)
       return
     } else setErrors({})
+    console.log("parsedData: ", parsedData)
 
     // server action: add work
     const response = await addWork(formData)
@@ -67,9 +102,10 @@ export default function WorkForm({
     }
     if (response.status === 200) toast.success(response.message)
     if (response.status === 500) toast.error(response.message)
+  }
 
-    // Reset Form
-    onOpenChange && onOpenChange(false)
+  const resetForm = () => {
+    onOpenChange(false)
     setPreviewMediaObj(undefined)
     window.scrollTo(0, 0)
     ref.current?.reset()
@@ -85,7 +121,7 @@ export default function WorkForm({
         errors={errors.title}
         defaultValue={work?.title}
       />
-      <Input
+      <TextArea
         name="description"
         placeholder="Description*"
         onFocus={() => setErrors({ ...errors, description: "" })}

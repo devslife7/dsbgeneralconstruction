@@ -10,12 +10,11 @@ import Button from "@/components/ui/button"
 import WorkForm from "../forms/WorkForm"
 
 export default function DropdownMenuOptions({ work }: { work: WorkType }) {
-  const [test, setTest] = useState(false)
-  const openModal = () => setTest(true)
+  const [open, setOpen] = useState(false)
   return (
     <div>
       <DropdownMenuContent className="text-gray-600">
-        <DropdownMenuItem onClick={openModal}>
+        <DropdownMenuItem onClick={() => setOpen(true)}>
           <EditSVG className="mr-4 text-base text-green-500" />
           Edit
         </DropdownMenuItem>
@@ -24,9 +23,9 @@ export default function DropdownMenuOptions({ work }: { work: WorkType }) {
           Delete
         </DropdownMenuItem>
       </DropdownMenuContent>
-      <Modal open={test} onOpenChange={setTest}>
+      <Modal open={open} onOpenChange={setOpen}>
         <Modal.Content title="Edit Work">
-          <WorkForm work={work} />
+          <WorkForm work={work} onOpenChange={setOpen} />
         </Modal.Content>
       </Modal>
     </div>
