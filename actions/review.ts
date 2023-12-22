@@ -41,7 +41,7 @@ export async function addReview(data: unknown) {
       data: { rating: rating._avg.rating }
     })
     revalidatePath("/work")
-    return { status: 200, message: "Successfully added Work" }
+    return { status: 200, message: "Successfully added Review" }
   } catch (e) {
     console.error(e)
     return { status: 500, message: "Failed to add Review" }
