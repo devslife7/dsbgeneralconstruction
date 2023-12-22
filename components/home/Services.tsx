@@ -10,41 +10,40 @@ import { buttonStyles } from "../ui/button"
 import { cn } from "@/lib/utils"
 
 export default function Services() {
-    return (
-        <div className="mb-10">
-            <h2 className="block mt-32 mb-12 text-3xl font-semibold text-center text-gray-800 lg:mb-12 lg:mt-24 lg:text-5xl">
-                Our Services Include
-            </h2>
-            <div className="grid lg:grid-cols-3 xl:container xl:mx-auto xl:px-8 lg:gap-6">
-                <div className="relative w-full h-[22rem] lg:h-[45rem]">
-                    <Image src={kitchen} alt="kitchen" fill className="hidden object-cover lg:block" />
-                    <Image src={kitchenMobile} alt="kitchen" fill className="object-cover lg:hidden" />
-                    <div className="absolute inset-0 flex items-center justify-center text-3xl font-medium text-center text-white bg-black/25">
-                        Kitchens
-                    </div>
-                </div>
-                <div className="relative w-full h-[22rem] lg:h-[45rem]">
-                    <Image src={bathroom} alt="kitchen" fill className="hidden object-cover lg:block" />
-                    <Image src={bathroomMobile} alt="kitchen" fill className="object-cover lg:hidden" />
-                    <div className="absolute inset-0 flex items-center justify-center text-3xl font-medium text-center text-white bg-black/25">
-                        Bathrooms
-                    </div>
-                </div>
-                <div className="relative w-full h-[22rem] lg:h-[45rem]">
-                    <Image src={interior} alt="kitchen" fill className="hidden object-cover lg:block" />
-                    <Image src={interiorMobile} alt="kitchen" fill className="object-cover lg:hidden" />
-                    <div className="absolute inset-0 flex items-center justify-center text-3xl font-medium text-center text-white bg-black/25">
-                        Interiors
-                    </div>
-                </div>
-            </div>
-
-            <div className="my-container text-center">
-            <Link href="/services" className={cn(buttonStyles(), "font-light lg:text-lg mt-10")}>
-                See All Services
-            </Link>
-
-            </div>
+  return (
+    <div className="mb-10">
+      <h2 className="mb-12 mt-32 block text-center text-3xl font-semibold text-gray-800 lg:mb-12 lg:mt-24 lg:text-5xl">
+        Our Services Include
+      </h2>
+      <div className="grid xl:container lg:grid-cols-3 lg:gap-6 xl:mx-auto xl:px-8">
+        <div className="relative h-[22rem] w-full lg:h-[45rem]">
+          <Image src={kitchen} alt="kitchen" fill className="hidden object-cover lg:block" />
+          <Image src={kitchenMobile} alt="kitchen" fill className="object-cover lg:hidden" />
+          <div className="absolute inset-0 flex items-center justify-center bg-black/25 text-center text-3xl font-medium text-white">
+            Kitchens
+          </div>
         </div>
-    )
+        <div className="relative h-[22rem] w-full lg:h-[45rem]">
+          <Image src={bathroom} alt="kitchen" fill className="hidden object-cover lg:block" />
+          <Image src={bathroomMobile} alt="kitchen" fill className="object-cover lg:hidden" />
+          <div className="absolute inset-0 flex items-center justify-center bg-black/25 text-center text-3xl font-medium text-white">
+            Bathrooms
+          </div>
+        </div>
+        <div className="relative h-[22rem] w-full lg:h-[45rem]">
+          <Image src={interior} alt="kitchen" fill className="hidden object-cover lg:block" />
+          <Image src={interiorMobile} alt="kitchen" fill className="object-cover lg:hidden" />
+          <div className="absolute inset-0 flex items-center justify-center bg-black/25 text-center text-3xl font-medium text-white">
+            Interiors
+          </div>
+        </div>
+      </div>
+
+      <div className="my-container text-center">
+        <Link href="/services" className={cn(buttonStyles(), "mt-10 font-light lg:text-lg")}>
+          See All Services
+        </Link>
+      </div>
+    </div>
+  )
 }
