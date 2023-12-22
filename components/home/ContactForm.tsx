@@ -2,31 +2,13 @@
 import emailjs from "@emailjs/browser"
 import React, { useState } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
-import { ZodType, z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Button from "../ui/button"
 import { SpinnerSVG } from "@/public/svgs"
 import { Input } from "../ui/input"
 import { toast } from "sonner"
 import { TextArea } from "../ui/textArea"
-
-type FormTypes = {
-  name: string
-  email: string
-  phone?: string
-  message: string
-}
-
-const schema: ZodType<FormTypes> = z.object({
-  name: z
-    .string()
-    .min(1, { message: "Name is required" })
-    .min(3, { message: "Name must contain at least 3 characters" })
-    .max(20),
-  email: z.string().email(),
-  phone: z.string(),
-  message: z.string().max(50).nonempty({ message: "Message is required" })
-})
+import { ContactFormSchema, ContactFormTypes } from "@/lib/validators/contact"
 
 export default function ContactForm() {
   const {
@@ -34,39 +16,40 @@ export default function ContactForm() {
     reset,
     handleSubmit,
     formState: { errors }
-  } = useForm<FormTypes>({
-    resolver: zodResolver(schema)
+  } = useForm<ContactFormTypes>({
+    resolver: zodResolver(ContactFormSchema)
   })
   const [isLoading, setIsLoading] = useState(false)
 
-  const onSubmit: SubmitHandler<FormTypes> = data => {
-    console.log("onSubmit here")
+  const onSubmit: SubmitHandler<ContactFormTypes> = async data => {
+    setIsLoading(true)
 
-    // setIsLoading(true)
-    // // set timer for 3 seconds
-    // setTimeout(() => {
-    //   setIsLoading(false)
-    //   toast.success("Message sent successfully")
-    //   reset()
-    // }, 3000)
+    let formElement = document.createElement("form")
+    formElement.innerHTML = `
+          <input name="from_name" value="${data.name}" />
+          <input name="from_email" value="${data.email}" />
+          <input name="from_phone" value="${data.phone}" />
+          <textarea name="from_message">${data.message}</textarea>
+      `
 
-    let formData = document.createElement("form")
-    formData.innerHTML = `
-            <input name="from_name" value="${data.name}" />
-            <input name="from_email" value="${data.email}" />
-            <input name="from_phone" value="${data.phone}" />
-            <textarea name="from_message">${data.message}</textarea>
-        `
-    emailjs.sendForm("service_drybrep", "template_y49hums", formData, "hpeVPBIjR0dTtIqex").then(
-      result => {
-        setIsLoading(false)
-        toast.success("Message sent successfully")
-        reset()
-      },
-      error => {
-        console.log(error.text)
-      }
-    )
+    await emailjs
+      .sendForm(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+        formElement,
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+      )
+      .then(
+        res => {
+          toast.success("Message sent successfully")
+        },
+        error => {
+          console.log(error.text)
+        }
+      )
+
+    setIsLoading(false)
+    reset()
   }
 
   return (
