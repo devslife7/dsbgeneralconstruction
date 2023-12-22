@@ -1,12 +1,10 @@
 "use client"
-
 import { DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { removeWork } from "@/actions/work"
 import { DeleteSVG, EditSVG } from "@/public/svgs"
 import { WorkType } from "@/lib/validators/work"
 import { Modal } from "@/components/ui/modal"
 import { useState } from "react"
-import Button from "@/components/ui/button"
 import WorkForm from "../forms/WorkForm"
 
 export default function DropdownMenuOptions({ work }: { work: WorkType }) {

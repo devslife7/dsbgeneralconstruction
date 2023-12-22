@@ -20,20 +20,13 @@ type FormTypes = {
 const schema: ZodType<FormTypes> = z.object({
   name: z
     .string()
-    .nonempty({ message: "Name is required" })
-    .min(3, { message: "Name must contain at least 3 character(s)" })
+    .min(1, { message: "Name is required" })
+    .min(3, { message: "Name must contain at least 3 characters" })
     .max(20),
   email: z.string().email(),
   phone: z.string(),
   message: z.string().max(50).nonempty({ message: "Message is required" })
 })
-
-const defaultValues = {
-  name: "",
-  email: "",
-  phone: "",
-  message: ""
-}
 
 export default function ContactForm() {
   const {
@@ -42,19 +35,19 @@ export default function ContactForm() {
     handleSubmit,
     formState: { errors }
   } = useForm<FormTypes>({
-    resolver: zodResolver(schema),
-    defaultValues: defaultValues
+    resolver: zodResolver(schema)
   })
-
   const [isLoading, setIsLoading] = useState(false)
 
   const onSubmit: SubmitHandler<FormTypes> = data => {
+    console.log("onSubmit here")
+
     setIsLoading(true)
     // set timer for 3 seconds
     setTimeout(() => {
       setIsLoading(false)
       toast.success("Message sent successfully")
-      reset(defaultValues)
+      reset()
     }, 3000)
 
     // let formData = document.createElement("form")
