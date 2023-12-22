@@ -76,12 +76,14 @@ export default function ReviewForm({ isReviewFormOpen, closeReviewForm, workId }
       <Input
         type="text"
         name="name"
+        className="text-base"
         placeholder="Name..."
         onFocus={() => setErrors({ ...errors, name: "" })}
         errors={errors.name}
       />
       <TextArea
         placeholder="Comment..."
+        className="text-base"
         rows={4}
         name="comment"
         onFocus={() => setErrors({ ...errors, comment: "" })}
