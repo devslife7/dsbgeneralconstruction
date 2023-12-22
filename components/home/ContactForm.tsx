@@ -42,31 +42,31 @@ export default function ContactForm() {
   const onSubmit: SubmitHandler<FormTypes> = data => {
     console.log("onSubmit here")
 
-    setIsLoading(true)
-    // set timer for 3 seconds
-    setTimeout(() => {
-      setIsLoading(false)
-      toast.success("Message sent successfully")
-      reset()
-    }, 3000)
+    // setIsLoading(true)
+    // // set timer for 3 seconds
+    // setTimeout(() => {
+    //   setIsLoading(false)
+    //   toast.success("Message sent successfully")
+    //   reset()
+    // }, 3000)
 
-    // let formData = document.createElement("form")
-    // formData.innerHTML = `
-    //         <input name="from_name" value="${data.name}" />
-    //         <input name="from_email" value="${data.email}" />
-    //         <input name="from_phone" value="${data.phone}" />
-    //         <textarea name="from_message">${data.message}</textarea>
-    //     `
-    // emailjs.sendForm("service_drybrep", "template_y49hums", formData, "hpeVPBIjR0dTtIqex").then(
-    //   result => {
-    //     setIsLoading(false)
-    //     toast.success("Message sent successfully")
-    //     reset(defaultValues)
-    //   },
-    //   error => {
-    //     console.log(error.text)
-    //   }
-    // )
+    let formData = document.createElement("form")
+    formData.innerHTML = `
+            <input name="from_name" value="${data.name}" />
+            <input name="from_email" value="${data.email}" />
+            <input name="from_phone" value="${data.phone}" />
+            <textarea name="from_message">${data.message}</textarea>
+        `
+    emailjs.sendForm("service_drybrep", "template_y49hums", formData, "hpeVPBIjR0dTtIqex").then(
+      result => {
+        setIsLoading(false)
+        toast.success("Message sent successfully")
+        reset()
+      },
+      error => {
+        console.log(error.text)
+      }
+    )
   }
 
   return (
