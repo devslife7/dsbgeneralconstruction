@@ -16,7 +16,9 @@ export default function DropdownMenuOptions({ work }: { work: WorkType }) {
           <EditSVG className="mr-4 text-base text-green-500" />
           Edit
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => removeWork(work)}>
+        <DropdownMenuItem
+          onClick={() => confirm("Are you sure you want to delete this Work?") && removeWork(work)}
+        >
           <DeleteSVG className="mr-4 text-red-500" />
           Delete
         </DropdownMenuItem>

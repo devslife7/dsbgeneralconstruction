@@ -2,7 +2,7 @@ import Button from "@/components/ui/button"
 import { useRef, useState } from "react"
 import { SpinnerSVG } from "@/public/svgs"
 import { cn } from "@/lib/utils"
-import { ReviewErrors, reviewSchema } from "@/lib/validators/review"
+import { ReviewErrors, ReviewSchema } from "@/lib/validators/review"
 import { addReview } from "@/actions/review"
 import { toast } from "sonner"
 import { useFormStatus } from "react-dom"
@@ -29,7 +29,7 @@ export default function ReviewForm({ isReviewFormOpen, closeReviewForm, workId }
       workId: workId
     }
 
-    const parsedData = reviewSchema.safeParse(newReview)
+    const parsedData = ReviewSchema.safeParse(newReview)
     if (!parsedData.success) {
       let errors: ReviewErrors = {}
       parsedData.error.issues.forEach(issue => {

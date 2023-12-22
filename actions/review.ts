@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache"
 import { prisma } from "../lib/db"
-import { reviewSchema } from "@/lib/validators/review"
+import { ReviewSchema } from "@/lib/validators/review"
 
 export async function deleteReview(reviewId: number) {
   const deleted = await prisma.review.delete({
@@ -24,7 +24,7 @@ export async function deleteReview(reviewId: number) {
 }
 
 export async function addReview(data: unknown) {
-  const parsedData = reviewSchema.safeParse(data)
+  const parsedData = ReviewSchema.safeParse(data)
   if (!parsedData.success) {
     let errorMessage = ""
     parsedData.error.issues.forEach(issue => {

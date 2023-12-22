@@ -13,6 +13,10 @@ export default function Reviews({ work }: { work: WorkType }) {
   const closeReviewForm = () => setIsReviewFormOpen(false)
   const toggleReviewForm = () => setIsReviewFormOpen(prevState => !prevState)
 
+  const removeReview = async (reviewId: number) => {
+    confirm("Are you sure you want to delete this review?") && (await deleteReview(reviewId))
+  }
+
   const renderReviews = () => {
     return work.Review.map((review, index) => (
       <div key={index} className="py-4">
@@ -32,7 +36,7 @@ export default function Reviews({ work }: { work: WorkType }) {
           </div>
           <DeleteSVG
             className="rounded-sm text-2xl text-red-500 hover:cursor-pointer hover:bg-gray-100"
-            onClick={() => deleteReview(review.id)}
+            onClick={() => removeReview(review.id)}
           />
         </div>
       </div>
