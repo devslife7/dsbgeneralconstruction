@@ -2,38 +2,16 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import MobileNav from "./MobileNav"
-import { LogoSVG, MenuSVG } from "@/public/svgs"
-import { NavLink } from "@/lib/validators/types"
-
-const navLinks: NavLink[] = [
-  {
-    label: "Home",
-    href: "/",
-  },
-  {
-    label: "Work",
-    href: "/work",
-  },
-  {
-    label: "Services",
-    href: "/services",
-  },
-  {
-    label: "About",
-    href: "/about",
-  },
-  {
-    label: "Contact",
-    href: "/contact",
-  },
-]
+import { CloseSVG, LogoSVG, MenuSVG } from "@/public/svgs"
+import { cn } from "@/lib/utils"
+import { navigationLinks } from "@/lib/data/navigationLinks"
 
 export default function Navbar() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [scrollNav, setScrollNav] = useState(false)
   const pathname = usePathname()
-  const isHome = () => pathname !== "/"
+
+  const toggleMobileNavOpen = () => setMobileNavOpen(!mobileNavOpen)
 
   useEffect(() => {
     window.addEventListener("scroll", changeNav)
@@ -47,51 +25,66 @@ export default function Navbar() {
     }
   }
 
-  const handleMobileMenuOpen = () => {
-    setMobileMenuOpen(true)
-  }
-
   const renderNavLinks = () => {
     const isActive = (link: string) => (pathname === link ? "text-primary" : "hover:text-gray-400")
-    return navLinks.map((link, index) => (
+    return navigationLinks.map((link, index) => (
       <Link
         key={index}
         href={link.href}
-        className={`px-0 leading-7 transition-all font-extralight ${isActive(link.href)}`}
+        className={`px-0 font-extralight leading-7 transition-all ${isActive(link.href)}`}
       >
         {link.label}
       </Link>
     ))
   }
 
+  const renderNavLinksMobile = () => {
+    return (
+      <nav>
+        <ul
+          className={cn(
+            "my-container fixed -top-[100%] left-0 z-10 h-full bg-custom-white py-10 text-center transition-all duration-300 ease-in lg:hidden",
+            { "top-32 ": mobileNavOpen }
+          )}
+        >
+          {navigationLinks.map((link, index) => (
+            <li key={index}>
+              <Link href={link.href} className="block py-7 text-xl" onClick={toggleMobileNavOpen}>
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    )
+  }
+
   return (
     <>
       <div className="h-32"></div>
-      <header className="fixed top-0 z-10 w-full transition-all duration-300 ease-in-out bg-custom-white">
-        <nav className="flex items-center justify-between h-32 my-container">
+      <header className="fixed top-0 z-20 w-full bg-custom-white transition-all duration-300 ease-in-out">
+        <nav className=" my-container flex h-32 items-center justify-between">
           <div className="mt-6 lg:mt-0 lg:flex-1">
-            <Link href="/" className="text-xl font-semibold opacity-80 leading-none">
-              <LogoSVG className="text-primary inline-block mb-2 mr-2 text-3xl" />
+            <Link href="/" className="text-xl font-semibold leading-none opacity-80">
+              <LogoSVG className="mb-2 mr-2 inline-block text-3xl text-primary" />
               <span className="text-primary">DSB</span> General Construction
             </Link>
-            <p className="mt-2 text-sm break-normal lg:hidden lg:ml-5 font-extralight">123-456-7890</p>
+            <p className="mt-2 break-normal text-sm font-extralight lg:ml-5 lg:hidden">123-456-7890</p>
           </div>
           <div className="hidden lg:flex lg:gap-x-7">{renderNavLinks()}</div>
 
-          <p className="hidden break-normal lg:block bg-blue lg:ml-7 font-extralight">123-456-7890</p>
-          <button className="p-2.5 lg:hidden" onClick={handleMobileMenuOpen}>
+          <p className="bg-blue hidden break-normal font-extralight lg:ml-7 lg:block">123-456-7890</p>
+          <button className="p-2.5 transition-all lg:hidden" onClick={toggleMobileNavOpen}>
             <span className="sr-only">Open main menu</span>
-            <MenuSVG className="text-3xl opacity-80" aria-hidden="true" />
+            {mobileNavOpen ? (
+              <CloseSVG className="text-3xl opacity-80 aria-pressed:bg-red-300" />
+            ) : (
+              <MenuSVG className="text-3xl opacity-80" />
+            )}
           </button>
         </nav>
-        {mobileMenuOpen && (
-          <MobileNav
-            mobileMenuOpen={mobileMenuOpen}
-            setMobileMenuOpen={setMobileMenuOpen}
-            navLinks={navLinks}
-          />
-        )}
       </header>
+      {renderNavLinksMobile()}
     </>
   )
 }

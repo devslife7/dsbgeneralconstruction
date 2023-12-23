@@ -3,7 +3,7 @@ export type PreviewMedia = {
   url: string
 }
 
-export type NavLink = {
+export type NavLinkType = {
   label: string
   href: string
 }

@@ -6,10 +6,7 @@ import { buttonStyles } from "../ui/button"
 
 export default function Hero() {
   return (
-    <div
-      className=" h-[30rem] lg:container lg:mx-auto lg:h-[54rem] lg:px-8
-        "
-    >
+    <div className="h-[30rem] lg:container lg:mx-auto lg:h-[54rem] lg:px-8">
       <div className="relative h-full w-full bg-black/30 lg:px-8">
         <Image
           alt="Hero Kitchen"

@@ -5,6 +5,7 @@ import type { Metadata } from "next"
 import { Inter, Roboto, Titillium_Web } from "next/font/google"
 import { cn } from "@/lib/utils"
 import { Toaster } from "sonner"
+import MobileNavBar from "@/components/layout/MobileNavBar"
 
 const inter = Inter({ subsets: ["latin"] })
 const roboto = Roboto({
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       {/* <body className={`${inter.className} bg-custom-white`}> */}
       <body className={cn("bg-custom-white", inter.className, titillium.variable, roboto.variable)}>
         <Navbar />
+        {/* <MobileNavBar /> */}
         {children}
         <Toaster richColors position="top-center" />
         <Footer />
