@@ -77,6 +77,7 @@ export default function ReviewForm({ isReviewFormOpen, closeReviewForm, workId }
         type="text"
         name="name"
         className="text-base"
+        autoFocus
         placeholder="Name..."
         onFocus={() => setErrors({ ...errors, name: "" })}
         errors={errors.name}

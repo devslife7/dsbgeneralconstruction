@@ -49,7 +49,13 @@ export default function Navbar() {
         >
           {navigationLinks.map((link, index) => (
             <li key={index}>
-              <Link href={link.href} className="block py-7 text-xl" onClick={toggleMobileNavOpen}>
+              <Link
+                href={link.href}
+                className={cn("block py-7 text-xl", {
+                  "border-spacing-4 border-[3px] border-primary text-primary": pathname === link.href
+                })}
+                onClick={toggleMobileNavOpen}
+              >
                 {link.label}
               </Link>
             </li>

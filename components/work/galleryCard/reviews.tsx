@@ -11,7 +11,9 @@ export default function Reviews({ work }: { work: WorkType }) {
   const [isReviewFormOpen, setIsReviewFormOpen] = useState(false)
 
   const closeReviewForm = () => setIsReviewFormOpen(false)
-  const toggleReviewForm = () => setIsReviewFormOpen(prevState => !prevState)
+  const toggleReviewForm = () => {
+    setIsReviewFormOpen(prevState => !prevState)
+  }
 
   const removeReview = async (reviewId: number) => {
     confirm("Are you sure you want to delete this review?") && (await deleteReview(reviewId))
@@ -44,7 +46,7 @@ export default function Reviews({ work }: { work: WorkType }) {
   }
 
   return (
-    <Modal.Content title="Reviews" className="sm:max-w-sm">
+    <Modal.Content title="Reviews" className="max-h-full overflow-scroll sm:max-w-sm">
       {work.Review.length > 0 ? (
         <div className="my-2">{renderReviews()}</div>
       ) : (

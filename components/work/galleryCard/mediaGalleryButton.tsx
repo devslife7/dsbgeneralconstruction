@@ -13,7 +13,7 @@ const testGallery = [
   "https://images.unsplash.com/photo-1587582423116-ec07293f0395?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80",
   "https://plus.unsplash.com/premium_photo-1681691912442-68c4179c530c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1742&q=80",
   "https://images.unsplash.com/photo-1517089596392-fb9a9033e05b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80",
-  "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80",
+  "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80"
 ]
 
 export default function MediaGalleryButton({ mediaURLS = testGallery, className }: Props) {
@@ -25,7 +25,7 @@ export default function MediaGalleryButton({ mediaURLS = testGallery, className 
         render={({ attrs }) => {
           return (
             <div {...attrs} className="flex items-center">
-              <div className="mx-auto my-auto max-w-md w-full">
+              <div className="mx-auto my-auto w-full max-w-md">
                 <video width="400" height="350" src={videoUrl} controls autoPlay muted>
                   Sorry, your browser doesn&#39;t support HTML5 <code>video</code>
                 </video>
