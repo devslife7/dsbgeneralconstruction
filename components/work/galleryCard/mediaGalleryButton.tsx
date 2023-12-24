@@ -34,7 +34,7 @@ export default function MediaGalleryButton({ mediaURLS = testGallery, className 
           )
         }}
       >
-        <video width="350" height="450" src={videoUrl} autoPlay muted hidden={index !== 0}>
+        <video width="cover-fit" height="350" src={videoUrl} autoPlay muted hidden={index !== 0}>
           Sorry, your browser doesn&#39;t support HTML5 <code>video</code>
         </video>
       </PhotoView>
