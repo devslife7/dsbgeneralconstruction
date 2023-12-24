@@ -5,6 +5,7 @@ import { deleteFilesFromS3, uploadFilesToS3 } from "./s3Upload"
 import { EditWorkSchema, WorkSchema, WorkType } from "@/lib/validators/work"
 
 export async function getWorkList() {
+  await new Promise(resolve => setTimeout(resolve, 3000))
   return await prisma.work.findMany({
     orderBy: {
       id: "desc"
