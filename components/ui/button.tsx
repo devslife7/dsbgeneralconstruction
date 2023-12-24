@@ -8,7 +8,7 @@ import { VariantProps, cva } from "class-variance-authority"
 import { forwardRef } from "react"
 
 const buttonStyles = cva(
-  "inline-flex cursor-pointer items-center gap-2 justify-center w-full sm:w-auto px-auto transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 border border-transparent disabled:cursor-not-allowed disabled:opacity-60",
+  "inline-flex cursor-pointer items-center gap-2 justify-center w-auto sm:w-auto px-auto transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 border border-transparent disabled:cursor-not-allowed disabled:opacity-60",
   {
     variants: {
       variant: {
@@ -22,8 +22,9 @@ const buttonStyles = cva(
         md: "px-6 py-2",
         lg: "px-8 py-2"
       },
-      mobile: { true: "w-full lg:w-auto" },
-      wide: { true: "w-full" }
+      // mobile: { true: "w-full lg:w-auto" },
+      // wide: { true: "w-full" }
+      responsive: { true: "w-full" }
     },
     defaultVariants: {
       variant: "primary",
@@ -37,9 +38,9 @@ interface ButtonProps
     VariantProps<typeof buttonStyles> {}
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ variant, size, mobile, wide, className, ...props }, ref) => {
+  ({ variant, size, responsive, className, ...props }, ref) => {
     return (
-      <button ref={ref} className={cn(buttonStyles({ variant, size, mobile, wide, className }))} {...props} />
+      <button ref={ref} className={cn(buttonStyles({ variant, size, responsive, className }))} {...props} />
     )
   }
 )

@@ -9,6 +9,7 @@ import { useFormStatus } from "react-dom"
 import Rating from "@/components/ui/rating"
 import { TextArea } from "@/components/ui/textArea"
 import { Input } from "@/components/ui/input"
+import { Modal } from "@/components/ui/modal"
 
 type Props = {
   isReviewFormOpen: boolean
@@ -98,13 +99,20 @@ export default function ReviewForm({ isReviewFormOpen, closeReviewForm, workId }
 const FormButtons = ({ resetForm }: { resetForm: () => void }) => {
   const { pending } = useFormStatus()
   return (
-    <div className="flex justify-end space-x-2">
-      <Button variant="cancel" type="button" onClick={resetForm} aria-disabled={pending} disabled={pending}>
+    <Modal.Footer>
+      <Button
+        responsive
+        variant="cancel"
+        type="button"
+        onClick={resetForm}
+        aria-disabled={pending}
+        disabled={pending}
+      >
         Cancel
       </Button>
-      <Button aria-disabled={pending} disabled={pending}>
+      <Button responsive aria-disabled={pending} disabled={pending}>
         {pending ? <SpinnerSVG className="animate-spin" /> : "Post"}
       </Button>
-    </div>
+    </Modal.Footer>
   )
 }

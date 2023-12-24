@@ -59,7 +59,7 @@ export default function ContactForm() {
         <Input placeholder="Email*" {...register("email")} errors={errors.email?.message} />
         <Input placeholder="Phone (optional)" {...register("phone")} />
         <TextArea placeholder="Message*" rows={5} {...register("message")} errors={errors.message?.message} />
-        <Button type="submit" className="flex">
+        <Button type="submit" className="flex" responsive>
           {isLoading ? <SpinnerSVG className="animate-spin text-2xl" /> : "Send"}
         </Button>
       </fieldset>

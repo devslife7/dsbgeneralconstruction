@@ -21,7 +21,7 @@ export default function OptionButtons({ work }: { work: WorkType }) {
         <MediaGalleryButton mediaURLS={work.media} className="relative z-10 opacity-0" />
         <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center  gap-1 text-center text-xs">
           <GallerySVG className="text-base text-primary" />
-          <div className="opacity-70">gallery</div>
+          <div className="opacity-70">gallery({work.media.length})</div>
         </div>
       </div>
 

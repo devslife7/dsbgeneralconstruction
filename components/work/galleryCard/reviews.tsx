@@ -6,6 +6,7 @@ import { WorkType } from "@/lib/validators/work"
 import { deleteReview } from "@/actions/review"
 import { Modal } from "@/components/ui/modal"
 import ReviewForm from "../forms/ReviewForm"
+import Image from "next/image"
 
 export default function Reviews({ work }: { work: WorkType }) {
   const [isReviewFormOpen, setIsReviewFormOpen] = useState(false)
@@ -46,7 +47,20 @@ export default function Reviews({ work }: { work: WorkType }) {
   }
 
   return (
-    <Modal.Content title="Reviews" className="max-h-full overflow-scroll sm:max-w-sm">
+    <Modal.Content title="Reviews" className="max-h-full overflow-auto sm:max-w-sm">
+      <div className="flex flex-wrap gap-2 overflow-x-scroll">
+        {work.media.map((url, idx) =>
+          !url.match(/mp4|mov|webm/) ? (
+            <div key={idx} className="relative h-32 w-28 overflow-hidden rounded-lg">
+              <Image className="object-cover" src={url} alt="preview" priority fill sizes="128px 128px" />
+            </div>
+          ) : (
+            <div key={idx} className="relative overflow-hidden rounded-lg">
+              <video className="object-cover" src={url} autoPlay loop muted />
+            </div>
+          )
+        )}
+      </div>
       {work.Review.length > 0 ? (
         <div className="my-2">{renderReviews()}</div>
       ) : (
