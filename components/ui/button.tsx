@@ -12,7 +12,8 @@ const buttonStyles = cva(
   {
     variants: {
       variant: {
-        primary: "bg-primary text-white hover:bg-primary-600 hover:bg-primary-600 focus-visible:ring-white",
+        primary:
+          "bg-primary text-white hover:bg-primary-600 hover:bg-primary-600 focus-visible:ring-custom-white",
         secondary: "bg-blue-100 text-blue-700 hover:bg-blue-200 ",
         danger: "bg-red-100 text-red-600 hover:bg-red-200",
         cancel: "text-gray-700"
