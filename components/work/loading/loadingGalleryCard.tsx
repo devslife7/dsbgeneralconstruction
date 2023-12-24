@@ -6,7 +6,6 @@ import { Skeleton } from "@/components/ui/skeleton"
 export default function LoadingGalleryCard() {
   return (
     <div className=" h-full w-full bg-white shadow-lg sm:max-w-md lg:max-w-xs">
-      {/* <MediaGalleryButton mediaURLS={testGallery} /> */}
       <div className="h-[20rem] w-full animate-pulse bg-slate-200 md:h-56"></div>
 
       <div className="mb-5 px-4">
