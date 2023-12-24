@@ -6,7 +6,7 @@ import { buttonStyles } from "@/components/ui/button"
 
 export default function About() {
   return (
-    <div className="pt-4 lg:pt-20">
+    <div className="pt-5 lg:pt-20">
       <div className="my-container mb-8 text-center lg:mb-20">
         <h1 className="mb-4 text-center text-2xl font-semibold opacity-80 lg:text-4xl">
           About DSB <br className="lg:hidden" /> General Construction
