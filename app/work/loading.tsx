@@ -1,7 +1,6 @@
-import GalleryCard from "../galleryCard/galleryCard"
-import LoadingGalleryCard from "./loadingGalleryCard"
+import GalleryCardSkeleton from "@/components/work/galleryCard/galleryCardSkeleton"
 
-export default function LoadingGallery() {
+export default function Loading() {
   return (
     <div className="mx-auto mb-10 mt-5 lg:container lg:mt-10 lg:px-8">
       <div className="my-container">
@@ -12,8 +11,8 @@ export default function LoadingGallery() {
       </div>
 
       <div className="flex flex-wrap justify-center gap-20 lg:justify-center lg:gap-4">
-        {[{}, {}, {}].map((work: any, idx: number) => (
-          <LoadingGalleryCard key={idx} />
+        {[{}, {}, {}, {}].map((work: any, idx: number) => (
+          <GalleryCardSkeleton key={idx} />
         ))}
       </div>
     </div>

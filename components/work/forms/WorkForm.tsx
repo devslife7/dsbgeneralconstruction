@@ -114,7 +114,6 @@ export default function WorkForm({
   return (
     <form action={formAction} ref={ref} className="w-full space-y-6">
       <Input
-        autoFocus={false}
         name="title"
         placeholder="Title*"
         onFocus={() => setErrors({ ...errors, title: "" })}

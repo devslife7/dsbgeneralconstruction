@@ -3,7 +3,7 @@ import MediaGalleryButton from "../galleryCard/mediaGalleryButton"
 import { GallerySVG, ReviewsSVG } from "@/public/svgs"
 import { Skeleton } from "@/components/ui/skeleton"
 
-export default function LoadingGalleryCard() {
+export default function GalleryCardSkeleton() {
   return (
     <div className=" h-full w-full bg-white shadow-lg sm:max-w-md lg:max-w-xs">
       <div className="h-[20rem] w-full animate-pulse bg-slate-200 md:h-56"></div>
