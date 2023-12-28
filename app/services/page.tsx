@@ -35,7 +35,7 @@ export default function page() {
   )
 
   return (
-    <div className="mt-5 space-y-10 lg:pt-20">
+    <div className="mt-5 space-y-10 lg:pt-0">
       <div className="my-container">
         <h1 className="mb-2 text-center text-3xl font-semibold opacity-80 lg:text-4xl">Our Services</h1>
         <p className="text-center font-light opacity-60">Let us help you make your dreams a reality.</p>

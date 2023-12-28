@@ -1,7 +1,5 @@
 import StarFilledSVG from "@/public/svgs/starFilled.svg"
-import MediaGalleryButton from "../galleryCard/mediaGalleryButton"
 import { GallerySVG, ReviewsSVG } from "@/public/svgs"
-import { Skeleton } from "@/components/ui/skeleton"
 
 export default function GalleryCardSkeleton() {
   return (

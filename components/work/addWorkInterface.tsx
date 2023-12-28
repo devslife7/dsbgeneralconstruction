@@ -10,7 +10,11 @@ export default function AddWorkInterface() {
   return (
     <Modal open={open} onOpenChange={setOpen}>
       <Modal.Trigger asChild className="mx-auto flex">
-        <Button responsive size="sm" className="lg:bg-transparent lg:py-0 lg:text-primary">
+        <Button
+          responsive
+          size="sm"
+          className="lg:bg-transparent lg:py-0 lg:text-primary lg:hover:text-custom-white"
+        >
           Add Work
         </Button>
       </Modal.Trigger>
