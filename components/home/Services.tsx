@@ -17,22 +17,28 @@ export default function Services() {
       </h2>
       <div className="grid xl:container lg:grid-cols-3 lg:gap-6 xl:mx-auto xl:px-8">
         <div className="relative h-[22rem] w-full lg:h-[45rem]">
-          <Image src={kitchen} alt="kitchen" fill className="hidden object-cover lg:block" />
-          <Image src={kitchenMobile} alt="kitchen" fill className="object-cover lg:hidden" />
+          <Image src={kitchen} alt="kitchen" fill sizes="100vw" className="hidden object-cover lg:block" />
+          <Image src={kitchenMobile} alt="kitchen" fill sizes="100vw" className="object-cover lg:hidden" />
           <div className="absolute inset-0 flex items-center justify-center bg-black/25 text-center text-3xl font-medium text-white">
             Kitchens
           </div>
         </div>
         <div className="relative h-[22rem] w-full lg:h-[45rem]">
-          <Image src={bathroom} alt="kitchen" fill className="hidden object-cover lg:block" />
-          <Image src={bathroomMobile} alt="kitchen" fill className="object-cover lg:hidden" />
+          <Image src={bathroom} alt="kitchen" fill sizes="100vw" className="hidden object-cover lg:block" />
+          <Image src={bathroomMobile} alt="kitchen" fill sizes="100vw" className="object-cover lg:hidden" />
           <div className="absolute inset-0 flex items-center justify-center bg-black/25 text-center text-3xl font-medium text-white">
             Bathrooms
           </div>
         </div>
         <div className="relative h-[22rem] w-full lg:h-[45rem]">
-          <Image src={interior} alt="kitchen" fill className="hidden object-cover lg:block" />
-          <Image src={interiorMobile} alt="kitchen" fill className="object-cover lg:hidden" />
+          <Image src={interior} alt="kitchen" fill sizes="100vw" className="hidden object-cover lg:block" />
+          <Image
+            src={interiorMobile}
+            alt="kitchen mobile"
+            fill
+            sizes="100vw"
+            className="object-cover lg:hidden"
+          />
           <div className="absolute inset-0 flex items-center justify-center bg-black/25 text-center text-3xl font-medium text-white">
             Interiors
           </div>
