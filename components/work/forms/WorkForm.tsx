@@ -44,9 +44,8 @@ export default function WorkForm({
   }
 
   const formAction = async (formData: FormData) => {
-    if (work) editWorkClient(formData)
-    else addWorkClient(formData)
-    resetForm()
+    if (work) await editWorkClient(formData)
+    else await addWorkClient(formData)
   }
 
   const editWorkClient = async (formData: FormData) => {
@@ -73,6 +72,7 @@ export default function WorkForm({
     }
     if (response.status === 200) toast.success(response.message)
     if (response.status === 500) toast.error(response.message)
+    resetForm()
   }
 
   const addWorkClient = async (formData: FormData) => {
@@ -102,6 +102,7 @@ export default function WorkForm({
     }
     if (response.status === 200) toast.success(response.message)
     if (response.status === 500) toast.error(response.message)
+    resetForm()
   }
 
   const resetForm = () => {
@@ -171,7 +172,7 @@ const previewFile = (previewMediaObj: PreviewMedia[]) => {
       {previewMediaObj.map((file, idx) =>
         file.type.startsWith("image/") ? (
           <div key={idx} className="relative h-32 w-32 overflow-hidden rounded-lg">
-            <Image className="object-cover" src={file.url} alt="preview" priority={true} fill={true} />
+            <Image className="object-cover" src={file.url} alt="preview" priority fill />
           </div>
         ) : (
           <div key={idx} className="w-200 h-300 relative overflow-hidden rounded-lg">
