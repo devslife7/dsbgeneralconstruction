@@ -81,9 +81,6 @@ export async function getSignedURL(type: string, size: number, checksum: string)
   const signedURL = await getSignedUrl(s3, putObjectCommand, {
     expiresIn: 60
   })
-
-  console.log("signedURL", signedURL)
-
   return { success: { url: signedURL } }
 }
 
