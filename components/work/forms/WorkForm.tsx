@@ -76,7 +76,6 @@ export default function WorkForm({
   }
 
   const addWorkClient = async (formData: FormData) => {
-    console.log("formData: ", formData)
     const newWork = {
       title: formData.get("title"),
       description: formData.get("description"),
@@ -90,7 +89,6 @@ export default function WorkForm({
         errors = { ...errors, [issue.path[0]]: issue.message }
       })
       setErrors(errors)
-      console.log("parsedData: ", parsedData)
       return
     } else setErrors({})
 

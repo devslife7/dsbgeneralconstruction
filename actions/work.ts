@@ -34,7 +34,6 @@ export async function addWork(formData: FormData) {
     description: formData.get("description"),
     media: formData.getAll("media")
   }
-  console.log("formData", newWork.media)
   // server-side validation
   const parsedData = WorkSchema.safeParse(newWork)
   if (!parsedData.success) {
