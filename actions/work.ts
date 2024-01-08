@@ -27,42 +27,42 @@ export async function removeWork(work: any) {
 }
 
 export async function addWork(formData: FormData) {
-  // throw new Error("Not implemented")
+  throw new Error("Not implemented")
 
-  const newWork = {
-    title: formData.get("title"),
-    description: formData.get("description"),
-    media: formData.getAll("media")
-  }
-  // server-side validation
-  const parsedData = WorkSchema.safeParse(newWork)
-  if (!parsedData.success) {
-    let errorMessage = ""
-    parsedData.error.issues.forEach(issue => {
-      errorMessage = errorMessage + "\n " + issue.message
-    })
-    return { status: 406, message: errorMessage }
-  }
+  // const newWork = {
+  //   title: formData.get("title"),
+  //   description: formData.get("description"),
+  //   media: formData.getAll("media")
+  // }
+  // // server-side validation
+  // const parsedData = WorkSchema.safeParse(newWork)
+  // if (!parsedData.success) {
+  //   let errorMessage = ""
+  //   parsedData.error.issues.forEach(issue => {
+  //     errorMessage = errorMessage + "\n " + issue.message
+  //   })
+  //   return { status: 406, message: errorMessage }
+  // }
 
-  try {
-    // upload media to s3
-    const mediaURLS: string[] | undefined = await uploadFilesToS3(parsedData.data.media)
+  // try {
+  //   // upload media to s3
+  //   const mediaURLS: string[] | undefined = await uploadFilesToS3(parsedData.data.media)
 
-    // add work to db
-    await prisma.work.create({
-      data: {
-        title: parsedData.data.title,
-        description: parsedData.data.description,
-        media: mediaURLS
-      }
-    })
+  //   // add work to db
+  //   await prisma.work.create({
+  //     data: {
+  //       title: parsedData.data.title,
+  //       description: parsedData.data.description,
+  //       media: mediaURLS
+  //     }
+  //   })
 
-    revalidatePath("/work")
-    return { status: 200, message: "Successfully added Work" }
-  } catch (e) {
-    console.error(e)
-    return { status: 500, message: "Failed to add Work" }
-  }
+  //   revalidatePath("/work")
+  //   return { status: 200, message: "Successfully added Work" }
+  // } catch (e) {
+  //   console.error(e)
+  //   return { status: 500, message: "Failed to add Work" }
+  // }
 }
 
 export async function updateWork(formData: FormData, work: WorkType) {

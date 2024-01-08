@@ -8,5 +8,5 @@ export const ACCEPTED_MEDIA_TYPES = [
   "video/mp4",
   "video/mov",
   "video/webm",
-  "application/octet-stream",
+  "application/octet-stream"
 ]
