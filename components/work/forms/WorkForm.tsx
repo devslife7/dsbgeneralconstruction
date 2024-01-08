@@ -77,23 +77,22 @@ export default function WorkForm({
 
   const addWorkClient = async (formData: FormData) => {
     console.log("formData: ", formData)
-    console.log("accepted types: ", ACCEPTED_MEDIA_TYPES.join(", "))
     const newWork = {
       title: formData.get("title"),
       description: formData.get("description"),
       media: formData.getAll("media")
     }
     // client-side validation
-    // const parsedData = WorkSchema.safeParse(newWork)
-    // if (!parsedData.success) {
-    //   let errors: WorkErrors = {}
-    //   parsedData.error.issues.forEach(issue => {
-    //     errors = { ...errors, [issue.path[0]]: issue.message }
-    //   })
-    //   setErrors(errors)
-    //   console.log("parsedData: ", parsedData)
-    //   return
-    // } else setErrors({})
+    const parsedData = WorkSchema.safeParse(newWork)
+    if (!parsedData.success) {
+      let errors: WorkErrors = {}
+      parsedData.error.issues.forEach(issue => {
+        errors = { ...errors, [issue.path[0]]: issue.message }
+      })
+      setErrors(errors)
+      console.log("parsedData: ", parsedData)
+      return
+    } else setErrors({})
 
     // server action: add work
     const response = await addWork(formData)
