@@ -33,8 +33,16 @@ export async function addReview(data: unknown) {
     return { status: 406, message: errorMessage }
   }
   const workId = parsedData.data.workId as number
+  const work = prisma.review.findUnique({
+    where: {
+      id: workId
+    }
+  })
+
+  if (!work) return { status: 404, message: "Work not found" }
+
   try {
-    const newReview = await prisma.review.create({ data: parsedData.data })
+    await prisma.review.create({ data: parsedData.data })
     const rating = await prisma.review.aggregate({ _avg: { rating: true }, where: { workId } })
     await prisma.work.update({
       where: { id: workId },

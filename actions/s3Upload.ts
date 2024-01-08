@@ -3,14 +3,16 @@
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import crypto from "crypto"
+import { MAX_FILE_SIZE } from "@/lib/constants"
+
 const generateFileName = (bytes = 32) => crypto.randomBytes(bytes).toString("hex")
 
 const s3 = new S3Client({
   region: process.env.AWS_BUCKET_REGION!,
   credentials: {
     accessKeyId: process.env.AWS_BUCKET_ACCESS_KEY!,
-    secretAccessKey: process.env.AWS_BUCKET_SECRET_ACCESS_KEY!,
-  },
+    secretAccessKey: process.env.AWS_BUCKET_SECRET_ACCESS_KEY!
+  }
 })
 
 const acceptedTypes = [
@@ -21,10 +23,8 @@ const acceptedTypes = [
   "image/gif",
   "video/mp4",
   "video/mov",
-  "video/webm",
+  "video/webm"
 ]
-
-const MAX_FILE_SIZE = 1024 * 1024 * 10 // 10MB
 
 // Takes in a list of files and uploads them to S3
 export async function uploadFilesToS3(fileList: File[]) {
@@ -45,8 +45,8 @@ export async function uploadFilesToS3(fileList: File[]) {
           method: "PUT",
           body: file,
           headers: {
-            "Content-Type": file.type,
-          },
+            "Content-Type": file.type
+          }
         })
       }
     }
@@ -72,11 +72,11 @@ export async function getSignedURL(type: string, size: number, checksum: string)
     Key: generateFileName() + `${type.split("/")[1]}`,
     ContentType: type,
     ContentLength: size,
-    ChecksumSHA256: checksum,
+    ChecksumSHA256: checksum
   })
 
   const signedURL = await getSignedUrl(s3, putObjectCommand, {
-    expiresIn: 60,
+    expiresIn: 60
   })
 
   return { success: { url: signedURL } }
@@ -86,7 +86,7 @@ export async function deleteFilesFromS3(work: any) {
   for (const file of work.media) {
     const deleteObjectCommand = new DeleteObjectCommand({
       Bucket: process.env.AWS_BUCKET_NAME!,
-      Key: file.split("/").pop()!,
+      Key: file.split("/").pop()!
     })
     await s3.send(deleteObjectCommand)
   }
