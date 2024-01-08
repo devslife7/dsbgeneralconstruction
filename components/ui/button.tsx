@@ -16,7 +16,9 @@ const buttonStyles = cva(
           "bg-primary text-white hover:bg-primary-600 hover:bg-primary-600 focus-visible:ring-custom-white",
         secondary: "bg-blue-100 text-blue-700 hover:bg-blue-200 ",
         danger: "bg-red-100 text-red-600 hover:bg-red-200",
-        cancel: "text-gray-700"
+        cancel: "text-gray-700",
+        inverted:
+          "border border-2 border-primary text-primary hover:bg-primary-600 hover:bg-primary-600 hover:text-white focus-visible:ring-custom-white"
       },
       size: {
         sm: "px-6 py-1 text-base",

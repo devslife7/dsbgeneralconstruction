@@ -13,6 +13,7 @@ export { default as CloseSVG } from "./close.svg"
 export { default as PlusSVG } from "./plus.svg"
 export { default as SpinnerSVG } from "./spinner.svg"
 export { default as BackArrowSVG } from "./back-arrow.svg"
+export { default as RefreshSVG } from "./refresh.svg"
 
 export { default as FacebookSVG } from "./socials/facebook.svg"
 export { default as InstagramSVG } from "./socials/instagram.svg"
