@@ -10,7 +10,6 @@ export default function ErrorBoundary({ error, reset }: { error: Error; reset: (
       <p className="mb-6 text-2xl font-semibold tracking-tight text-primary">There was a problem</p>
 
       <p className="mb-6 text-6xl font-semibold">{error.message}</p>
-      <p className="mb-6 text-6xl font-semibold">{error.stack}</p>
       <p className="mb-12 mt-4 text-gray-500">
         Please try again later or contact support if the problem persists.
       </p>

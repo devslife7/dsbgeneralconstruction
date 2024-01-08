@@ -1,4 +1,4 @@
-export const MAX_FILE_SIZE = 20_000_000 // 10MB
+export const MAX_FILE_SIZE = 4_000_000 // 10MB
 export const ACCEPTED_MEDIA_TYPES = [
   "image/jpeg",
   // "image/jpg",
