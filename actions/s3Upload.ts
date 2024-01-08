@@ -3,7 +3,7 @@
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import crypto from "crypto"
-import { MAX_FILE_SIZE } from "@/lib/constants"
+import { MAX_FILE_SIZE, ACCEPTED_MEDIA_TYPES } from "@/lib/constants"
 
 const generateFileName = (bytes = 32) => crypto.randomBytes(bytes).toString("hex")
 
@@ -36,7 +36,7 @@ export async function uploadFilesToS3(fileList: File[]) {
         const checksum = await computeSHA256(file)
         const signedURLResult = await getSignedURL(file.type, file.size, checksum)
         if (signedURLResult.error !== undefined) {
-          console.error(signedURLResult.error)
+          console.error("signed url error: ", signedURLResult.error)
           return
         }
         const url = signedURLResult.success.url
@@ -47,6 +47,9 @@ export async function uploadFilesToS3(fileList: File[]) {
           headers: {
             "Content-Type": file.type
           }
+        }).catch(e => {
+          console.error("fetch put error: ", e)
+          return
         })
       }
     }
@@ -64,7 +67,7 @@ export async function getSignedURL(type: string, size: number, checksum: string)
   const session = true
 
   if (!session) return { error: "Not authenticated" }
-  if (!acceptedTypes.includes(type)) return { error: "File type not accepted" }
+  if (!ACCEPTED_MEDIA_TYPES.includes(type)) return { error: "File type not accepted" }
   if (size > MAX_FILE_SIZE) return { error: "File size too large" }
 
   const putObjectCommand = new PutObjectCommand({
@@ -78,6 +81,8 @@ export async function getSignedURL(type: string, size: number, checksum: string)
   const signedURL = await getSignedUrl(s3, putObjectCommand, {
     expiresIn: 60
   })
+
+  console.log("signedURL", signedURL)
 
   return { success: { url: signedURL } }
 }

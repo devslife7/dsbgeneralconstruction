@@ -61,7 +61,7 @@ export default function MediaGalleryButton({ mediaURLS = testGallery, className 
     <PhotoProvider>
       {mediaURLS.map((url: string, index: number) => (
         <div key={index} className={className}>
-          {url && !!url.match(/mp4|mov|webm/) ? renderVideo(url, index) : renderImage(url, index)}
+          {url && !!url.match(/mp4|mov|webm|quicktime/) ? renderVideo(url, index) : renderImage(url, index)}
         </div>
       ))}
     </PhotoProvider>

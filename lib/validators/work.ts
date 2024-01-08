@@ -23,7 +23,7 @@ export const WorkSchema = z.object({
     )
     .refine(
       files => files.every(file => ACCEPTED_MEDIA_TYPES.includes(file.type)),
-      "Only these types are allowed .jpg, .jpeg, .png .webp .gif .mp4 .mov .webm"
+      "Allowed file extentions: .jpg, .jpeg, .png .webp .gif .mp4 .mov .webm"
     )
 })
 

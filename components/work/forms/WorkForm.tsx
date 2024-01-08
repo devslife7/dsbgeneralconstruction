@@ -7,7 +7,7 @@ import { PreviewMedia } from "@/lib/validators/types"
 import { toast } from "sonner"
 import { WorkSchema, WorkErrors, WorkType, EditWorkSchema } from "@/lib/validators/work"
 import { Input } from "../../ui/input"
-import { ACCEPTED_MEDIA_TYPES } from "@/lib/constants"
+import { ACCEPTED_MEDIA_TYPES, ACCEPTED_MEDIA_EXTENTIONS } from "@/lib/constants"
 import { Modal } from "@/components/ui/modal"
 import { useFormStatus } from "react-dom"
 import { SpinnerSVG } from "@/public/svgs"
@@ -76,23 +76,24 @@ export default function WorkForm({
   }
 
   const addWorkClient = async (formData: FormData) => {
+    console.log("formData: ", formData)
+    console.log("accepted types: ", ACCEPTED_MEDIA_TYPES.join(", "))
     const newWork = {
       title: formData.get("title"),
       description: formData.get("description"),
       media: formData.getAll("media")
     }
     // client-side validation
-    const parsedData = WorkSchema.safeParse(newWork)
-    if (!parsedData.success) {
-      let errors: WorkErrors = {}
-      parsedData.error.issues.forEach(issue => {
-        errors = { ...errors, [issue.path[0]]: issue.message }
-      })
-      setErrors(errors)
-      console.log("parsedData: ", parsedData)
-      return
-    } else setErrors({})
-    console.log("parsedData: ", parsedData)
+    // const parsedData = WorkSchema.safeParse(newWork)
+    // if (!parsedData.success) {
+    //   let errors: WorkErrors = {}
+    //   parsedData.error.issues.forEach(issue => {
+    //     errors = { ...errors, [issue.path[0]]: issue.message }
+    //   })
+    //   setErrors(errors)
+    //   console.log("parsedData: ", parsedData)
+    //   return
+    // } else setErrors({})
 
     // server action: add work
     const response = await addWork(formData)
@@ -136,7 +137,7 @@ export default function WorkForm({
           name="media"
           type="file"
           multiple
-          accept={ACCEPTED_MEDIA_TYPES.join(", ")}
+          accept={ACCEPTED_MEDIA_EXTENTIONS.join(", ")}
           onChange={handleChange}
           onFocus={() => setErrors({ ...errors, media: "" })}
           errors={errors.media}

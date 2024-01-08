@@ -34,6 +34,7 @@ export async function addWork(formData: FormData) {
     description: formData.get("description"),
     media: formData.getAll("media")
   }
+  console.log("formData", newWork.media)
   // server-side validation
   const parsedData = WorkSchema.safeParse(newWork)
   if (!parsedData.success) {
@@ -47,6 +48,9 @@ export async function addWork(formData: FormData) {
   try {
     // upload media to s3
     const mediaURLS: string[] | undefined = await uploadFilesToS3(parsedData.data.media)
+    if (!mediaURLS) {
+      return { status: 500, message: "Failed to upload media" }
+    }
 
     // add work to db
     await prisma.work.create({

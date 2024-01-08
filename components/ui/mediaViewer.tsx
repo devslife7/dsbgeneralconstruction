@@ -46,7 +46,7 @@ export default function MediaViewer({ mediaURLS }: { mediaURLS: string[] }) {
     <PhotoProvider>
       {mediaURLS.map((url: string, index: number) => (
         <div key={index} className="w-[30rem] lg:max-w-[24rem]">
-          {url && !!url.match(/.mp4|.mov/) ? renderVideo(url) : renderImage(url)}
+          {url && !!url.match(/.mp4|.mov|.quicktime/) ? renderVideo(url) : renderImage(url)}
         </div>
       ))}
     </PhotoProvider>

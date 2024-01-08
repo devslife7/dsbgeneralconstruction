@@ -18,7 +18,7 @@ export default function AddWorkInterface() {
           Add Work
         </Button>
       </Modal.Trigger>
-      <Modal.Content title="Add Work">
+      <Modal.Content title="Add Work" className="max-h-full overflow-auto">
         <WorkForm onOpenChange={setOpen} />
       </Modal.Content>
     </Modal>
