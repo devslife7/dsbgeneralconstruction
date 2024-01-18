@@ -2,6 +2,8 @@ import Link from "next/link"
 import { socialMediaLinks } from "@/lib/data/socialMediaLinks"
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear()
+
   const renderSocialLinks = () => {
     return socialMediaLinks.map((link, index) => (
       <Link
@@ -18,14 +20,14 @@ export default function Footer() {
   }
 
   return (
-    <footer className="sticky mt-auto top-full bg-custom-black text-custom-white">
-      <div className="flex flex-col items-center justify-center my-container h-52 gap-y-4 md:flex-row md:justify-between">
-        <div className="text-xl text-center">
+    <footer className="sticky top-full mt-auto bg-custom-black text-custom-white">
+      <div className="my-container flex h-52 flex-col items-center justify-center gap-y-4 md:flex-row md:justify-between">
+        <div className="text-center text-xl">
           <span className="text-primary">DSB</span> General Construction
         </div>
         <div className="text-center ">
-          Copyright © 2023 <span className="text-primary">DSB</span> General Construction. All rights
-          reserved.
+          Copyright © {currentYear} <span className="text-primary">DSB</span> General Construction. All
+          rights reserved.
         </div>
         <div className="flex justify-center gap-x-6">{renderSocialLinks()}</div>
       </div>
