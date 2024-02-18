@@ -11,7 +11,7 @@ export const ACCEPTED_MEDIA_TYPES = [
   "video/webm",
   "application/octet-stream"
 ]
-export const ACCEPTED_MEDIA_EXTENTIONS = [
+export const ACCEPTED_MEDIA_EXTENSIONS = [
   ".jpeg",
   ".jpg",
   ".png",

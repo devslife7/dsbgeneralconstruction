@@ -7,7 +7,7 @@ import { PreviewMedia } from "@/lib/validators/types"
 import { toast } from "sonner"
 import { WorkSchema, WorkErrors, WorkType, EditWorkSchema } from "@/lib/validators/work"
 import { Input } from "../../ui/input"
-import { ACCEPTED_MEDIA_TYPES, ACCEPTED_MEDIA_EXTENTIONS } from "@/lib/constants"
+import { ACCEPTED_MEDIA_TYPES, ACCEPTED_MEDIA_EXTENSIONS } from "@/lib/constants"
 import { Modal } from "@/components/ui/modal"
 import { useFormStatus } from "react-dom"
 import { SpinnerSVG } from "@/public/svgs"
@@ -76,6 +76,7 @@ export default function WorkForm({
   }
 
   const addWorkClient = async (formData: FormData) => {
+    console.log("Form is submitted")
     const newWork = {
       title: formData.get("title"),
       description: formData.get("description"),
@@ -134,7 +135,7 @@ export default function WorkForm({
           name="media"
           type="file"
           multiple
-          accept={ACCEPTED_MEDIA_EXTENTIONS.join(", ")}
+          accept={ACCEPTED_MEDIA_EXTENSIONS.join(", ")}
           onChange={handleChange}
           onFocus={() => setErrors({ ...errors, media: "" })}
           errors={errors.media}

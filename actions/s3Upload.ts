@@ -28,6 +28,7 @@ const acceptedTypes = [
 
 // Takes in a list of files and uploads them to S3
 export async function uploadFilesToS3(fileList: File[]) {
+  console.log("starts uploadFilesToS3")
   let urlArray: string[] | undefined = []
   try {
     // Upload file to S3
@@ -41,6 +42,8 @@ export async function uploadFilesToS3(fileList: File[]) {
         }
         const url = signedURLResult.success.url
         urlArray.push(url.split("?")[0])
+
+        // Upload file to S3 using presigned url
         await fetch(url, {
           method: "PUT",
           body: file,
@@ -57,6 +60,7 @@ export async function uploadFilesToS3(fileList: File[]) {
     console.error(e)
     return
   }
+  console.log("finishes uploadFilesToS3")
   return urlArray
 }
 
