@@ -12,7 +12,7 @@ export default function OptionButtons({ work }: { work: WorkType }) {
       <Modal>
         <Modal.Trigger className="flex w-1/2 items-center justify-center gap-2 border-r border-black/30 py-2 text-center text-xs">
           <ReviewsSVG className="mt-[.1rem] text-sm text-primary" />
-          <div className="opacity-70">reviews({work.Review.length})</div>
+          <div className="opacity-70">reviews</div>
         </Modal.Trigger>
         <Reviews work={work} />
       </Modal>
