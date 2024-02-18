@@ -15,7 +15,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className, error
         disabled={pending}
         className={cn(
           "border-input placeholder:text-muted-foreground focus-visible:ring-ring flex w-full rounded-none border px-3 py-2 text-base ring-offset-background file:cursor-pointer file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 file:disabled:cursor-not-allowed",
-          className
+          className,
+          { "border-red-300": errors }
         )}
         ref={ref}
         {...props}
