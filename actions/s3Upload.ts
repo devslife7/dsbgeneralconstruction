@@ -29,32 +29,23 @@ const acceptedTypes = [
 // Takes in a list of files and uploads them to S3
 export async function uploadFilesToS3(fileList: File[]) {
   console.log("starts uploadFilesToS3")
+
   let urlArray: string[] | undefined = []
   try {
-    // Upload file to S3
-    if (fileList.length > 0 && fileList[0]) {
-      for (const file of fileList) {
-        const checksum = await computeSHA256(file)
-        const signedURLResult = await getSignedURL(file.type, file.size, checksum)
-        if (signedURLResult.error !== undefined) {
-          console.error("signed url error: ", signedURLResult.error)
-          return
-        }
-        const url = signedURLResult.success.url
-        urlArray.push(url.split("?")[0])
+    for (const file of fileList) {
+      // Get presigned url from aws
+      const signedURLResponse = await getSignedURL(file)
+      const url = signedURLResponse.url as string
 
-        // Upload file to S3 using presigned url
-        await fetch(url, {
-          method: "PUT",
-          body: file,
-          headers: {
-            "Content-Type": file.type
-          }
-        }).catch(e => {
-          console.error("fetch put error: ", e)
-          return
-        })
-      }
+      // Upload file to S3 using presigned url
+      await fetch(url, {
+        method: "PUT",
+        body: file,
+        headers: {
+          "Content-Type": file.type
+        }
+      })
+      urlArray.push(url.split("?")[0])
     }
   } catch (e) {
     console.error(e)
@@ -64,8 +55,49 @@ export async function uploadFilesToS3(fileList: File[]) {
   return urlArray
 }
 
+// Takes in a list of files and uploads them to S3
+// export async function uploadFilesToS3(fileList: File[]) {
+//   console.log("starts uploadFilesToS3")
+//   let urlArray: string[] | undefined = []
+//   try {
+//     // Upload file to S3
+//     if (fileList.length > 0 && fileList[0]) {
+//       for (const file of fileList) {
+//         const checksum = await computeSHA256(file)
+//         const signedURLResult = await getSignedURL(file.type, file.size, checksum)
+//         if (signedURLResult.error !== undefined) {
+//           console.error("signed url error: ", signedURLResult.error)
+//           return
+//         }
+//         const url = signedURLResult.success.url
+//         urlArray.push(url.split("?")[0])
+
+//         // Upload file to S3 using presigned url
+//         await fetch(url, {
+//           method: "PUT",
+//           body: file,
+//           headers: {
+//             "Content-Type": file.type
+//           }
+//         }).catch(e => {
+//           console.error("fetch put error: ", e)
+//           return
+//         })
+//       }
+//     }
+//   } catch (e) {
+//     console.error(e)
+//     return
+//   }
+//   console.log("finishes uploadFilesToS3")
+//   return urlArray
+// }
+
 // Returns a signed URL for the file to be uploaded to
-export async function getSignedURL(type: string, size: number, checksum: string) {
+export async function getSignedURL(file: File) {
+  const { type, size } = file
+  const checksum = await computeSHA256(file)
+
   // make sure user is authenticated
   // const session = await auth()
   const session = true
@@ -85,7 +117,7 @@ export async function getSignedURL(type: string, size: number, checksum: string)
   const signedURL = await getSignedUrl(s3, putObjectCommand, {
     expiresIn: 60
   })
-  return { success: { url: signedURL } }
+  return { url: signedURL }
 }
 
 export async function deleteFilesFromS3(work: any) {
