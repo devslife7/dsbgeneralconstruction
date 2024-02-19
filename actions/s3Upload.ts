@@ -28,73 +28,35 @@ const acceptedTypes = [
 
 // Takes in a list of files and uploads them to S3
 export async function uploadFilesToS3(fileList: File[]) {
-  console.log("starts uploadFilesToS3")
-
-  let urlArray: string[] | undefined = []
+  let urlList: string[] = []
   try {
-    for (const file of fileList) {
-      // Get presigned url from aws
-      const signedURLResponse = await getSignedURL(file)
-      const url = signedURLResponse.url as string
-
-      // Upload file to S3 using presigned url
-      await fetch(url, {
-        method: "PUT",
-        body: file,
-        headers: {
-          "Content-Type": file.type
-        }
-      })
-      urlArray.push(url.split("?")[0])
-    }
+    // Upload file to S3
+    const promises = fileList.map(file => uploadFile(file))
+    urlList = await Promise.all(promises)
   } catch (e) {
     console.error(e)
     return
   }
-  console.log("finishes uploadFilesToS3")
-  return urlArray
+  return urlList
+}
+const uploadFile = async (file: File) => {
+  // Get presigned url from aws
+  const response = await getSignedURL(file)
+  const url = response.url as string
+
+  // Upload file to S3 using presigned url
+  await fetch(url, {
+    method: "PUT",
+    body: file,
+    headers: {
+      "Content-Type": file.type
+    }
+  })
+  return url.split("?")[0]
 }
 
-// Takes in a list of files and uploads them to S3
-// export async function uploadFilesToS3(fileList: File[]) {
-//   console.log("starts uploadFilesToS3")
-//   let urlArray: string[] | undefined = []
-//   try {
-//     // Upload file to S3
-//     if (fileList.length > 0 && fileList[0]) {
-//       for (const file of fileList) {
-//         const checksum = await computeSHA256(file)
-//         const signedURLResult = await getSignedURL(file.type, file.size, checksum)
-//         if (signedURLResult.error !== undefined) {
-//           console.error("signed url error: ", signedURLResult.error)
-//           return
-//         }
-//         const url = signedURLResult.success.url
-//         urlArray.push(url.split("?")[0])
-
-//         // Upload file to S3 using presigned url
-//         await fetch(url, {
-//           method: "PUT",
-//           body: file,
-//           headers: {
-//             "Content-Type": file.type
-//           }
-//         }).catch(e => {
-//           console.error("fetch put error: ", e)
-//           return
-//         })
-//       }
-//     }
-//   } catch (e) {
-//     console.error(e)
-//     return
-//   }
-//   console.log("finishes uploadFilesToS3")
-//   return urlArray
-// }
-
 // Returns a signed URL for the file to be uploaded to
-export async function getSignedURL(file: File) {
+async function getSignedURL(file: File) {
   const { type, size } = file
   const checksum = await computeSHA256(file)
 
@@ -121,13 +83,16 @@ export async function getSignedURL(file: File) {
 }
 
 export async function deleteFilesFromS3(work: any) {
-  for (const file of work.media) {
-    const deleteObjectCommand = new DeleteObjectCommand({
-      Bucket: process.env.AWS_BUCKET_NAME!,
-      Key: file.split("/").pop()!
-    })
-    await s3.send(deleteObjectCommand)
-  }
+  const promises = work.media.map((url: string) => deleteFile(url))
+  await Promise.all(promises)
+}
+
+async function deleteFile(url: string) {
+  const deleteObjectCommand = new DeleteObjectCommand({
+    Bucket: process.env.AWS_BUCKET_NAME!,
+    Key: url.split("/").pop()!
+  })
+  await s3.send(deleteObjectCommand)
 }
 
 // Takes an input and produces a fixed-size string of bytes. Output is unique to the input.
