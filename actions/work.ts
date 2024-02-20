@@ -5,7 +5,6 @@ import { deleteFilesFromS3, uploadFilesToS3 } from "./s3Upload"
 import { EditWorkSchema, WorkSchema, WorkType } from "@/lib/validators/work"
 
 export async function getWorkList() {
-  await new Promise(resolve => setTimeout(resolve, 3000))
   return await prisma.work.findMany({
     orderBy: {
       id: "desc"
@@ -28,8 +27,6 @@ export async function removeWork(work: any) {
 
 export async function addWork(formData: FormData) {
   // throw new Error("Not implemented testing")
-  console.log("Enters Server action")
-
   const newWork = {
     title: formData.get("title"),
     description: formData.get("description"),
@@ -52,7 +49,6 @@ export async function addWork(formData: FormData) {
       return { status: 500, message: "Failed to upload media" }
     }
 
-    console.log("starts to add work to db")
     // add work to db
     await prisma.work.create({
       data: {
@@ -61,7 +57,6 @@ export async function addWork(formData: FormData) {
         media: mediaURLS
       }
     })
-    console.log("finishes adding work to db")
 
     revalidatePath("/work")
     return { status: 200, message: "Successfully added Work" }
@@ -105,8 +100,4 @@ export async function updateWork(formData: FormData, work: WorkType) {
     console.error(e)
     return { status: 500, message: "Failed to update Work" }
   }
-}
-
-export async function revalidateWorkPage() {
-  revalidatePath("/work")
 }

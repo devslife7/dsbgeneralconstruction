@@ -76,7 +76,6 @@ export default function WorkForm({
   }
 
   const addWorkClient = async (formData: FormData) => {
-    console.log("Form is submitted")
     const newWork = {
       title: formData.get("title"),
       description: formData.get("description"),
