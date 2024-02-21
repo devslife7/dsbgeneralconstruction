@@ -1,9 +1,9 @@
 "use server"
-// import { auth } from "@/auth"
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import crypto from "crypto"
 import { MAX_FILE_SIZE, ACCEPTED_MEDIA_TYPES } from "@/lib/constants"
+import { randomUUID } from "crypto"
 
 const generateFileName = (bytes = 32) => crypto.randomBytes(bytes).toString("hex")
 
@@ -14,17 +14,6 @@ const s3 = new S3Client({
     secretAccessKey: process.env.AWS_BUCKET_SECRET_ACCESS_KEY!
   }
 })
-
-const acceptedTypes = [
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/webp",
-  "image/gif",
-  "video/mp4",
-  "video/mov",
-  "video/webm"
-]
 
 // Takes in a list of files and uploads them to S3
 export async function uploadFilesToS3(fileList: File[]) {
@@ -58,8 +47,6 @@ const uploadFile = async (file: File) => {
 // Returns a signed URL for the file to be uploaded to
 async function getSignedURL(file: File) {
   const { type, size } = file
-  const checksum = await computeSHA256(file)
-
   // make sure user is authenticated
   // const session = await auth()
   const session = true
@@ -71,9 +58,7 @@ async function getSignedURL(file: File) {
   const putObjectCommand = new PutObjectCommand({
     Bucket: process.env.AWS_BUCKET_NAME!,
     Key: generateFileName() + `${type.split("/")[1]}`,
-    ContentType: type,
-    ContentLength: size,
-    ChecksumSHA256: checksum
+    ContentType: type
   })
 
   const signedURL = await getSignedUrl(s3, putObjectCommand, {
@@ -102,4 +87,26 @@ const computeSHA256 = async (file: File) => {
   const hashArray = Array.from(new Uint8Array(hashBuffer))
   const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("")
   return hashHex
+}
+
+export async function getPresignedURLS(fileTypeList: string[]) {
+  const promiseArray = fileTypeList.map(fileType => getPresignedURL(fileType))
+  const urls = await Promise.all(promiseArray)
+  console.log("--URLS: ", urls)
+  return urls
+}
+
+export async function getPresignedURL(fileType: string) {
+  const extension = fileType.split("/")[1]
+  const Key = `${randomUUID()}.${extension}`
+
+  const putObjectCommand = new PutObjectCommand({
+    Bucket: process.env.AWS_BUCKET_NAME!,
+    Key,
+    ContentType: fileType
+  })
+
+  const uploadUrl = await getSignedUrl(s3, putObjectCommand, { expiresIn: 60 })
+
+  return { uploadUrl, Key }
 }

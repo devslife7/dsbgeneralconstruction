@@ -13,6 +13,9 @@ import { useFormStatus } from "react-dom"
 import { SpinnerSVG } from "@/public/svgs"
 import { cn } from "@/lib/utils"
 import { TextArea } from "@/components/ui/textArea"
+import { getPresignedURLS, getPresignedURL } from "@/actions/s3Upload"
+import { url } from "inspector"
+import { get } from "http"
 
 export default function WorkForm({
   onOpenChange,
@@ -75,31 +78,60 @@ export default function WorkForm({
     resetForm()
   }
 
-  const addWorkClient = async (formData: FormData) => {
-    const newWork = {
-      title: formData.get("title"),
-      description: formData.get("description"),
-      media: formData.getAll("media")
-    }
-    // client-side validation
-    const parsedData = WorkSchema.safeParse(newWork)
-    if (!parsedData.success) {
-      let errors: WorkErrors = {}
-      parsedData.error.issues.forEach(issue => {
-        errors = { ...errors, [issue.path[0]]: issue.message }
-      })
-      setErrors(errors)
-      return
-    } else setErrors({})
+  async function uploadFile(file: File, url: string) {
+    // Upload file to S3 using presigned url
+    await fetch(url, {
+      method: "PUT",
+      body: file,
+      headers: {
+        "Content-Type": file.type
+      }
+    }).catch(e => console.error(e))
+    return url.split("?")[0]
+  }
 
-    // server action: add work
-    const response = await addWork(formData)
-    if (response.status === 406) {
-      toast.error("Validation Error", { description: response.message })
-      return
+  const addWorkClient = async (formData: FormData) => {
+    const fileList = formData.getAll("media") as File[]
+    // const fileListType = fileList.map(file => file.type)
+    const promiseArray = fileList.map(file => getPresignedURL(file.type))
+    const presignedURLS = await Promise.all(promiseArray)
+
+    const fileUrlArr: string[] = []
+    for (let i = 0; i < fileList.length; i++) {
+      const url = presignedURLS[i].uploadUrl as string
+      const file = fileList[i]
+      const fileUrlArr = uploadFile(file, url)
     }
-    if (response.status === 200) toast.success(response.message)
-    if (response.status === 500) toast.error(response.message)
+
+    const urlArray2 = await Promise.all(fileUrlArr)
+
+    console.log("urlArray2", urlArray2)
+
+    // const newWork = {
+    //   title: formData.get("title"),
+    //   description: formData.get("description"),
+    //   media: formData.getAll("media")
+    // }
+    // // client-side validation
+    // const parsedData = WorkSchema.safeParse(newWork)
+    // if (!parsedData.success) {
+    //   let errors: WorkErrors = {}
+    //   parsedData.error.issues.forEach(issue => {
+    //     errors = { ...errors, [issue.path[0]]: issue.message }
+    //   })
+    //   setErrors(errors)
+    //   return
+    // } else setErrors({})
+
+    // // server action: add work
+    // const response = await addWork(formData)
+    // if (response.status === 406) {
+    //   toast.error("Validation Error", { description: response.message })
+    //   return
+    // }
+    // if (response.status === 200) toast.success(response.message)
+    // if (response.status === 500) toast.error(response.message)
+
     resetForm()
   }
 
