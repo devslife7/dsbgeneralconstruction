@@ -92,7 +92,6 @@ export default function WorkForm({
 
   const addWorkClient = async (formData: FormData) => {
     const fileList = formData.getAll("media") as File[]
-    // const fileListType = fileList.map(file => file.type)
     const promiseArray = fileList.map(file => getPresignedURL(file.type))
     const presignedURLS = await Promise.all(promiseArray)
 
