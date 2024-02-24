@@ -2,7 +2,7 @@
 import { prisma } from "../lib/db"
 import { revalidatePath } from "next/cache"
 import { deleteFilesFromS3, uploadFilesToS3 } from "./s3Upload"
-import { EditWorkSchema, WorkSchema, WorkType } from "@/lib/validators/work"
+import { EditWorkSchema, WorkSchema, WorkType, WorkSchemaServerValidation } from "@/lib/validators/work"
 
 export async function getWorkList() {
   return await prisma.work.findMany({
@@ -25,15 +25,9 @@ export async function removeWork(work: any) {
   revalidatePath("/work")
 }
 
-export async function addWork(formData: FormData) {
-  // throw new Error("Not implemented testing")
-  const newWork = {
-    title: formData.get("title"),
-    description: formData.get("description"),
-    media: formData.getAll("media")
-  }
+export async function addWork(workData: unknown) {
   // server-side validation
-  const parsedData = WorkSchema.safeParse(newWork)
+  const parsedData = WorkSchemaServerValidation.safeParse(workData)
   if (!parsedData.success) {
     let errorMessage = ""
     parsedData.error.issues.forEach(issue => {
@@ -43,19 +37,9 @@ export async function addWork(formData: FormData) {
   }
 
   try {
-    // upload media to s3
-    const mediaURLS: string[] | undefined = await uploadFilesToS3(parsedData.data.media)
-    if (!mediaURLS) {
-      return { status: 500, message: "Failed to upload media" }
-    }
-
     // add work to db
     await prisma.work.create({
-      data: {
-        title: parsedData.data.title,
-        description: parsedData.data.description,
-        media: mediaURLS
-      }
+      data: parsedData.data
     })
 
     revalidatePath("/work")

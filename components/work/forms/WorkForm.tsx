@@ -82,11 +82,9 @@ export default function WorkForm({
     const title = formData.get("title") as string
     const description = formData.get("description") as string
     const fileList = formData.getAll("media") as File[]
-    console.log("fileList", fileList.length)
 
     // client-side validation
-    const parsedData = WorkSchema.safeParse({ title, description, fileList })
-    console.log("parsedData", parsedData)
+    const parsedData = WorkSchema.safeParse({ title, description, media: fileList })
     if (!parsedData.success) {
       let errors: WorkErrors = {}
       parsedData.error.issues.forEach(issue => {
@@ -97,18 +95,16 @@ export default function WorkForm({
     } else setErrors({})
 
     // upload files to s3
-    const resp = await uploadFiles(fileList)
-    if (!resp.success) {
-      toast.error("Failed to upload files.")
-      return
-    }
+    const resp = await uploadFiles(parsedData.data.media)
+    if (!resp.success) return toast.error("Failed to upload files.")
 
     // server action: add work
-    const response = await addWork(formData)
-    if (response.status === 406) {
-      toast.error("Validation Error", { description: response.message })
-      return
-    }
+    const response = await addWork({
+      title: parsedData.data.title,
+      description: parsedData.data.description,
+      media: resp.urlList
+    })
+    if (response.status === 406) return toast.error("Validation Error", { description: response.message })
     if (response.status === 200) toast.success(response.message)
     if (response.status === 500) toast.error(response.message)
 
