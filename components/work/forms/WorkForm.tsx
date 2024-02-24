@@ -7,7 +7,7 @@ import { PreviewMedia } from "@/lib/validators/types"
 import { toast } from "sonner"
 import { WorkSchema, WorkErrors, WorkType, EditWorkSchema } from "@/lib/validators/work"
 import { Input } from "../../ui/input"
-import { ACCEPTED_MEDIA_TYPES, ACCEPTED_MEDIA_EXTENSIONS } from "@/lib/constants"
+import { ACCEPTED_MEDIA_EXTENSIONS, ACCEPTED_MEDIA_TYPES } from "@/lib/constants"
 import { Modal } from "@/components/ui/modal"
 import { useFormStatus } from "react-dom"
 import { SpinnerSVG } from "@/public/svgs"
@@ -67,7 +67,7 @@ export default function WorkForm({
       return
     } else setErrors({})
 
-    // server action: add work
+    // server action: update work
     const response = await updateWork(formData, work!)
     if (response.status === 406) {
       toast.error("Validation Error", { description: response.message })
@@ -78,58 +78,39 @@ export default function WorkForm({
     resetForm()
   }
 
-  async function uploadFile(file: File, url: string) {
-    // Upload file to S3 using presigned url
-    await fetch(url, {
-      method: "PUT",
-      body: file,
-      headers: {
-        "Content-Type": file.type
-      }
-    }).catch(e => console.error(e))
-    return url.split("?")[0]
-  }
-
   const addWorkClient = async (formData: FormData) => {
+    const title = formData.get("title") as string
+    const description = formData.get("description") as string
     const fileList = formData.getAll("media") as File[]
-    const promiseArray = fileList.map(file => getPresignedURL(file.type))
-    const presignedURLS = await Promise.all(promiseArray)
+    console.log("fileList", fileList.length)
 
-    const fileUrlArr: string[] = []
-    for (let i = 0; i < fileList.length; i++) {
-      const url = presignedURLS[i].uploadUrl as string
-      const file = fileList[i]
-      const fileUrlArr = uploadFile(file, url)
+    // client-side validation
+    const parsedData = WorkSchema.safeParse({ title, description, fileList })
+    console.log("parsedData", parsedData)
+    if (!parsedData.success) {
+      let errors: WorkErrors = {}
+      parsedData.error.issues.forEach(issue => {
+        errors = { ...errors, [issue.path[0]]: issue.message }
+      })
+      setErrors(errors)
+      return
+    } else setErrors({})
+
+    // upload files to s3
+    const resp = await uploadFiles(fileList)
+    if (!resp.success) {
+      toast.error("Failed to upload files.")
+      return
     }
 
-    const urlArray2 = await Promise.all(fileUrlArr)
-
-    console.log("urlArray2", urlArray2)
-
-    // const newWork = {
-    //   title: formData.get("title"),
-    //   description: formData.get("description"),
-    //   media: formData.getAll("media")
-    // }
-    // // client-side validation
-    // const parsedData = WorkSchema.safeParse(newWork)
-    // if (!parsedData.success) {
-    //   let errors: WorkErrors = {}
-    //   parsedData.error.issues.forEach(issue => {
-    //     errors = { ...errors, [issue.path[0]]: issue.message }
-    //   })
-    //   setErrors(errors)
-    //   return
-    // } else setErrors({})
-
-    // // server action: add work
-    // const response = await addWork(formData)
-    // if (response.status === 406) {
-    //   toast.error("Validation Error", { description: response.message })
-    //   return
-    // }
-    // if (response.status === 200) toast.success(response.message)
-    // if (response.status === 500) toast.error(response.message)
+    // server action: add work
+    const response = await addWork(formData)
+    if (response.status === 406) {
+      toast.error("Validation Error", { description: response.message })
+      return
+    }
+    if (response.status === 200) toast.success(response.message)
+    if (response.status === 500) toast.error(response.message)
 
     resetForm()
   }
@@ -174,6 +155,34 @@ export default function WorkForm({
       <FormButtons />
     </form>
   )
+}
+
+// Upload files to AWS S3
+const uploadFiles = async (fileList: File[]) => {
+  const promiseArray = fileList.map(file => getPresignedURL(file.type))
+  const presignedURLS = await Promise.all(promiseArray)
+
+  const fileUrlArr = []
+  for (let i = 0; i < fileList.length; i++) {
+    const url = presignedURLS[i].uploadUrl as string
+    const file = fileList[i]
+    fileUrlArr.push(uploadFile(file, url))
+  }
+
+  const urlList = await Promise.all(fileUrlArr)
+  return { success: true, urlList }
+}
+
+// Upload file to S3 using presigned url
+async function uploadFile(file: File, url: string) {
+  await fetch(url, {
+    method: "PUT",
+    body: file,
+    headers: {
+      "Content-Type": file.type
+    }
+  }).catch(e => console.error(e))
+  return url.split("?")[0]
 }
 
 // Form Buttons for Cancel and Submit
