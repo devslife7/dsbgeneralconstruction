@@ -16,56 +16,56 @@ const s3 = new S3Client({
 })
 
 // Takes in a list of files and uploads them to S3
-export async function uploadFilesToS3(fileList: File[]) {
-  let urlList: string[] = []
-  try {
-    // Upload file to S3
-    const promises = fileList.map(file => uploadFile(file))
-    urlList = await Promise.all(promises)
-  } catch (e) {
-    console.error(e)
-    return
-  }
-  return urlList
-}
-const uploadFile = async (file: File) => {
-  // Get presigned url from aws
-  const response = await getSignedURL(file)
-  const url = response.url as string
+// export async function uploadFilesToS3(fileList: File[]) {
+//   let urlList: string[] = []
+//   try {
+//     // Upload file to S3
+//     const promises = fileList.map(file => uploadFile(file))
+//     urlList = await Promise.all(promises)
+//   } catch (e) {
+//     console.error(e)
+//     return
+//   }
+//   return urlList
+// }
+// const uploadFile = async (file: File) => {
+//   // Get presigned url from aws
+//   const response = await getSignedURL(file)
+//   const url = response.url as string
 
-  // Upload file to S3 using presigned url
-  await fetch(url, {
-    method: "PUT",
-    body: file,
-    headers: {
-      "Content-Type": file.type
-    }
-  })
-  return url.split("?")[0]
-}
+//   // Upload file to S3 using presigned url
+//   await fetch(url, {
+//     method: "PUT",
+//     body: file,
+//     headers: {
+//       "Content-Type": file.type
+//     }
+//   })
+//   return url.split("?")[0]
+// }
 
 // Returns a signed URL for the file to be uploaded to
-async function getSignedURL(file: File) {
-  const { type, size } = file
-  // make sure user is authenticated
-  // const session = await auth()
-  const session = true
+// async function getSignedURL(file: File) {
+//   const { type, size } = file
+//   // make sure user is authenticated
+//   // const session = await auth()
+//   const session = true
 
-  if (!session) return { error: "Not authenticated" }
-  if (!ACCEPTED_MEDIA_TYPES.includes(type)) return { error: "File type not accepted" }
-  if (size > MAX_FILE_SIZE) return { error: "File size too large" }
+//   if (!session) return { error: "Not authenticated" }
+//   if (!ACCEPTED_MEDIA_TYPES.includes(type)) return { error: "File type not accepted" }
+//   if (size > MAX_FILE_SIZE) return { error: "File size too large" }
 
-  const putObjectCommand = new PutObjectCommand({
-    Bucket: process.env.AWS_BUCKET_NAME!,
-    Key: generateFileName() + `${type.split("/")[1]}`,
-    ContentType: type
-  })
+//   const putObjectCommand = new PutObjectCommand({
+//     Bucket: process.env.AWS_BUCKET_NAME!,
+//     Key: generateFileName() + `${type.split("/")[1]}`,
+//     ContentType: type
+//   })
 
-  const signedURL = await getSignedUrl(s3, putObjectCommand, {
-    expiresIn: 60
-  })
-  return { url: signedURL }
-}
+//   const signedURL = await getSignedUrl(s3, putObjectCommand, {
+//     expiresIn: 60
+//   })
+//   return { url: signedURL }
+// }
 
 export async function deleteFilesFromS3(work: any) {
   const promises = work.media.map((url: string) => deleteFile(url))
@@ -87,13 +87,6 @@ const computeSHA256 = async (file: File) => {
   const hashArray = Array.from(new Uint8Array(hashBuffer))
   const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("")
   return hashHex
-}
-
-export async function getPresignedURLS(fileTypeList: string[]) {
-  const promiseArray = fileTypeList.map(fileType => getPresignedURL(fileType))
-  const urls = await Promise.all(promiseArray)
-  console.log("--URLS: ", urls)
-  return urls
 }
 
 export async function getPresignedURL(fileType: string) {
