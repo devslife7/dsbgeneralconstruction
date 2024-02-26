@@ -24,7 +24,8 @@ export default function WorkForm({ onOpenChange, work }: FormType) {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting },
+    reset
   } = useForm<WorkFormType>({ resolver: zodResolver(WorkFormSchema) })
 
   const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,57 +49,20 @@ export default function WorkForm({ onOpenChange, work }: FormType) {
   const formAction = async (formData: FormData) => {
     // if (work) await editWorkClient(formData)
     // else await addWorkClient(formData)
-    // await addWorkClient(formData)
   }
 
-  // const editWorkClient = async (formData: FormData) => {
-  //   // client-side validation
-  //   const parsedData = EditWorkSchema.safeParse({
-  //     title: formData.get("title"),
-  //     description: formData.get("description")
-  //   })
-  //   if (!parsedData.success) {
-  //     let errors: WorkErrors = {}
-  //     parsedData.error.issues.forEach(issue => {
-  //       errors = { ...errors, [issue.path[0]]: issue.message }
-  //     })
-  //     setErrors(errors)
-  //     return
-  //   } else setErrors({})
+  const editWorkClient = async (data: WorkType) => {
+    // server action: update work
+    // const response = await updateWork({ title, descripttion }, workId)
 
-  //   // server action: update work
-  //   const response = await updateWork(formData, work!)
-  //   if (response.status === 406) {
-  //     toast.error("Validation Error", { description: response.message })
-  //     return
-  //   }
-  //   if (response.status === 200) toast.success(response.message)
-  //   if (response.status === 500) toast.error(response.message)
-  //   resetForm()
-  // }
-
-  const addWorkClient = async (formData: FormData) => {
-    // upload files to s3
-    // Array.from(files).every(file => file.size < MAX_FILE_SIZE)
-    // const resp = await uploadFiles(parsedData.data.media)
-    // if (!resp.success) return toast.error("Failed to upload files.")
-    // // server action: add work
-    // const response = await addWork({
-    //   title: parsedData.data.title,
-    //   description: parsedData.data.description,
-    //   media: resp.urlList
-    // })
-    // if (response.status === 406) return toast.error("Validation Error", { description: response.message })
+    // if (!response.success) return toast.error(response.errors)
+    // if (response.status === 406) {
+    //   toast.error("Validation Error", { description: response.message })
+    //   return
+    // }
     // if (response.status === 200) toast.success(response.message)
     // if (response.status === 500) toast.error(response.message)
-    // resetForm()
-  }
-
-  const resetForm = () => {
-    onOpenChange(false)
-    setPreviewMediaObj(undefined)
-    window.scrollTo(0, 0)
-    // ref.current?.reset()
+    resetForm()
   }
 
   const onSubmit: SubmitHandler<WorkFormType> = async ({ title, description, files }) => {
@@ -113,13 +77,14 @@ export default function WorkForm({ onOpenChange, work }: FormType) {
     })
     if (!response.success) return toast.error("Failed to upload files.")
 
-    // const formData = new FormData()
-    // formData.append("title", data.title)
-    // formData.append("description", data.description)
-    // data.files.forEach(file => {
-    //   formData.append("media", file)
-    // })
-    // formAction(formData)
+    resetForm()
+  }
+
+  const resetForm = () => {
+    onOpenChange(false)
+    setPreviewMediaObj(undefined)
+    window.scrollTo(0, 0)
+    reset()
   }
 
   return (
@@ -229,7 +194,7 @@ const WorkFormSchema = z.object({
     .max(128, "Description must be less than 128 characters long."),
   files: z
     .instanceof(FileList)
-    .refine(files => files.length > 0, "sMedia files are required.")
+    .refine(files => files.length > 0, "Media files are required.")
     .refine(files => files.length <= 15, "Media must be less than 15 files.")
     .refine(
       files => Array.from(files).every(file => file.size < MAX_FILE_SIZE),

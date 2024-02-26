@@ -15,7 +15,7 @@ export const WorkFormSchema2 = z.object({
     .max(128, "Description must be less than 128 characters long."),
   files: z
     .instanceof(FileList)
-    .refine(files => files.length > 0, "sMedia files are required.")
+    .refine(files => files.length > 0, "Media files are required.")
     .refine(files => files.length <= 15, "Media must be less than 15 files.")
     .refine(
       files => Array.from(files).every(file => file.size < MAX_FILE_SIZE),
