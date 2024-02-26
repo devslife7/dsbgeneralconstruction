@@ -1,37 +1,29 @@
 "use client"
-import { useRef, useState } from "react"
-import { addWork, updateWork } from "@/actions/work"
-import Image from "next/image"
-import Button from "../../ui/button"
 import { PreviewMedia } from "@/lib/validators/types"
-import { toast } from "sonner"
-import { WorkSchema, WorkType } from "@/lib/validators/work"
-import { Input } from "../../ui/input"
-import { ACCEPTED_FILES_TYPES } from "@/lib/constants"
-import { Modal } from "@/components/ui/modal"
-import { useFormStatus } from "react-dom"
-import { SpinnerSVG } from "@/public/svgs"
-import { cn } from "@/lib/utils"
-import { TextArea } from "@/components/ui/textArea"
+import Image from "next/image"
+import { useState } from "react"
+import z from "zod"
+import Button from "../../ui/button"
+// import { WorkFormSchema, WorkFormType } from "@/lib/validators/work"
 import { getPresignedURL } from "@/actions/s3Upload"
-import { useForm, SubmitHandler } from "react-hook-form"
+import { Input } from "@/components/ui/input"
+import { Modal } from "@/components/ui/modal"
+import { TextArea } from "@/components/ui/textArea"
+import { ACCEPTED_FILE_TYPES, MAX_FILE_SIZE } from "@/lib/constants"
+import { cn } from "@/lib/utils"
+import { WorkSchema, WorkType } from "@/lib/validators/work"
+import { SpinnerSVG } from "@/public/svgs"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useFormStatus } from "react-dom"
+import { SubmitHandler, useForm } from "react-hook-form"
 
-type Inputs = {
-  title: string
-  description: string
-  files: File[]
-}
-
-export default function WorkForm({
-  onOpenChange,
-  work
-}: {
-  onOpenChange: (open: boolean) => void
-  work?: WorkType
-}) {
-  const ref = useRef<HTMLFormElement>(null)
+export default function WorkForm({ onOpenChange, work }: FormType) {
   const [previewMediaObj, setPreviewMediaObj] = useState<PreviewMedia[] | undefined>(undefined)
-  const { register, handleSubmit } = useForm<Inputs>()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting }
+  } = useForm<WorkFormType>({ resolver: zodResolver(WorkFormSchema) })
 
   const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileArr: FileList | null = e.target.files as FileList
@@ -54,7 +46,7 @@ export default function WorkForm({
   const formAction = async (formData: FormData) => {
     // if (work) await editWorkClient(formData)
     // else await addWorkClient(formData)
-    await addWorkClient(formData)
+    // await addWorkClient(formData)
   }
 
   // const editWorkClient = async (formData: FormData) => {
@@ -93,30 +85,30 @@ export default function WorkForm({
     // if (!parsedData.success) return setErrors(parsedData.error.flatten().fieldErrors)
 
     // upload files to s3
-    const resp = await uploadFiles(parsedData.data.media)
-    if (!resp.success) return toast.error("Failed to upload files.")
+    // const resp = await uploadFiles(parsedData.data.media)
+    // if (!resp.success) return toast.error("Failed to upload files.")
 
-    // server action: add work
-    const response = await addWork({
-      title: parsedData.data.title,
-      description: parsedData.data.description,
-      media: resp.urlList
-    })
-    if (response.status === 406) return toast.error("Validation Error", { description: response.message })
-    if (response.status === 200) toast.success(response.message)
-    if (response.status === 500) toast.error(response.message)
+    // // server action: add work
+    // const response = await addWork({
+    //   title: parsedData.data.title,
+    //   description: parsedData.data.description,
+    //   media: resp.urlList
+    // })
+    // if (response.status === 406) return toast.error("Validation Error", { description: response.message })
+    // if (response.status === 200) toast.success(response.message)
+    // if (response.status === 500) toast.error(response.message)
 
-    resetForm()
+    // resetForm()
   }
 
   const resetForm = () => {
     onOpenChange(false)
     setPreviewMediaObj(undefined)
     window.scrollTo(0, 0)
-    ref.current?.reset()
+    // ref.current?.reset()
   }
 
-  const onSubmit: SubmitHandler<Inputs> = data => {
+  const onSubmit: SubmitHandler<WorkFormType> = data => {
     console.log("data: ", data)
     // const formData = new FormData()
     // formData.append("title", data.title)
@@ -127,22 +119,36 @@ export default function WorkForm({
     // formAction(formData)
   }
 
+  const onValidation = (formData: FormData) => {
+    console.log("e.target: ", formData.getAll("files")[0])
+
+    const testSchema = z.object({ file: z.array(z.instanceof(File)) })
+
+    console.log("formData.getAll('files'): ", formData.getAll("files"))
+
+    const parsedData = testSchema.safeParse({ file: formData.getAll("files") })
+    console.log("parsedData: ", parsedData)
+  }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} ref={ref} className="w-full space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
+      {/* // <form action={onValidation} className="w-full space-y-6"> */}
       <Input {...register("title")} name="title" placeholder="Title*" />
+      {errors.title && <span className="text-sm text-red-400">{errors.title.message}</span>}
       <TextArea {...register("description")} name="description" placeholder="Description*" />
+      {errors.description && <span className="text-sm text-red-400">{errors.description.message}</span>}
 
       <div className={cn({ hidden: work })}>
         {previewMediaObj ? previewFile(previewMediaObj) : null}
         <Input
           {...register("files")}
-          className="cursor-pointer"
           name="files"
           type="file"
           multiple
-          accept={ACCEPTED_FILES_TYPES.join(", ")}
+          // accept={ACCEPTED_FILE_TYPES.join(", ")}
           onChange={handleFilesChange}
         />
+        {errors.files && <span className="text-sm text-red-400">{errors.files.message}</span>}
       </div>
       <FormButtons />
     </form>
@@ -213,3 +219,33 @@ const previewFile = (previewMediaObj: PreviewMedia[]) => {
     </div>
   )
 }
+
+type FormType = {
+  onOpenChange: (open: boolean) => void
+  work?: WorkType
+}
+type WorkFormType = z.infer<typeof WorkFormSchema>
+const WorkFormSchema = z.object({
+  title: z
+    .string()
+    .trim()
+    .min(3, "Title must be at least 3 characters long.")
+    .max(80, "Name must be less than 80 characters long."),
+  description: z
+    .string()
+    .trim()
+    .min(3, "Description must be at least 3 characters long.")
+    .max(128, "Description must be less than 128 characters long."),
+  files: z
+    .instanceof(FileList)
+    .refine(files => files.length > 0, "sMedia files are required.")
+    .refine(files => files.length <= 15, "Media must be less than 15 files.")
+    .refine(
+      files => Array.from(files).every(file => file.size < MAX_FILE_SIZE),
+      `One or more files are too large. (Max ${MAX_FILE_SIZE / 1000000}MB) `
+    )
+    .refine(
+      files => Array.from(files).every(file => ACCEPTED_FILE_TYPES.includes(file.type)),
+      `Accepted file types: ${ACCEPTED_FILE_TYPES.join(", ")}.`
+    )
+})

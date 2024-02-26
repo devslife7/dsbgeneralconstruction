@@ -1,5 +1,5 @@
 export const MAX_FILE_SIZE = 20_000_000 // 10MB
-export const ACCEPTED_FILES_TYPES = [
+export const ACCEPTED_FILE_TYPES = [
   "image/jpeg",
   "image/jpg",
   "image/png",
@@ -8,18 +8,7 @@ export const ACCEPTED_FILES_TYPES = [
   "video/mp4",
   "video/mov",
   "video/quicktime",
-  "video/webm",
-  "application/octet-stream"
+  "video/webm"
 ]
-// export const ACCEPTED_MEDIA_EXTENSIONS = [
-//   ".jpeg",
-//   ".jpg",
-//   ".png",
-//   ".webp",
-//   ".gif",
-//   ".mp4",
-//   ".mov",
-//   ".quicktime",
-//   ".webm",
-//   ".octet-stream"
-// ]
+
+// "application/octet-stream"
