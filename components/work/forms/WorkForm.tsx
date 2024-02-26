@@ -14,6 +14,13 @@ import { SpinnerSVG } from "@/public/svgs"
 import { cn } from "@/lib/utils"
 import { TextArea } from "@/components/ui/textArea"
 import { getPresignedURL } from "@/actions/s3Upload"
+import { useForm, SubmitHandler } from "react-hook-form"
+
+type Inputs = {
+  title: string
+  description: string
+  files: File[]
+}
 
 export default function WorkForm({
   onOpenChange,
@@ -29,6 +36,8 @@ export default function WorkForm({
     description: [""],
     media: [""]
   })
+
+  const { register, handleSubmit } = useForm<Inputs>()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileArr: FileList | null = e.target.files as FileList
@@ -113,34 +122,32 @@ export default function WorkForm({
     ref.current?.reset()
   }
 
+  const onSubmit: SubmitHandler<Inputs> = data => {
+    console.log("data: ", data)
+    // const formData = new FormData()
+    // formData.append("title", data.title)
+    // formData.append("description", data.description)
+    // data.files.forEach(file => {
+    //   formData.append("media", file)
+    // })
+    // formAction(formData)
+  }
+
   return (
-    <form action={formAction} ref={ref} className="w-full space-y-6">
-      <Input
-        name="title"
-        placeholder="Title*"
-        onFocus={() => setErrors({ ...errors, title: [""] })}
-        errors={errors.title![0]}
-        defaultValue={work?.title}
-      />
-      <TextArea
-        name="description"
-        placeholder="Description*"
-        onFocus={() => setErrors({ ...errors, description: [""] })}
-        errors={errors.description![0]}
-        defaultValue={work?.description}
-      />
+    <form onSubmit={handleSubmit(onSubmit)} ref={ref} className="w-full space-y-6">
+      <Input {...register("title")} name="title" placeholder="Title*" />
+      <TextArea {...register("description")} name="description" placeholder="Description*" />
 
       <div className={cn({ hidden: work })}>
         {previewMediaObj ? previewFile(previewMediaObj) : null}
         <Input
+          {...register("files")}
           className="cursor-pointer"
-          name="media"
+          name="files"
           type="file"
           multiple
           accept={ACCEPTED_MEDIA_EXTENSIONS.join(", ")}
           onChange={handleChange}
-          onFocus={() => setErrors({ ...errors, media: [""] })}
-          errors={errors.media![0]}
         />
       </div>
       <FormButtons />

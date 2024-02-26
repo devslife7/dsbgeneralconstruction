@@ -2,7 +2,7 @@
 import { prisma } from "../lib/db"
 import { revalidatePath } from "next/cache"
 import { deleteFilesFromS3 } from "./s3Upload"
-import { EditWorkSchema, WorkSchema, WorkType, WorkSchemaServerValidation } from "@/lib/validators/work"
+import { EditWorkSchema, WorkSchema, WorkType, WorkFormValidation } from "@/lib/validators/work"
 
 export async function getWorkList() {
   return await prisma.work.findMany({
@@ -27,7 +27,7 @@ export async function removeWork(work: any) {
 
 export async function addWork(workData: unknown) {
   // server-side validation
-  const parsedData = WorkSchemaServerValidation.safeParse(workData)
+  const parsedData = WorkFormValidation.safeParse(workData)
   if (!parsedData.success) {
     let errorMessage = ""
     parsedData.error.issues.forEach(issue => {

@@ -27,7 +27,7 @@ export const WorkSchema = z.object({
     )
 })
 
-export const WorkSchemaServerValidation = z.object({
+export const WorkFormValidation = z.object({
   title: z
     .string()
     .trim()
