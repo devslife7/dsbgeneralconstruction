@@ -24,7 +24,11 @@ export default function WorkForm({
 }) {
   const ref = useRef<HTMLFormElement>(null)
   const [previewMediaObj, setPreviewMediaObj] = useState<PreviewMedia[] | undefined>(undefined)
-  const [errors, setErrors] = useState<WorkErrors>({})
+  const [errors, setErrors] = useState<{ title?: string[]; description?: string[]; media?: string[] }>({
+    title: [""],
+    description: [""],
+    media: [""]
+  })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileArr: FileList | null = e.target.files as FileList
@@ -45,52 +49,45 @@ export default function WorkForm({
   }
 
   const formAction = async (formData: FormData) => {
-    if (work) await editWorkClient(formData)
-    else await addWorkClient(formData)
+    // if (work) await editWorkClient(formData)
+    // else await addWorkClient(formData)
+    await addWorkClient(formData)
   }
 
-  const editWorkClient = async (formData: FormData) => {
-    const newWork = {
-      title: formData.get("title"),
-      description: formData.get("description")
-    }
-    // client-side validation
-    const parsedData = EditWorkSchema.safeParse(newWork)
-    if (!parsedData.success) {
-      let errors: WorkErrors = {}
-      parsedData.error.issues.forEach(issue => {
-        errors = { ...errors, [issue.path[0]]: issue.message }
-      })
-      setErrors(errors)
-      return
-    } else setErrors({})
+  // const editWorkClient = async (formData: FormData) => {
+  //   // client-side validation
+  //   const parsedData = EditWorkSchema.safeParse({
+  //     title: formData.get("title"),
+  //     description: formData.get("description")
+  //   })
+  //   if (!parsedData.success) {
+  //     let errors: WorkErrors = {}
+  //     parsedData.error.issues.forEach(issue => {
+  //       errors = { ...errors, [issue.path[0]]: issue.message }
+  //     })
+  //     setErrors(errors)
+  //     return
+  //   } else setErrors({})
 
-    // server action: update work
-    const response = await updateWork(formData, work!)
-    if (response.status === 406) {
-      toast.error("Validation Error", { description: response.message })
-      return
-    }
-    if (response.status === 200) toast.success(response.message)
-    if (response.status === 500) toast.error(response.message)
-    resetForm()
-  }
+  //   // server action: update work
+  //   const response = await updateWork(formData, work!)
+  //   if (response.status === 406) {
+  //     toast.error("Validation Error", { description: response.message })
+  //     return
+  //   }
+  //   if (response.status === 200) toast.success(response.message)
+  //   if (response.status === 500) toast.error(response.message)
+  //   resetForm()
+  // }
 
   const addWorkClient = async (formData: FormData) => {
-    const title = formData.get("title") as string
-    const description = formData.get("description") as string
-    const fileList = formData.getAll("media") as File[]
-
     // client-side validation
-    const parsedData = WorkSchema.safeParse({ title, description, media: fileList })
-    if (!parsedData.success) {
-      let errors: WorkErrors = {}
-      parsedData.error.issues.forEach(issue => {
-        errors = { ...errors, [issue.path[0]]: issue.message }
-      })
-      setErrors(errors)
-      return
-    } else setErrors({})
+    const parsedData = WorkSchema.safeParse({
+      title: formData.get("title") as string,
+      description: formData.get("description") as string,
+      media: formData.getAll("media") as File[]
+    })
+    if (!parsedData.success) return setErrors(parsedData.error.flatten().fieldErrors)
 
     // upload files to s3
     const resp = await uploadFiles(parsedData.data.media)
@@ -121,15 +118,15 @@ export default function WorkForm({
       <Input
         name="title"
         placeholder="Title*"
-        onFocus={() => setErrors({ ...errors, title: "" })}
-        errors={errors.title}
+        onFocus={() => setErrors({ ...errors, title: [""] })}
+        errors={errors.title![0]}
         defaultValue={work?.title}
       />
       <TextArea
         name="description"
         placeholder="Description*"
-        onFocus={() => setErrors({ ...errors, description: "" })}
-        errors={errors.description}
+        onFocus={() => setErrors({ ...errors, description: [""] })}
+        errors={errors.description![0]}
         defaultValue={work?.description}
       />
 
@@ -142,8 +139,8 @@ export default function WorkForm({
           multiple
           accept={ACCEPTED_MEDIA_EXTENSIONS.join(", ")}
           onChange={handleChange}
-          onFocus={() => setErrors({ ...errors, media: "" })}
-          errors={errors.media}
+          onFocus={() => setErrors({ ...errors, media: [""] })}
+          errors={errors.media![0]}
         />
       </div>
       <FormButtons />
