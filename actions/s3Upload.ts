@@ -1,9 +1,7 @@
 "use server"
-import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3"
+import { DeleteObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
-import crypto from "crypto"
-import { MAX_FILE_SIZE, ACCEPTED_MEDIA_TYPES } from "@/lib/constants"
-import { randomUUID } from "crypto"
+import crypto, { randomUUID } from "crypto"
 
 const generateFileName = (bytes = 32) => crypto.randomBytes(bytes).toString("hex")
 
@@ -68,7 +66,7 @@ const s3 = new S3Client({
 // }
 
 export async function deleteFilesFromS3(work: any) {
-  const promises = work.media.map((url: string) => deleteFile(url))
+  const promises = work.files.map((url: string) => deleteFile(url))
   await Promise.all(promises)
 }
 

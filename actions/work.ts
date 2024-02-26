@@ -1,8 +1,8 @@
 "use server"
-import { prisma } from "../lib/db"
+import { WorkSchema } from "@/lib/validators/work"
 import { revalidatePath } from "next/cache"
+import { prisma } from "../lib/db"
 import { deleteFilesFromS3 } from "./s3Upload"
-import { EditWorkSchema, WorkType, WorkSchema } from "@/lib/validators/work"
 
 export async function getWorkList() {
   return await prisma.work.findMany({
@@ -35,12 +35,13 @@ export async function addWork(workData: unknown) {
     })
     return { status: 406, message: errorMessage }
   }
+  console.log("parsedData: ", parsedData)
 
   // add work to db
   try {
     await prisma.work.create({ data: parsedData.data })
     revalidatePath("/work")
-    return { status: 200, message: "Successfully added Work" }
+    return { status: 200, message: "Successfully added Work", success: true }
   } catch (e) {
     console.error(e)
     return { status: 500, message: "Failed to add Work" }

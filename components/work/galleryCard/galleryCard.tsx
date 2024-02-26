@@ -1,13 +1,13 @@
-import OptionButtons from "./optionButtons"
+import { WorkType } from "@/lib/validators/work"
 import StarFilledSVG from "@/public/svgs/starFilled.svg"
 import MediaGalleryButton from "./mediaGalleryButton"
-import { WorkType } from "@/lib/validators/work"
+import OptionButtons from "./optionButtons"
 
 export default function GalleryCard({ work }: { work: WorkType }) {
   const averageRating = work.rating && work.rating > 0 ? work.rating.toFixed(1) : work.rating
   return (
     <div className="h-full w-full bg-white shadow-lg sm:max-w-md lg:max-w-xs">
-      <MediaGalleryButton mediaURLS={work.media} />
+      <MediaGalleryButton mediaURLS={work.files} />
 
       <div className="mb-5 px-4">
         <div className="flex justify-between">

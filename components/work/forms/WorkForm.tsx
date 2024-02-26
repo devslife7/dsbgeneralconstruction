@@ -6,16 +6,18 @@ import z from "zod"
 import Button from "../../ui/button"
 // import { WorkFormSchema, WorkFormType } from "@/lib/validators/work"
 import { getPresignedURL } from "@/actions/s3Upload"
+import { addWork } from "@/actions/work"
 import { Input } from "@/components/ui/input"
 import { Modal } from "@/components/ui/modal"
 import { TextArea } from "@/components/ui/textArea"
 import { ACCEPTED_FILE_TYPES, MAX_FILE_SIZE } from "@/lib/constants"
 import { cn } from "@/lib/utils"
-import { WorkSchema, WorkType } from "@/lib/validators/work"
+import { WorkType } from "@/lib/validators/work"
 import { SpinnerSVG } from "@/public/svgs"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useFormStatus } from "react-dom"
 import { SubmitHandler, useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 export default function WorkForm({ onOpenChange, work }: FormType) {
   const [previewMediaObj, setPreviewMediaObj] = useState<PreviewMedia[] | undefined>(undefined)
@@ -76,18 +78,10 @@ export default function WorkForm({ onOpenChange, work }: FormType) {
   // }
 
   const addWorkClient = async (formData: FormData) => {
-    // client-side validation
-    const parsedData = WorkSchema.safeParse({
-      title: formData.get("title") as string,
-      description: formData.get("description") as string,
-      media: formData.getAll("media") as File[]
-    })
-    // if (!parsedData.success) return setErrors(parsedData.error.flatten().fieldErrors)
-
     // upload files to s3
+    // Array.from(files).every(file => file.size < MAX_FILE_SIZE)
     // const resp = await uploadFiles(parsedData.data.media)
     // if (!resp.success) return toast.error("Failed to upload files.")
-
     // // server action: add work
     // const response = await addWork({
     //   title: parsedData.data.title,
@@ -97,7 +91,6 @@ export default function WorkForm({ onOpenChange, work }: FormType) {
     // if (response.status === 406) return toast.error("Validation Error", { description: response.message })
     // if (response.status === 200) toast.success(response.message)
     // if (response.status === 500) toast.error(response.message)
-
     // resetForm()
   }
 
@@ -108,8 +101,18 @@ export default function WorkForm({ onOpenChange, work }: FormType) {
     // ref.current?.reset()
   }
 
-  const onSubmit: SubmitHandler<WorkFormType> = data => {
-    console.log("data: ", data)
+  const onSubmit: SubmitHandler<WorkFormType> = async ({ title, description, files }) => {
+    // upload files to s3
+    const resp = await uploadFiles(files)
+    if (!resp.success) return toast.error("Failed to get presigned urls.")
+    // server action add work
+    const response = await addWork({
+      title,
+      description,
+      files: resp.urlList
+    })
+    if (!response.success) return toast.error("Failed to upload files.")
+
     // const formData = new FormData()
     // formData.append("title", data.title)
     // formData.append("description", data.description)
@@ -119,20 +122,8 @@ export default function WorkForm({ onOpenChange, work }: FormType) {
     // formAction(formData)
   }
 
-  const onValidation = (formData: FormData) => {
-    console.log("e.target: ", formData.getAll("files")[0])
-
-    const testSchema = z.object({ file: z.array(z.instanceof(File)) })
-
-    console.log("formData.getAll('files'): ", formData.getAll("files"))
-
-    const parsedData = testSchema.safeParse({ file: formData.getAll("files") })
-    console.log("parsedData: ", parsedData)
-  }
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
-      {/* // <form action={onValidation} className="w-full space-y-6"> */}
       <Input {...register("title")} name="title" placeholder="Title*" />
       {errors.title && <span className="text-sm text-red-400">{errors.title.message}</span>}
       <TextArea {...register("description")} name="description" placeholder="Description*" />
@@ -156,14 +147,14 @@ export default function WorkForm({ onOpenChange, work }: FormType) {
 }
 
 // Upload files to AWS S3
-const uploadFiles = async (fileList: File[]) => {
-  const promiseArray = fileList.map(file => getPresignedURL(file.type))
+const uploadFiles = async (files: FileList) => {
+  const promiseArray = Array.from(files).map(file => getPresignedURL(file.type))
   const presignedURLS = await Promise.all(promiseArray)
 
   const fileUrlArr = []
-  for (let i = 0; i < fileList.length; i++) {
+  for (let i = 0; i < files.length; i++) {
     const url = presignedURLS[i].uploadUrl as string
-    const file = fileList[i]
+    const file = files[i]
     fileUrlArr.push(uploadFile(file, url))
   }
 

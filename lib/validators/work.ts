@@ -1,6 +1,5 @@
 import z from "zod"
 import { ReviewType } from "./review"
-import { ACCEPTED_FILE_TYPES, MAX_FILE_SIZE } from "../constants"
 
 export const WorkSchema = z.object({
   title: z
@@ -55,13 +54,13 @@ export const EditWorkSchema = z.object({
 })
 
 // export type WorkFormType = z.infer<typeof WorkFormSchema>
-export type WorkType = z.infer<typeof WorkSchema>
+// export type WorkType = z.infer<typeof WorkSchema>
 
-// export type WorkType = {
-//   id: number
-//   title: string
-//   description: string
-//   media: string[]
-//   rating: number
-//   Review: ReviewType[]
-// }
+export type WorkType = {
+  id: number
+  title: string
+  description: string
+  files: string[]
+  rating: number
+  Review: ReviewType[]
+}
