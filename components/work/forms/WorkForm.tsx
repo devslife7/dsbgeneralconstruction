@@ -5,9 +5,9 @@ import Image from "next/image"
 import Button from "../../ui/button"
 import { PreviewMedia } from "@/lib/validators/types"
 import { toast } from "sonner"
-import { WorkSchema, WorkErrors, WorkType, EditWorkSchema } from "@/lib/validators/work"
+import { WorkSchema, WorkType } from "@/lib/validators/work"
 import { Input } from "../../ui/input"
-import { ACCEPTED_MEDIA_EXTENSIONS, ACCEPTED_MEDIA_TYPES } from "@/lib/constants"
+import { ACCEPTED_FILES_TYPES } from "@/lib/constants"
 import { Modal } from "@/components/ui/modal"
 import { useFormStatus } from "react-dom"
 import { SpinnerSVG } from "@/public/svgs"
@@ -31,15 +31,9 @@ export default function WorkForm({
 }) {
   const ref = useRef<HTMLFormElement>(null)
   const [previewMediaObj, setPreviewMediaObj] = useState<PreviewMedia[] | undefined>(undefined)
-  const [errors, setErrors] = useState<{ title?: string[]; description?: string[]; media?: string[] }>({
-    title: [""],
-    description: [""],
-    media: [""]
-  })
-
   const { register, handleSubmit } = useForm<Inputs>()
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileArr: FileList | null = e.target.files as FileList
     let fileUrlArr: PreviewMedia[] = []
     if (previewMediaObj) {
@@ -96,7 +90,7 @@ export default function WorkForm({
       description: formData.get("description") as string,
       media: formData.getAll("media") as File[]
     })
-    if (!parsedData.success) return setErrors(parsedData.error.flatten().fieldErrors)
+    // if (!parsedData.success) return setErrors(parsedData.error.flatten().fieldErrors)
 
     // upload files to s3
     const resp = await uploadFiles(parsedData.data.media)
@@ -146,8 +140,8 @@ export default function WorkForm({
           name="files"
           type="file"
           multiple
-          accept={ACCEPTED_MEDIA_EXTENSIONS.join(", ")}
-          onChange={handleChange}
+          accept={ACCEPTED_FILES_TYPES.join(", ")}
+          onChange={handleFilesChange}
         />
       </div>
       <FormButtons />
