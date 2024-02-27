@@ -86,13 +86,18 @@ export default function WorkForm({ onOpenChange, work }: FormType) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
-      <Input {...register("title")} name="title" placeholder="Title*" />
+      <Input {...register("title")} name="title" placeholder="Title*" disabled={isSubmitting} />
       {errors.title && <span className="text-sm text-red-400">{errors.title.message}</span>}
-      <TextArea {...register("description")} name="description" placeholder="Description*" />
+      <TextArea
+        {...register("description")}
+        name="description"
+        placeholder="Description*"
+        disabled={isSubmitting}
+      />
       {errors.description && <span className="text-sm text-red-400">{errors.description.message}</span>}
 
       <div className={cn({ hidden: work })}>
-        {previewMediaObj ? previewFile(previewMediaObj) : null}
+        {previewMediaObj ? previewFile(previewMediaObj, isSubmitting) : null}
         <Input
           {...register("files")}
           name="files"
@@ -100,6 +105,7 @@ export default function WorkForm({ onOpenChange, work }: FormType) {
           multiple
           accept={ACCEPTED_FILE_TYPES.join(", ")}
           onChange={handleFilesChange}
+          disabled={isSubmitting}
         />
         {errors.files && <span className="text-sm text-red-400">{errors.files.message}</span>}
       </div>
@@ -147,10 +153,10 @@ async function uploadFile(file: File, url: string) {
 }
 
 // Preview first file in array of selected items
-const previewFile = (previewMediaObj: PreviewMedia[]) => {
+const previewFile = (previewMediaObj: PreviewMedia[], isSubmiting: boolean) => {
   return (
-    // <div className="gap-4 items-start pb-4 bg-red-100 overflow-auto w-[200px] h-[400px]">
-    <div className="flex w-full flex-wrap items-start gap-1 pb-4">
+    // <div className="flex w-full flex-wrap items-start gap-1 pb-4 opacity-50">
+    <div className={cn("flex w-full flex-wrap items-start gap-1 pb-4", { "opacity-50": isSubmiting })}>
       {previewMediaObj.map((file, idx) =>
         file.type.startsWith("image/") ? (
           <div key={idx} className="relative h-32 w-32 overflow-hidden rounded-lg">
