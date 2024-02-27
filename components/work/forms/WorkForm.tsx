@@ -54,7 +54,12 @@ export default function WorkForm({ onOpenChange, work }: FormType) {
   const onSubmit: SubmitHandler<WorkFormType> = async ({ title, description, files }) => {
     if (work) {
       const response = await updateWork({ title, description, id: work.id })
-      if (!response.success) return toast.error("Failed to update work.")
+      if (!response.success) {
+        console.log("Server Error: ", response.errors)
+        toast.error("Failed to update Work. Check console logs for more info.")
+        return
+      }
+      toast.success("Work updated.")
       resetForm()
       return
     }
@@ -98,7 +103,6 @@ export default function WorkForm({ onOpenChange, work }: FormType) {
         />
         {errors.files && <span className="text-sm text-red-400">{errors.files.message}</span>}
       </div>
-      {/* <FormButtons /> */}
 
       <Modal.Footer>
         <Modal.Close asChild>
