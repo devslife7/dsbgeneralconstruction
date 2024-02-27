@@ -1,5 +1,5 @@
 "use server"
-import { WorkSchema } from "@/lib/validators/work"
+import { EditWorkSchemaServer, WorkSchema } from "@/lib/validators/work"
 import { revalidatePath } from "next/cache"
 import { prisma } from "../lib/db"
 import { deleteFilesFromS3 } from "./s3Upload"
@@ -48,33 +48,30 @@ export async function addWork(workData: unknown) {
   }
 }
 
-export async function updateWork(formData: FormData) {
-  // const updatedWork = {
-  //   id: work.id,
-  //   title: formData.get("title"),
-  //   description: formData.get("description")
-  // }
+export async function updateWork(data: unknown) {
   // server-side validation
-  // const parsedData = EditWorkSchema.safeParse(updatedWork)
-  // if (!parsedData.success) {
-  //   let errorMessage = ""
-  //   parsedData.error.issues.forEach(issue => {
-  //     errorMessage = errorMessage + "\n " + issue.message
-  //   })
-  //   return { status: 406, message: errorMessage }
-  // }
+  const parsedData = EditWorkSchemaServer.safeParse(data)
+  if (!parsedData.success) {
+    let errorMessage = ""
+    parsedData.error.issues.forEach(issue => {
+      errorMessage = errorMessage + "\n " + issue.message
+    })
+    return { status: 406, message: errorMessage }
+  }
+
+  console.log("parsedData: ", parsedData)
 
   try {
     // update work in db
-    // await prisma.work.update({
-    //   where: {
-    //     id: work.id
-    //   },
-    //   data: {
-    //     title: parsedData.data.title,
-    //     description: parsedData.data.description
-    //   }
-    // })
+    await prisma.work.update({
+      where: {
+        id: parsedData.data.id
+      },
+      data: {
+        title: parsedData.data.title,
+        description: parsedData.data.description
+      }
+    })
 
     revalidatePath("/work")
     return { status: 200, message: "Successfully updated Work" }
