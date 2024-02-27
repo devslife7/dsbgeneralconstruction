@@ -1,20 +1,25 @@
 "use client"
-import { PreviewMedia } from "@/lib/validators/types"
-import Image from "next/image"
-import { useState } from "react"
-import Button from "../../ui/button"
-// import { WorkFormSchema, WorkFormType } from "@/lib/validators/work"
 import { getPresignedURL } from "@/actions/s3Upload"
+import { addWork, updateWork } from "@/actions/work"
 import { Input } from "@/components/ui/input"
 import { Modal } from "@/components/ui/modal"
 import { TextArea } from "@/components/ui/textArea"
 import { ACCEPTED_FILE_TYPES } from "@/lib/constants"
 import { cn } from "@/lib/utils"
+import { PreviewMedia } from "@/lib/validators/types"
 import { EditWorkSchema, WorkFormSchema, WorkFormType, WorkType } from "@/lib/validators/work"
 import { SpinnerSVG } from "@/public/svgs"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useFormStatus } from "react-dom"
+import Image from "next/image"
+import { useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
+import { toast } from "sonner"
+import Button from "../../ui/button"
+
+type FormType = {
+  onOpenChange: (open: boolean) => void
+  work?: WorkType
+}
 
 export default function WorkForm({ onOpenChange, work }: FormType) {
   const [previewMediaObj, setPreviewMediaObj] = useState<PreviewMedia[] | undefined>(undefined)
@@ -47,26 +52,24 @@ export default function WorkForm({ onOpenChange, work }: FormType) {
   }
 
   const onSubmit: SubmitHandler<WorkFormType> = async ({ title, description, files }) => {
-    console.log("-----passes validation")
-    // if (work) {
-    //   const workId = work.id
-    //   await updateWork({ title, description, workId })
-    //   resetForm()
-    //   return
-    // }
-    // console.log("files: ", files)
-    // // upload files to s3
-    // const responseFiles = await uploadFiles(files)
-    // if (!responseFiles.success) return toast.error("Failed to get upload files.")
-    // // server action add work
-    // const responseWork = await addWork({
-    //   title,
-    //   description,
-    //   files: responseFiles.urlList
-    // })
-    // if (!responseWork.success) return toast.error("Failed to upload files.")
-    // toast.success("Upload complete.")
-    // resetForm()
+    if (work) {
+      const response = await updateWork({ title, description, id: work.id })
+      if (!response.success) return toast.error("Failed to update work.")
+      resetForm()
+      return
+    }
+    // upload files to s3
+    const responseFiles = await uploadFiles(files)
+    if (!responseFiles.success) return toast.error("Failed to upload files.")
+    // server action add work
+    const responseWork = await addWork({
+      title,
+      description,
+      files: responseFiles.urlList
+    })
+    if (!responseWork.success) return toast.error("Failed to add Work.")
+    toast.success("Upload complete.")
+    resetForm()
   }
 
   const resetForm = () => {
@@ -139,23 +142,6 @@ async function uploadFile(file: File, url: string) {
   return url.split("?")[0]
 }
 
-// Form Buttons for Cancel and Submit
-const FormButtons = () => {
-  const { pending } = useFormStatus()
-  return (
-    <Modal.Footer>
-      <Modal.Close asChild>
-        <Button aria-disabled={pending} disabled={pending} variant="cancel">
-          Close
-        </Button>
-      </Modal.Close>
-      <Button type="submit" aria-disabled={pending} disabled={pending}>
-        {pending ? <SpinnerSVG className="animate-spin" /> : "Submit"}
-      </Button>
-    </Modal.Footer>
-  )
-}
-
 // Preview first file in array of selected items
 const previewFile = (previewMediaObj: PreviewMedia[]) => {
   return (
@@ -175,33 +161,3 @@ const previewFile = (previewMediaObj: PreviewMedia[]) => {
     </div>
   )
 }
-
-type FormType = {
-  onOpenChange: (open: boolean) => void
-  work?: WorkType
-}
-// type WorkFormType = z.infer<typeof WorkFormSchema>
-// const WorkFormSchema = z.object({
-//   title: z
-//     .string()
-//     .trim()
-//     .min(3, "Title must be at least 3 characters long.")
-//     .max(80, "Name must be less than 80 characters long."),
-//   description: z
-//     .string()
-//     .trim()
-//     .min(3, "Description must be at least 3 characters long.")
-//     .max(128, "Description must be less than 128 characters long."),
-//   files: z
-//     .instanceof(FileList)
-//     .refine(files => files.length > 0, "Media files are required.")
-//     .refine(files => files.length <= 15, "Media must be less than 15 files.")
-//     .refine(
-//       files => Array.from(files).every(file => file.size < MAX_FILE_SIZE),
-//       `One or more files are too large. (Max ${MAX_FILE_SIZE / 1000000}MB) `
-//     )
-//     .refine(
-//       files => Array.from(files).every(file => ACCEPTED_FILE_TYPES.includes(file.type)),
-//       `Accepted file types: ${ACCEPTED_FILE_TYPES.join(", ")}.`
-//     )
-// })

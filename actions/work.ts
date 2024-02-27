@@ -50,16 +50,18 @@ export async function addWork(workData: unknown) {
 
 export async function updateWork(data: unknown) {
   // server-side validation
+  console.log("data: ", data)
   const parsedData = EditWorkSchemaServer.safeParse(data)
   if (!parsedData.success) {
     let errorMessage = ""
     parsedData.error.issues.forEach(issue => {
       errorMessage = errorMessage + "\n " + issue.message
     })
+    console.log("parsedData: ", parsedData)
     return { status: 406, message: errorMessage }
   }
 
-  console.log("parsedData: ", parsedData)
+  console.log("------parsedData: ", parsedData)
 
   try {
     // update work in db
