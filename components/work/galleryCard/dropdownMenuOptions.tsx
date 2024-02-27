@@ -1,9 +1,9 @@
 "use client"
-import { DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { removeWork } from "@/actions/work"
-import { DeleteSVG, EditSVG } from "@/public/svgs"
-import { WorkType } from "@/lib/validators/work"
+import { DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { Modal } from "@/components/ui/modal"
+import { WorkType } from "@/lib/validators/work"
+import { DeleteSVG, EditSVG } from "@/public/svgs"
 import { useState } from "react"
 import WorkForm from "../forms/WorkForm"
 
