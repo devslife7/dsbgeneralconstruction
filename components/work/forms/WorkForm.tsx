@@ -7,7 +7,7 @@ import { TextArea } from "@/components/ui/textArea"
 import { ACCEPTED_FILE_TYPES } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 import { PreviewMedia } from "@/lib/validators/types"
-import { EditWorkSchema, WorkFormSchema, WorkFormType, WorkType } from "@/lib/validators/work"
+import { AddWorkSchema, AddWorkType, EditWorkSchema, WorkType } from "@/lib/validators/work"
 import { SpinnerSVG } from "@/public/svgs"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Image from "next/image"
@@ -28,20 +28,20 @@ export default function WorkForm({ onOpenChange, work }: FormType) {
     handleSubmit,
     formState: { errors, isSubmitting },
     reset
-  } = useForm<WorkFormType>({
+  } = useForm<AddWorkType>({
     defaultValues: { title: work?.title, description: work?.description },
-    resolver: zodResolver(work ? EditWorkSchema : WorkFormSchema)
+    resolver: zodResolver(work ? EditWorkSchema : AddWorkSchema)
   })
 
   const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileArr: FileList | null = e.target.files as FileList
-    let fileUrlArr: PreviewMedia[] = []
     if (previewMediaObj) {
       setPreviewMediaObj(undefined)
       previewMediaObj.forEach(file => {
         URL.revokeObjectURL(file.url)
       })
     }
+    let fileUrlArr: PreviewMedia[] = []
     for (let i = 0; i < fileArr.length; i++) {
       fileUrlArr.push({
         type: fileArr[i].type,
@@ -51,7 +51,8 @@ export default function WorkForm({ onOpenChange, work }: FormType) {
     setPreviewMediaObj(fileUrlArr)
   }
 
-  const onSubmit: SubmitHandler<WorkFormType> = async ({ title, description, files }) => {
+  const onSubmit: SubmitHandler<AddWorkType> = async ({ title, description, files }) => {
+    // update work if work exists
     if (work) {
       const response = await updateWork({ title, description, id: work.id })
       if (!response.success) {
@@ -124,7 +125,7 @@ export default function WorkForm({ onOpenChange, work }: FormType) {
   )
 }
 
-// Upload files to AWS S3
+// Upload multiple files to AWS S3
 const uploadFiles = async (files: FileList) => {
   const promiseArray = Array.from(files).map(file => getPresignedURL(file.type))
   const presignedURLS = await Promise.all(promiseArray)
@@ -140,7 +141,7 @@ const uploadFiles = async (files: FileList) => {
   return { success: true, urlList }
 }
 
-// Upload file to S3 using presigned url
+// Uploads a single file using presigned url
 async function uploadFile(file: File, url: string) {
   await fetch(url, {
     method: "PUT",

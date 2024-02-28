@@ -16,8 +16,8 @@ export const WorkSchema = z.object({
   files: z.array(z.string())
 })
 
-export type WorkFormType = z.infer<typeof WorkFormSchema>
-export const WorkFormSchema = z.object({
+export type AddWorkType = z.infer<typeof AddWorkSchema>
+export const AddWorkSchema = z.object({
   title: z
     .string()
     .trim()
