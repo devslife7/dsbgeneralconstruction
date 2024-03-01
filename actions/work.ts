@@ -5,6 +5,7 @@ import { prisma } from "../lib/db"
 import { deleteFilesFromS3 } from "./s3Upload"
 
 export async function getWorkList() {
+  revalidatePath("/work")
   return await prisma.work.findMany({
     orderBy: {
       id: "desc"
