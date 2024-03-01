@@ -27,6 +27,7 @@ export async function removeWork(work: any) {
 }
 
 export async function addWork(workData: unknown) {
+  revalidatePath("/work")
   // server-side validation
   const parsedData = WorkSchema.safeParse(workData)
   if (!parsedData.success) {
@@ -40,7 +41,7 @@ export async function addWork(workData: unknown) {
   // add work to db
   try {
     await prisma.work.create({ data: parsedData.data })
-    revalidatePath("/work")
+    // revalidatePath("/work")
     return { status: 200, message: "Successfully added Work", success: true }
   } catch (e) {
     console.error(e)
