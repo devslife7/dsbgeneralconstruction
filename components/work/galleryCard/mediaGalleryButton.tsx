@@ -1,6 +1,7 @@
 "use client"
 import Image from "next/image"
 import { PhotoProvider, PhotoView } from "react-photo-view"
+import "react-photo-view/dist/react-photo-view.css"
 
 type Props = {
   mediaURLS?: string[]
