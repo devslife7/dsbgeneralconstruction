@@ -1,7 +1,6 @@
 "use client"
 import Image from "next/image"
 import { PhotoProvider, PhotoView } from "react-photo-view"
-import "react-photo-view/dist/react-photo-view.css"
 
 type Props = {
   mediaURLS?: string[]
@@ -26,15 +25,13 @@ export default function MediaGalleryButton({ mediaURLS = testGallery, className 
           return (
             <div {...attrs} className="flex items-center">
               <div className="mx-auto my-auto w-full max-w-md">
-                <video width="cover-fit" height="350" src={videoUrl} controls muted>
-                  Sorry, your browser doesn&#39;t support HTML5 <code>video</code>
-                </video>
+                <video width="cover-fit" height="350" src={videoUrl} autoPlay controls muted />
               </div>
             </div>
           )
         }}
       >
-        <video width="cover-fit" height="350" src={videoUrl} muted hidden={index !== 0}>
+        <video width="cover-fit" height="350" src={videoUrl} muted autoPlay hidden={index !== 0}>
           Sorry, your browser doesn&#39;t support HTML5 <code>video</code>
         </video>
       </PhotoView>
