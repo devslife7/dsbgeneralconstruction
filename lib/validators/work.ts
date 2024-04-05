@@ -31,7 +31,7 @@ export const AddWorkSchema = z.object({
   files: z
     .unknown()
     .transform(files => files as FileList)
-    .refine(files => files.length > 0, "Media files are required.")
+    .refine(files => files.length > 0, "Media files are required here.")
     .refine(files => files.length <= 15, "Media must be less than 15 files.")
     .refine(
       files => Array.from(files).every(file => file.size < MAX_FILE_SIZE),
