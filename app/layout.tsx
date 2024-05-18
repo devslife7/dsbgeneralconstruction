@@ -1,10 +1,10 @@
-import "./globals.css"
-import Navbar from "@/components/layout/Navbar"
 import Footer from "@/components/layout/Footer"
+import Navbar from "@/components/layout/Navbar"
+import { cn } from "@/lib/utils"
 import type { Metadata } from "next"
 import { Inter, Roboto, Titillium_Web } from "next/font/google"
-import { cn } from "@/lib/utils"
 import { Toaster } from "sonner"
+import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"] })
 const roboto = Roboto({
