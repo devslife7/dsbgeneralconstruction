@@ -18,6 +18,7 @@ export default function page() {
                 sizes="auto"
                 className="object-cover"
                 priority={idx < 4}
+                placeholder="blur"
               />
             </div>
             <div className="my-container hidden sm:block">

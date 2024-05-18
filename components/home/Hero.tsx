@@ -15,6 +15,7 @@ export default function Hero() {
           sizes="100vw"
           priority
           className="-z-10 object-cover"
+          placeholder="blur"
         />
         <div className="absolute inset-0 mx-auto flex h-full w-full items-center justify-center text-center text-white lg:w-auto lg:justify-start lg:text-left">
           <div className="max-w-[18rem] py-14 lg:ml-10 lg:max-w-2xl lg:py-20">

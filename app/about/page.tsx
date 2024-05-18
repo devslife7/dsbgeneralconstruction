@@ -19,7 +19,7 @@ export default function About() {
         </p>
       </div>
       <div className="relative h-[20rem] lg:h-[40rem]">
-        <Image src={AboutPage} fill alt="About Us" className="fixed object-cover" />
+        <Image src={AboutPage} fill alt="About Us" className="fixed object-cover" placeholder="blur" />
       </div>
       <div className="bg-black py-20 text-center text-white">
         <h2 className="text-2xl font-semibold">
