@@ -8,22 +8,22 @@ import { navigationLinks } from "@/lib/data/navigationLinks"
 
 export default function Navbar() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
-  const [scrollNav, setScrollNav] = useState(false)
+  // const [scrollNav, setScrollNav] = useState(false)
   const pathname = usePathname()
 
   const toggleMobileNavOpen = () => setMobileNavOpen(!mobileNavOpen)
 
-  useEffect(() => {
-    window.addEventListener("scroll", changeNav)
-  }, [])
+  // useEffect(() => {
+  //   window.addEventListener("scroll", changeNav)
+  // }, [])
 
-  const changeNav = () => {
-    if (window.scrollY >= 100) {
-      setScrollNav(true)
-    } else {
-      setScrollNav(false)
-    }
-  }
+  // const changeNav = () => {
+  //   if (window.scrollY >= 100) {
+  //     setScrollNav(true)
+  //   } else {
+  //     setScrollNav(false)
+  //   }
+  // }
 
   const renderNavLinks = () => {
     const isActive = (link: string) => (pathname === link ? "text-primary" : "hover:text-gray-400")
