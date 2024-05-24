@@ -5,20 +5,24 @@ import MediaGalleryButton from "./mediaGalleryButton"
 import OptionButtons from "./optionButtons"
 import { redirect } from "next/navigation"
 import Link from "next/link"
+import Image from "next/image"
 
 export default function GalleryCard({ work }: { work: WorkType }) {
   const averageRating = work.rating && work.rating > 0 ? work.rating.toFixed(1) : work.rating
+  const url = work.files && work.files.length > 0 ? work.files[0] : null
+
   return (
     <Link href={`/work/${work.id}`}>
-      <div className="h-full w-full rounded-lg bg-white shadow-lg sm:max-w-md lg:max-w-xs">
-        <MediaGalleryButton mediaURLS={work.files} />
-        {/* <Link href={`/work/${work.id}`}>
-        {work.title}
-        Link here to work
-        <ExternalLinkSVG className="ml-1 inline-block w-[10px] text-gray-400" />
-      </Link> */}
+      <div className="w-full rounded-lg bg-white pb-2 shadow-lg sm:max-w-md lg:max-w-xs">
+        <Image
+          src={work.files[0]}
+          alt={work.title}
+          width={300}
+          height={300}
+          className="h-[250px] w-[400px] rounded-t-lg object-cover"
+        />
 
-        <div className="mb-5 px-4">
+        <div className="px-4">
           <div className="flex justify-between">
             <div className="mt-2 text-xl opacity-80">{work.title}</div>
             <div className="flex items-center ">
