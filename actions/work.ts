@@ -15,6 +15,16 @@ export async function getWorkList() {
     }
   })
 }
+export async function getWork(id: number) {
+  return await prisma.work.findUnique({
+    where: {
+      id: id
+    },
+    include: {
+      Review: true
+    }
+  })
+}
 export async function removeWork(work: any) {
   await deleteFilesFromS3(work)
   await prisma.work.delete({
