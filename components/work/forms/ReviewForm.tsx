@@ -9,15 +9,14 @@ import { useFormStatus } from "react-dom"
 import Rating from "@/components/ui/rating"
 import { TextArea } from "@/components/ui/textArea"
 import { Input } from "@/components/ui/input"
-import { Modal } from "@/components/ui/modal"
 
-type Props = {
+type ReviewFormProps = {
   isReviewFormOpen: boolean
   closeReviewForm: () => void
   workId: number
 }
 
-export default function ReviewForm({ isReviewFormOpen, closeReviewForm, workId }: Props) {
+export default function ReviewForm({ isReviewFormOpen, closeReviewForm, workId }: ReviewFormProps) {
   const ref = useRef<HTMLFormElement>(null)
   const [rating, setRating] = useState<number>(0)
   const [errors, setErrors] = useState<ReviewErrors>({})
@@ -99,7 +98,10 @@ export default function ReviewForm({ isReviewFormOpen, closeReviewForm, workId }
 const FormButtons = ({ resetForm }: { resetForm: () => void }) => {
   const { pending } = useFormStatus()
   return (
-    <Modal.Footer>
+    <div className="space-y-4">
+      <Button responsive aria-disabled={pending} disabled={pending}>
+        {pending ? <SpinnerSVG className="animate-spin" /> : "Post"}
+      </Button>
       <Button
         responsive
         variant="cancel"
@@ -110,9 +112,6 @@ const FormButtons = ({ resetForm }: { resetForm: () => void }) => {
       >
         Cancel
       </Button>
-      <Button responsive aria-disabled={pending} disabled={pending}>
-        {pending ? <SpinnerSVG className="animate-spin" /> : "Post"}
-      </Button>
-    </Modal.Footer>
+    </div>
   )
 }

@@ -14,7 +14,14 @@ export default function ImageGallery({ gallery }: { gallery: any }) {
   const renderSlides = () => {
     return gallery.map((url: any, idx: number) => (
       <SwiperSlide key={idx}>
-        <Image src={url} alt={`Image ${idx + 1}`} width={400} height={400} className="m-auto object-cover" />
+        <Image
+          src={url}
+          alt={`Image ${idx + 1}`}
+          width={400}
+          height={400}
+          className="m-auto object-cover"
+          priority={idx === 0}
+        />
       </SwiperSlide>
     ))
   }
