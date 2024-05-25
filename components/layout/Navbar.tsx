@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { CloseSVG, LogoSVG, MenuSVG } from "@/public/svgs"
@@ -8,25 +8,15 @@ import { navigationLinks } from "@/lib/data/navigationLinks"
 
 export default function Navbar() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
-  // const [scrollNav, setScrollNav] = useState(false)
   const pathname = usePathname()
 
   const toggleMobileNavOpen = () => setMobileNavOpen(!mobileNavOpen)
 
-  // useEffect(() => {
-  //   window.addEventListener("scroll", changeNav)
-  // }, [])
-
-  // const changeNav = () => {
-  //   if (window.scrollY >= 100) {
-  //     setScrollNav(true)
-  //   } else {
-  //     setScrollNav(false)
-  //   }
-  // }
-
   const renderNavLinks = () => {
-    const isActive = (link: string) => (pathname === link ? "text-primary" : "hover:text-gray-400")
+    const isActive = (link: string) => {
+      if (pathname === link) return "text-primary"
+      else return pathname.includes(link) && link !== "/" ? "text-primary" : "hover:text-gray-400"
+    }
     return navigationLinks.map((link, index) => (
       <Link
         key={index}
@@ -39,6 +29,11 @@ export default function Navbar() {
   }
 
   const renderNavLinksMobile = () => {
+    const mobileNavStyles = "border-spacing-4 border-[3px] border-primary text-primary"
+    const isActive = (link: string) => {
+      if (pathname === link) return mobileNavStyles
+      else return pathname.includes(link) && link !== "/" && mobileNavStyles
+    }
     return (
       <nav>
         <ul
@@ -51,9 +46,7 @@ export default function Navbar() {
             <li key={index}>
               <Link
                 href={link.href}
-                className={cn("block py-7 text-xl", {
-                  "border-spacing-4 border-[3px] border-primary text-primary": pathname === link.href
-                })}
+                className={cn("block py-7 text-xl", isActive(link.href))}
                 onClick={toggleMobileNavOpen}
               >
                 {link.label}
@@ -69,7 +62,7 @@ export default function Navbar() {
     <>
       <div className="h-32"></div>
       <header className="fixed top-0 z-20 w-full bg-custom-white transition-all duration-300 ease-in-out">
-        <nav className=" my-container flex h-32 items-center justify-between">
+        <nav className="my-container flex h-32 items-center justify-between">
           <div className="mt-6 lg:mt-0 lg:flex-1">
             <Link href="/" className="text-xl font-semibold leading-none opacity-80">
               <LogoSVG className="mb-2 mr-2 inline-block text-3xl text-primary" />
