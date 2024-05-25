@@ -20,7 +20,7 @@ export default async function WorkPage({ params: { id } }: WorkPageProps) {
   return (
     <div className="my-container">
       <BackButton />
-      <ImageGallery />
+      <ImageGallery gallery={files} />
       <div>{title}</div>
       <div>{description}</div>
       <div>Rating: {rating}</div>

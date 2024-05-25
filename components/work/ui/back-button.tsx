@@ -9,7 +9,7 @@ export default function BackButton() {
       className="inline-flex cursor-pointer items-center gap-0 py-2 pr-4 font-medium"
       onClick={router.back}
     >
-      <BackArrowSVG className="text-2xl" />
+      <BackArrowSVG className="-ml-[6px] text-2xl" />
       <u>Back</u>
     </div>
   )
