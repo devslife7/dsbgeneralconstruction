@@ -43,8 +43,3 @@ body {
 .my-container {
   @apply container mx-auto px-4 lg:px-8;
 }
-
-.swiper-button-next,
-.swiper-button-prev {
-  color: #fff !important;
-}

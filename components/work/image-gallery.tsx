@@ -2,7 +2,6 @@
 // Import Swiper React components
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
-import KitchenBg from "@/public/images/kitchen-bg.webp"
 import Image from "next/image"
 
 // Import Swiper styles
@@ -21,12 +20,14 @@ export default function ImageGallery({ gallery }: { gallery: any }) {
   }
   return (
     <Swiper
-      className="text-white"
+      style={
+        {
+          "--swiper-navigation-color": "#fff",
+          color: "#fff"
+        } as React.CSSProperties
+      }
       navigation
-      color={"#fff"}
       pagination={{ clickable: true, type: "fraction" }}
-      onSlideChange={() => console.log("slide change")}
-      onSwiper={swiper => console.log(swiper)}
       modules={[Navigation, Pagination, Scrollbar, A11y]}
     >
       {renderSlides()}
