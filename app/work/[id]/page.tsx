@@ -12,7 +12,7 @@ export default function WorkPage({ params: { id } }: WorkPageProps) {
   return (
     <div className="my-container">
       <BackButton />
-      <div>WorkPage</div>
+      <div>Image gallery</div>
       <div>{id}</div>
     </div>
   )
