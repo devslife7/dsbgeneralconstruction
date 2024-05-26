@@ -44,8 +44,8 @@ export default function Reviews({ reviews, workId }: { reviews: any; workId: num
   }
 
   return (
-    <div title="Reviews" className="max-h-full overflow-auto sm:max-w-sm">
-      <Button responsive size={"sm"} onClick={toggleReviewForm} className="mb-4 mt-10 font-semibold ">
+    <div className="max-h-full overflow-auto sm:max-w-sm">
+      <Button responsive size={"sm"} onClick={toggleReviewForm} className="mt-6 font-semibold">
         Add Review {isReviewFormOpen ? "-" : "+"}
       </Button>
 

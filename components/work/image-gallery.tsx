@@ -1,4 +1,5 @@
 "use client"
+import React, { useState } from "react"
 // Import Swiper React components
 import { Navigation, Pagination, FreeMode, Thumbs } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
@@ -6,27 +7,27 @@ import Image from "next/image"
 
 // Import Swiper styles
 import "swiper/css"
-import "swiper/css/bundle"
 import "swiper/css/pagination"
 import "swiper/css/free-mode"
 import "swiper/css/navigation"
 import "swiper/css/thumbs"
-import React, { useRef, useState } from "react"
+import { cn } from "@/lib/utils"
 
 export default function ImageGallery({ gallery }: { gallery: any }) {
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null)
 
-  console.log("thumbsSwiper", thumbsSwiper)
-
-  const renderSlides = () => {
+  const renderSlides = (size: string) => {
     return gallery.map((url: any, idx: number) => (
-      <SwiperSlide key={idx} aria-activedescendant="opacity-0">
+      <SwiperSlide key={idx}>
         <Image
           src={url}
           alt={`Image ${idx + 1}`}
           width={400}
           height={400}
-          className="m-auto object-cover"
+          className={cn(
+            "m-auto rounded-lg object-cover",
+            `${size === "large" ? "h-[500px]" : "h-[100px]"} w-[400px]`
+          )}
           priority={idx === 0}
         />
       </SwiperSlide>
@@ -48,21 +49,22 @@ export default function ImageGallery({ gallery }: { gallery: any }) {
         thumbs={{ swiper: thumbsSwiper }}
         modules={[FreeMode, Navigation, Thumbs, Pagination]}
       >
-        {renderSlides()}
+        {renderSlides("large")}
       </Swiper>
-      <Swiper
-        onSwiper={setThumbsSwiper}
-        slideActiveClass="bg-primary"
-        loop
-        freeMode
-        watchSlidesProgress
-        spaceBetween={10}
-        slidesPerView={4}
-        modules={[FreeMode, Navigation, Thumbs]}
-        className="mySwiper rounded-lg transition-all duration-300 ease-in-out"
-      >
-        {renderSlides()}
-      </Swiper>
+      <div className={cn({ hidden: gallery.length === 1 })}>
+        <Swiper
+          onSwiper={setThumbsSwiper}
+          loop
+          freeMode
+          watchSlidesProgress
+          spaceBetween={10}
+          slidesPerView={4}
+          modules={[FreeMode, Navigation, Thumbs]}
+          className="mySwiper  rounded-lg transition-all duration-300 ease-in-out"
+        >
+          {renderSlides("small")}
+        </Swiper>
+      </div>
     </>
   )
 }

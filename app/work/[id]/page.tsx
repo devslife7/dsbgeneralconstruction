@@ -1,8 +1,9 @@
 import { getWork } from "@/actions/work"
+import Rating from "@/components/ui/rating"
 import ImageGallery from "@/components/work/image-gallery"
 import Reviews from "@/components/work/reviews"
 import BackButton from "@/components/work/ui/back-button"
-import { BackArrowSVG } from "@/public/svgs"
+import { BackArrowSVG, StarFilledSVG } from "@/public/svgs"
 import { redirect } from "next/navigation"
 
 type WorkPageProps = {
@@ -20,10 +21,13 @@ export default async function WorkPage({ params: { id } }: WorkPageProps) {
     <div className="my-container">
       <BackButton />
       <ImageGallery gallery={files} />
-      <div className="my-4">
-        <div className="text-2xl font-semibold">{title}</div>
-        <div className="text-lg text-gray-500">{description}</div>
-        <div>Rating: {rating}</div>
+      <div className="mt-5">
+        <div className="mb-1 text-xl font-semibold">{title}</div>
+
+        <div className=" text-gray-500">{description}</div>
+        <div className="mt-2 flex items-center">
+          <Rating readOnly ratings={[0, 1, 2, 3, 4, 5]} />
+        </div>
       </div>
       <Reviews reviews={Review} workId={workId} />
     </div>

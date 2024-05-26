@@ -17,7 +17,6 @@ export default function GalleryCard({ work }: { work: WorkType }) {
             alt={work.title}
             width={400}
             height={400}
-            quality={100}
             className="h-[400px] w-[400px] rounded-t-lg object-cover"
           />
         </div>

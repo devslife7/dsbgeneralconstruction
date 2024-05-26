@@ -71,18 +71,17 @@ export default function Rating({
       className={cn("flex flex-row-reverse text-lg text-gray-600", className, { "justify-end": reverse })}
     >
       <span className={cn("ml-2", { hidden: !reverse })}>{parentRating.toFixed(1)}</span>
-      {renderStars()}
-      <div className={cn("mr-2", { hidden: reverse })}>
+      <div className={cn("ml-2", { hidden: reverse })}>
         {readOnly ? (
           <>
-            <span>({ratings.length})</span>
             <span>{getWorkRating().toFixed(1)}</span>
+            <span>({ratings.length})</span>
           </>
         ) : (
           <span className="">{parentRating.toFixed(1)}</span>
         )}
-        sin
       </div>
+      {renderStars()}
     </div>
   )
 }
