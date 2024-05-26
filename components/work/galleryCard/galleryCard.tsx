@@ -1,9 +1,6 @@
-"use client"
 import { WorkType } from "@/lib/validators/work"
 import StarFilledSVG from "@/public/svgs/starFilled.svg"
-import MediaGalleryButton from "./mediaGalleryButton"
 import OptionButtons from "./optionButtons"
-import { redirect } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 
@@ -17,14 +14,15 @@ export default function GalleryCard({ work }: { work: WorkType }) {
         <Image
           src={work.files[0]}
           alt={work.title}
-          width={300}
-          height={300}
-          className="h-[250px] w-[400px] rounded-t-lg object-cover"
+          width={100}
+          height={200}
+          quality={100}
+          className="h-[400px] w-[400px] rounded-t-lg object-cover"
         />
 
-        <div className="px-4">
-          <div className="flex justify-between">
-            <div className="mt-2 text-xl opacity-80">{work.title}</div>
+        <div className="my-2 mt-2 px-4">
+          <div className="flex items-end justify-between">
+            <div className="mt-2 text-lg font-semibold opacity-80">{work.title}</div>
             <div className="flex items-center ">
               <StarFilledSVG className="text-primary" />
               <span className="ml-[0.2rem] mt-[0.1rem] text-center text-sm opacity-70">
@@ -32,9 +30,13 @@ export default function GalleryCard({ work }: { work: WorkType }) {
               </span>
             </div>
           </div>
-          <div className="opacity-60">{work.description}</div>
+          <div className="flex items-end justify-between">
+            <div className="text-sm opacity-60">{work.description}</div>
+            <div>
+              <OptionButtons work={work} />
+            </div>
+          </div>
         </div>
-        {/* <OptionButtons work={work} /> */}
       </div>
     </Link>
   )
