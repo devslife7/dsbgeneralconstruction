@@ -3,6 +3,7 @@ import { EditWorkSchemaServer, WorkSchema } from "@/lib/validators/work"
 import { revalidatePath } from "next/cache"
 import { prisma } from "../lib/db"
 import { deleteFilesFromS3 } from "./s3Upload"
+import { redirect } from "next/navigation"
 
 export async function getWorkList() {
   revalidatePath("/work")
@@ -26,6 +27,7 @@ export async function getWork(id: number) {
   })
 }
 export async function removeWork(work: any) {
+  // TODO: verify that the workId is a number
   await deleteFilesFromS3(work)
   await prisma.work.delete({
     where: {
@@ -33,7 +35,9 @@ export async function removeWork(work: any) {
     }
   })
 
+  // TODO: if delete ok then revalidate else throw error
   revalidatePath("/work")
+  redirect("/work")
 }
 
 export async function addWork(workData: unknown) {

@@ -29,6 +29,7 @@ export default function ImageGallery({ gallery }: { gallery: any }) {
             `${size === "large" ? "h-[500px]" : "h-[100px]"} w-[400px]`
           )}
           priority={idx === 0}
+          onClick={() => console.log("clicked image")}
         />
       </SwiperSlide>
     ))

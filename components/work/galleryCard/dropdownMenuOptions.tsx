@@ -10,7 +10,7 @@ import WorkForm from "../forms/WorkForm"
 export default function DropdownMenuOptions({ work }: { work: WorkType }) {
   const [open, setOpen] = useState(false)
   return (
-    <div>
+    <>
       <DropdownMenuContent className="text-gray-600">
         <DropdownMenuItem onClick={() => setOpen(true)}>
           <EditSVG className="mr-4 text-base text-green-500" />
@@ -28,6 +28,6 @@ export default function DropdownMenuOptions({ work }: { work: WorkType }) {
           <WorkForm work={work} onOpenChange={setOpen} />
         </Modal.Content>
       </Modal>
-    </div>
+    </>
   )
 }

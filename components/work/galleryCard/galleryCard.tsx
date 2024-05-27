@@ -31,12 +31,7 @@ export default function GalleryCard({ work }: { work: WorkType }) {
             </span>
           </div>
         </div>
-        <div className="flex items-end justify-between">
-          <div className="text-sm opacity-60">{work.description}</div>
-          <div className=" relative z-20">
-            <OptionButtons work={work} />
-          </div>
-        </div>
+        <div className="mt-1 text-base opacity-60">{work.description}</div>
       </div>
     </div>
   )

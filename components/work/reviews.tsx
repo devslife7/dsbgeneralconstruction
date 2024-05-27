@@ -44,15 +44,15 @@ export default function Reviews({ reviews, workId }: { reviews: any; workId: num
   }
 
   return (
-    <div className="">
-      <Button size={"sm"} onClick={toggleReviewForm} className="mt-6 w-full bg-red-600 font-semibold">
+    <>
+      <Button size={"sm"} responsive onClick={toggleReviewForm} className="mt-6 font-semibold">
         Add Review {isReviewFormOpen ? "-" : "+"}
       </Button>
 
       <ReviewForm isReviewFormOpen={isReviewFormOpen} closeReviewForm={closeReviewForm} workId={workId} />
-      <div className="mb-10">
+      <div className="mb-10 mt-2">
         <RenderReviews />
       </div>
-    </div>
+    </>
   )
 }
