@@ -1,6 +1,5 @@
 import { WorkType } from "@/lib/validators/work"
 import StarFilledSVG from "@/public/svgs/starFilled.svg"
-import OptionButtons from "./optionButtons"
 import Link from "next/link"
 import Image from "next/image"
 

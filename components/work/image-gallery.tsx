@@ -12,9 +12,12 @@ import "swiper/css/free-mode"
 import "swiper/css/navigation"
 import "swiper/css/thumbs"
 import { cn } from "@/lib/utils"
+import { Modal } from "../ui/modal"
+import Button from "../ui/button"
 
-export default function ImageGallery({ gallery }: { gallery: any }) {
+export default function ImageGallery({ urlList }: { urlList: string[] }) {
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null)
+  const [openModal, setOpenModal] = useState<boolean>(false)
 
   const renderVideo = (videoUrl: string, idx: number, size: string) => {
     return (
@@ -26,7 +29,7 @@ export default function ImageGallery({ gallery }: { gallery: any }) {
         autoPlay={size === "large"}
         playsInline={size === "large"}
         muted
-        onClick={() => console.log("clicked image")}
+        onClick={() => size === "large" && setOpenModal(true)}
       />
     )
   }
@@ -43,13 +46,13 @@ export default function ImageGallery({ gallery }: { gallery: any }) {
           `${size === "large" ? "h-[500px]" : "h-[100px]"} w-[400px]`
         )}
         priority={idx === 0}
-        onClick={() => console.log("clicked image")}
+        onClick={() => size === "large" && setOpenModal(true)}
       />
     )
   }
 
   const renderSlides = (size: string) => {
-    return gallery.map((url: any, idx: number) => (
+    return urlList.map((url: any, idx: number) => (
       <SwiperSlide key={idx}>
         {url && !!url.match(/mp4|mov|webm|quicktime/)
           ? renderVideo(url, idx, size)
@@ -75,7 +78,7 @@ export default function ImageGallery({ gallery }: { gallery: any }) {
       >
         {renderSlides("large")}
       </Swiper>
-      <div className={cn({ hidden: gallery.length === 1 })}>
+      <div className={cn({ hidden: urlList.length === 1 })}>
         <Swiper
           onSwiper={setThumbsSwiper}
           loop
@@ -88,7 +91,45 @@ export default function ImageGallery({ gallery }: { gallery: any }) {
         >
           {renderSlides("small")}
         </Swiper>
+        {renderFullGallery(urlList, openModal, setOpenModal)}
       </div>
     </>
+  )
+}
+
+const renderFullGallery = (urlList: string[], open: boolean, onOpenChange: (open: boolean) => void) => {
+  return (
+    <Modal open={open} onOpenChange={onOpenChange}>
+      <Modal.Content title="Full Gallery" className="h-screen overflow-auto">
+        {urlList.map((url: string, idx: number) =>
+          url && !!url.match(/mp4|mov|webm|quicktime/) ? (
+            <video
+              key={idx}
+              src={url}
+              width={400}
+              height={400}
+              className="mx-auto"
+              autoPlay
+              playsInline
+              muted
+              controls
+            />
+          ) : (
+            <Image
+              key={idx}
+              src={url}
+              alt={`Image ${idx + 1}`}
+              width={400}
+              height={400}
+              className="mx-auto"
+              priority={idx === 0}
+            />
+          )
+        )}
+        <Button variant="danger" onClick={() => onOpenChange(false)}>
+          Close
+        </Button>
+      </Modal.Content>
+    </Modal>
   )
 }

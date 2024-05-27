@@ -22,7 +22,7 @@ export default async function WorkPage({ params: { id } }: WorkPageProps) {
       {/* Image gallery plus back button */}
       <div className="mx-auto max-w-2xl flex-initial basis-3/4">
         <BackButton />
-        <ImageGallery gallery={files} />
+        <ImageGallery urlList={files} />
       </div>
       <div className="mx-auto flex-initial basis-2/4 sm:max-w-sm">
         {/* Work Description section */}
