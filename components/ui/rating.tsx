@@ -6,7 +6,7 @@
 import { cn } from "@/lib/utils"
 import { Star, StarHalf } from "@/public/icons/RatingStars"
 
-type Props = {
+type RatingProps = {
   className?: string
   readOnly?: boolean
   reverse?: boolean
@@ -22,11 +22,11 @@ export default function Rating({
   readOnly,
   reverse,
   ratings = [],
-  size = 25,
+  size = 24,
   setRatingParent = () => {},
   parentRating = 0,
   onClick
-}: Props) {
+}: RatingProps) {
   const getWorkRating = () => {
     if (ratings.length <= 0) return 0
     return ratings.reduce((a, b) => a + b, 0) / ratings.length
@@ -70,8 +70,8 @@ export default function Rating({
       onClick={onClick}
       className={cn("flex flex-row-reverse text-lg text-gray-600", className, { "justify-end": reverse })}
     >
-      <span className={cn("ml-2", { hidden: !reverse })}>{parentRating.toFixed(1)}</span>
-      <div className={cn("ml-2", { hidden: reverse })}>
+      <span className={cn("mb-[-3px] ml-2", { hidden: !reverse })}>{parentRating.toFixed(1)}</span>
+      <div className={cn("mb-[-3px] ml-2", { hidden: reverse })}>
         {readOnly ? (
           <>
             <span>{getWorkRating().toFixed(1)}</span>

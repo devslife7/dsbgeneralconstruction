@@ -18,18 +18,22 @@ export default async function WorkPage({ params: { id } }: WorkPageProps) {
   const { title, description, files, rating, Review, id: workId } = work
 
   return (
-    <div className="my-container">
-      <BackButton />
-      <ImageGallery gallery={files} />
-      <div className="mt-5">
-        <div className="mb-1 text-xl font-semibold">{title}</div>
-
-        <div className=" text-gray-500">{description}</div>
-        <div className="mt-2 flex items-center">
-          <Rating readOnly ratings={[0, 1, 2, 3, 4, 5]} />
-        </div>
+    <div className="my-container justify-center lg:flex">
+      <div className="max-w-2xl flex-initial basis-3/4">
+        <BackButton />
+        <ImageGallery gallery={files} />
       </div>
-      <Reviews reviews={Review} workId={workId} />
+      <div className="flex-initial basis-2/4 sm:max-w-sm">
+        <div className="mt-5">
+          <div className="mb-1 text-xl font-semibold">{title}</div>
+          <div className=" text-gray-500">{description}</div>
+          <div className="mt-2 flex items-center">
+            <Rating size={20} readOnly ratings={[0, 1, 2, 3, 4, 5]} className="text-base" />
+          </div>
+        </div>
+
+        <Reviews reviews={Review} workId={workId} />
+      </div>
     </div>
   )
 }

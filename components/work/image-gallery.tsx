@@ -25,7 +25,7 @@ export default function ImageGallery({ gallery }: { gallery: any }) {
           width={400}
           height={400}
           className={cn(
-            "m-auto rounded-lg object-cover",
+            "mx-auto rounded-lg object-cover",
             `${size === "large" ? "h-[500px]" : "h-[100px]"} w-[400px]`
           )}
           priority={idx === 0}
