@@ -8,7 +8,6 @@ import { WorkType } from "@/lib/validators/work"
 
 export default function WorkOptions({ work }: { work: any }) {
   const [open, setOpen] = useState(false)
-  console.log("work", work)
 
   return (
     <div className="flex">

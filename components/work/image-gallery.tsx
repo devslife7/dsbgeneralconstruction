@@ -16,21 +16,44 @@ import { cn } from "@/lib/utils"
 export default function ImageGallery({ gallery }: { gallery: any }) {
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null)
 
+  const renderVideo = (videoUrl: string, idx: number, size: string) => {
+    return (
+      <video
+        src={videoUrl}
+        width={400}
+        height={200}
+        className={cn("mx-auto rounded-lg", `${size === "large" ? "h-[500px]" : "h-[100px]"} w-full`)}
+        autoPlay={size === "large"}
+        playsInline={size === "large"}
+        muted
+        onClick={() => console.log("clicked image")}
+      />
+    )
+  }
+
+  const renderImage = (imageURL: string, idx: number, size: string) => {
+    return (
+      <Image
+        src={imageURL}
+        alt={`Image ${idx + 1}`}
+        width={400}
+        height={400}
+        className={cn(
+          "mx-auto rounded-lg object-cover",
+          `${size === "large" ? "h-[500px]" : "h-[100px]"} w-[400px]`
+        )}
+        priority={idx === 0}
+        onClick={() => console.log("clicked image")}
+      />
+    )
+  }
+
   const renderSlides = (size: string) => {
     return gallery.map((url: any, idx: number) => (
       <SwiperSlide key={idx}>
-        <Image
-          src={url}
-          alt={`Image ${idx + 1}`}
-          width={400}
-          height={400}
-          className={cn(
-            "mx-auto rounded-lg object-cover",
-            `${size === "large" ? "h-[500px]" : "h-[100px]"} w-[400px]`
-          )}
-          priority={idx === 0}
-          onClick={() => console.log("clicked image")}
-        />
+        {url && !!url.match(/mp4|mov|webm|quicktime/)
+          ? renderVideo(url, idx, size)
+          : renderImage(url, idx, size)}
       </SwiperSlide>
     ))
   }
