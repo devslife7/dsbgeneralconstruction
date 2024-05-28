@@ -75,5 +75,7 @@ export type WorkType = {
   description: string
   files: string[]
   rating: number
-  Review: ReviewType[]
+  Reviews: ReviewType[]
+  ratingCount: number
+  ratingAvg: number
 }

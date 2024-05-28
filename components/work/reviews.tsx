@@ -5,7 +5,7 @@ import { useState } from "react"
 import ReviewForm from "./forms/ReviewForm"
 import Button from "../ui/button"
 
-export default function Reviews({ reviews, workId }: { reviews: any; workId: number }) {
+export default function ReviewList({ reviews, workId }: { reviews: any; workId: number }) {
   const [isReviewFormOpen, setIsReviewFormOpen] = useState(false)
 
   const closeReviewForm = () => setIsReviewFormOpen(false)

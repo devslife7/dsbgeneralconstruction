@@ -14,9 +14,11 @@ model Work {
   id          Int      @id @default(autoincrement())
   title       String
   description String?
-  Review      Review[]
+  Reviews     Review[]
   rating      Float?   @default(0)
   files       String[]
+  ratingCount Int      @default(0)
+  ratingAvg   Float    @default(0)
 }
 
 model Review {

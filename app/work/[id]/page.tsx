@@ -2,7 +2,7 @@ import { getWork } from "@/actions/work"
 import Rating from "@/components/ui/rating"
 import WorkOptions from "@/components/work/galleryCard/workOptions"
 import ImageGallery from "@/components/work/image-gallery"
-import Reviews from "@/components/work/reviews"
+import ReviewList from "@/components/work/reviews"
 import BackButton from "@/components/work/ui/back-button"
 import { redirect } from "next/navigation"
 
@@ -15,7 +15,7 @@ type WorkPageProps = {
 export default async function WorkPage({ params: { id } }: WorkPageProps) {
   const work = await getWork(+id)
   if (!work) return redirect("/")
-  const { title, description, files, rating, Review, id: workId } = work
+  const { title, description, files, rating, Reviews, id: workId } = work
 
   return (
     <div className="my-container justify-center lg:flex">
@@ -37,7 +37,7 @@ export default async function WorkPage({ params: { id } }: WorkPageProps) {
           </div>
         </div>
         {/* Reviews section */}
-        <Reviews reviews={Review} workId={workId} />
+        <ReviewList reviews={Reviews} workId={workId} />
       </div>
     </div>
   )

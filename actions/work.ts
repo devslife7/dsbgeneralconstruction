@@ -10,9 +10,6 @@ export async function getWorkList() {
   return await prisma.work.findMany({
     orderBy: {
       id: "desc"
-    },
-    include: {
-      Review: true
     }
   })
 }
@@ -22,7 +19,7 @@ export async function getWork(id: number) {
       id: id
     },
     include: {
-      Review: true
+      Reviews: true
     }
   })
 }
