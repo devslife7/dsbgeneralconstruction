@@ -11,8 +11,8 @@ type RatingProps = {
   readOnly?: boolean
   reverse?: boolean
   ratings?: number[]
-  ratingCount: number
-  ratingAvg: number
+  ratingCount?: number
+  ratingAvg?: number
   size?: number
   setRatingParent?: (star: number) => void
   parentRating?: number

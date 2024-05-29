@@ -21,7 +21,7 @@ export default function Reviews({ work }: { work: WorkType }) {
   }
 
   const renderReviews = () => {
-    return work.Review.map((review, index) => (
+    return work.Reviews.map((review, index) => (
       <div key={index} className="py-4">
         <div className="flex gap-2">
           <div className="inline-flex h-10 w-14 items-center justify-center rounded-full bg-gray-800">
@@ -61,7 +61,7 @@ export default function Reviews({ work }: { work: WorkType }) {
           )
         )}
       </div>
-      {work.Review.length > 0 ? (
+      {work.Reviews.length > 0 ? (
         <div className="my-2">{renderReviews()}</div>
       ) : (
         <div className={cn("pt-8", { hidden: isReviewFormOpen })}>
