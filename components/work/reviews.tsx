@@ -1,22 +1,17 @@
 "use client"
 import { deleteReview } from "@/actions/review"
-import { DeleteSVG, StarFilledSVG } from "@/public/svgs"
+import { DeleteSVG, PlusSVG, StarFilledSVG } from "@/public/svgs"
 import { useState } from "react"
 import ReviewForm from "./forms/ReviewForm"
 import Button from "../ui/button"
+import { Modal } from "../ui/modal"
 
 export default function ReviewList({ reviews, workId }: { reviews: any; workId: number }) {
-  const [isReviewFormOpen, setIsReviewFormOpen] = useState(false)
-
-  const closeReviewForm = () => setIsReviewFormOpen(false)
-  const toggleReviewForm = () => {
-    setIsReviewFormOpen(prevState => !prevState)
-  }
+  const [formOpen, setFormOpen] = useState<boolean>(false)
 
   const removeReview = async (reviewId: number) => {
     confirm("Are you sure you want to delete this review?") && (await deleteReview(reviewId))
   }
-
   const RenderReviews = () => {
     return reviews.map((review: any, index: number) => (
       <div key={index} className="py-4">
@@ -45,11 +40,16 @@ export default function ReviewList({ reviews, workId }: { reviews: any; workId: 
 
   return (
     <>
-      <Button size={"sm"} responsive onClick={toggleReviewForm} className="mt-6 font-semibold">
-        Add Review {isReviewFormOpen ? "-" : "+"}
-      </Button>
-
-      <ReviewForm isReviewFormOpen={isReviewFormOpen} closeReviewForm={closeReviewForm} workId={workId} />
+      <Modal open={formOpen} onOpenChange={setFormOpen}>
+        <Modal.Trigger className="w-full">
+          <Button size={"sm"} responsive className="mt-6 font-semibold">
+            Add Review <span className="-mt-[2px] text-lg">+</span>
+          </Button>
+        </Modal.Trigger>
+        <Modal.Content title="Add Review">
+          <ReviewForm workId={workId} setFormOpen={setFormOpen} />
+        </Modal.Content>
+      </Modal>
       <div className="mb-10 mt-2">
         <RenderReviews />
       </div>

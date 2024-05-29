@@ -9,14 +9,14 @@ import { useFormStatus } from "react-dom"
 import Rating from "@/components/ui/rating"
 import { TextArea } from "@/components/ui/textArea"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 type ReviewFormProps = {
-  isReviewFormOpen: boolean
-  closeReviewForm: () => void
+  setFormOpen: (open: boolean) => void
   workId: number
 }
 
-export default function ReviewForm({ isReviewFormOpen, closeReviewForm, workId }: ReviewFormProps) {
+export default function ReviewForm({ setFormOpen, workId }: ReviewFormProps) {
   const ref = useRef<HTMLFormElement>(null)
   const [rating, setRating] = useState<number>(0)
   const [errors, setErrors] = useState<ReviewErrors>({})
@@ -52,44 +52,48 @@ export default function ReviewForm({ isReviewFormOpen, closeReviewForm, workId }
   }
 
   const resetForm = () => {
-    closeReviewForm()
+    setFormOpen(false)
     setErrors({})
     setRating(0)
     ref.current?.reset()
   }
 
   return (
-    <form
-      action={submitAction}
-      ref={ref}
-      className={cn("mt-5 max-w-md space-y-3", { hidden: !isReviewFormOpen })}
-    >
-      <label className="text-lg font-semibold text-gray-700">Add Review</label>
-      <Rating
-        readOnly={false}
-        reverse
-        setRatingParent={setRating}
-        parentRating={rating}
-        onClick={() => setErrors({ ...errors, rating: "" })}
-      />
-      <span className="text-sm text-red-400">{errors.rating}</span>
-      <Input
-        type="text"
-        name="name"
-        className="text-base"
-        autoFocus
-        placeholder="Name..."
-        onFocus={() => setErrors({ ...errors, name: "" })}
-        errors={errors.name}
-      />
-      <TextArea
-        placeholder="Comment..."
-        className="text-base"
-        rows={4}
-        name="comment"
-        onFocus={() => setErrors({ ...errors, comment: "" })}
-        errors={errors.comment}
-      />
+    <form action={submitAction} ref={ref} className={cn("mt-5 max-w-md space-y-5")}>
+      <div>
+        <Label>Rating</Label>
+        <Rating
+          readOnly={false}
+          reverse
+          setRatingParent={setRating}
+          parentRating={rating}
+          onClick={() => setErrors({ ...errors, rating: "" })}
+        />
+        <span className="text-sm text-red-400">{errors.rating}</span>
+      </div>
+      <div>
+        <Label>Name</Label>
+        <Input
+          type="text"
+          name="name"
+          className="text-base"
+          autoFocus
+          placeholder="Name..."
+          onFocus={() => setErrors({ ...errors, name: "" })}
+          errors={errors.name}
+        />
+      </div>
+      <div>
+        <Label>Comment</Label>
+        <TextArea
+          placeholder="Comment..."
+          className="text-base"
+          rows={4}
+          name="comment"
+          onFocus={() => setErrors({ ...errors, comment: "" })}
+          errors={errors.comment}
+        />
+      </div>
       <FormButtons resetForm={resetForm} />
     </form>
   )
