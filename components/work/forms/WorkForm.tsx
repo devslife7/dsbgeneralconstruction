@@ -15,6 +15,7 @@ import { useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import Button from "../../ui/button"
+import { Label } from "@/components/ui/label"
 
 type FormType = {
   onOpenChange: (open: boolean) => void
@@ -87,17 +88,24 @@ export default function WorkForm({ onOpenChange, work }: FormType) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
-      <Input {...register("title")} name="title" placeholder="Title*" disabled={isSubmitting} />
-      {errors.title && <span className="text-sm text-red-400">{errors.title.message}</span>}
-      <TextArea
-        {...register("description")}
-        name="description"
-        placeholder="Description*"
-        disabled={isSubmitting}
-      />
-      {errors.description && <span className="text-sm text-red-400">{errors.description.message}</span>}
+      <div>
+        <Label>Title</Label>
+        <Input {...register("title")} name="title" placeholder="Title*" disabled={isSubmitting} />
+        {errors.title && <span className="text-sm text-red-400">{errors.title.message}</span>}
+      </div>
+      <div>
+        <Label>Description</Label>
+        <TextArea
+          {...register("description")}
+          name="description"
+          placeholder="Description*"
+          disabled={isSubmitting}
+        />
+        {errors.description && <span className="text-sm text-red-400">{errors.description.message}</span>}
+      </div>
 
       <div className={cn({ hidden: work })}>
+        <Label>Photos/Videos</Label>
         {previewMediaObj ? previewFile(previewMediaObj, isSubmitting) : null}
         <Input
           {...register("files")}
