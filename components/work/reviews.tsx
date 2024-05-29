@@ -41,11 +41,9 @@ export default function ReviewList({ reviews, workId }: { reviews: any; workId: 
   return (
     <>
       <Modal open={formOpen} onOpenChange={setFormOpen}>
-        <Modal.Trigger className="w-full">
-          <Button size={"sm"} responsive className="mt-6 font-semibold">
-            Add Review <span className="-mt-[2px] text-lg">+</span>
-          </Button>
-        </Modal.Trigger>
+        <Button size={"sm"} responsive className="mt-6 font-semibold" onClick={() => setFormOpen(true)}>
+          Add Review <span className="-mt-[2px] text-lg">+</span>
+        </Button>
         <Modal.Content title="Add Review">
           <ReviewForm workId={workId} setFormOpen={setFormOpen} />
         </Modal.Content>
