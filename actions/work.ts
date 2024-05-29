@@ -19,7 +19,7 @@ export async function getWork(id: number) {
       id: id
     },
     include: {
-      Reviews: true
+      Reviews: { orderBy: { id: "desc" } }
     }
   })
 }

@@ -15,10 +15,9 @@ model Work {
   title       String
   description String?
   Reviews     Review[]
-  rating      Float?   @default(0)
   files       String[]
   ratingCount Int      @default(0)
-  ratingAvg   Float    @default(0)
+  ratingAvg   Float?   @default(0)
 }
 
 model Review {

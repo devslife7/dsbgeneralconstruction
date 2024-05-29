@@ -37,7 +37,7 @@ export default async function WorkPage({ params: { id } }: WorkPageProps) {
               size={20}
               readOnly
               ratingCount={ratingCount}
-              ratingAvg={ratingAvg}
+              ratingAvg={ratingAvg ? +ratingAvg.toFixed(1) : 0}
               className="text-base"
             />
           </div>

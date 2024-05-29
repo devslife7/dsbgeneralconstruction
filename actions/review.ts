@@ -1,5 +1,4 @@
 "use server"
-
 import { revalidatePath } from "next/cache"
 import { prisma } from "../lib/db"
 import { ReviewSchema } from "@/lib/validators/review"
@@ -12,13 +11,7 @@ export async function deleteReview(reviewId: number) {
   })
 
   const workId = deleted.workId
-  const ratingAggregate = await prisma.review.aggregate({ _avg: { rating: true }, where: { workId } })
-  const ratingValue = ratingAggregate._avg.rating ? ratingAggregate._avg.rating : 0
-  await prisma.work.update({
-    where: { id: workId },
-    data: { rating: ratingValue }
-  })
-
+  updateWorkReviewAverage(workId)
   revalidatePath("/work")
   return deleted
 }
@@ -43,15 +36,7 @@ export async function addReview(data: unknown) {
 
   try {
     await prisma.review.create({ data: parsedData.data })
-    const rating = await prisma.review.aggregate({
-      _avg: { rating: true },
-      where: { workId },
-      _count: { rating: true }
-    })
-    await prisma.work.update({
-      where: { id: workId },
-      data: { rating: rating._avg.rating }
-    })
+    await updateWorkReviewAverage(workId)
     revalidatePath("/work")
     return { status: 200, message: "Successfully added Review" }
   } catch (e) {
@@ -60,15 +45,18 @@ export async function addReview(data: unknown) {
   }
 }
 
-const updateReviewRating = async (workId: number) => {
+const updateWorkReviewAverage = async (workId: number) => {
   const ratingAggregate = await prisma.review.aggregate({
     _avg: { rating: true },
     where: { workId },
     _count: { rating: true }
   })
-  const ratingValue = ratingAggregate._avg.rating ? ratingAggregate._avg.rating : 0
-  // await prisma.work.update({
-  //   where: { id: workId },
-  //   data: { ratingAvg: ratingAggregate._avg.rating, ratingCount: ratingAggregate._count.rating }
-  // })
+
+  const ratingAvg = ratingAggregate._avg.rating ? ratingAggregate._avg.rating : 0
+  const ratingCount = ratingAggregate._count.rating
+
+  await prisma.work.update({
+    where: { id: workId },
+    data: { ratingAvg, ratingCount: ratingCount }
+  })
 }
