@@ -6,15 +6,15 @@ import { WorkType } from "@/lib/validators/work"
 export default function GalleryCard({ work }: { work: WorkType }) {
   if (!work.files || work.files.length === 0) return null
   const { title, description, files, id: workId, ratingCount, ratingAvg } = work
-  const url = files[0]
+  const thumbnailURL = files[0]
 
   return (
     <Link href={`/work/${workId}`}>
       <div className="rounded-lg bg-white pb-2 shadow-lg sm:max-w-sm lg:max-w-xs">
         <div className="rounded-lg bg-background">
-          {url && !!url.match(/mp4|mov|webm|quicktime/) ? (
+          {thumbnailURL && !!thumbnailURL.match(/mp4|mov|webm|quicktime/) ? (
             <video
-              src={url}
+              src={thumbnailURL}
               width={400}
               height={200}
               className="mx-auto h-[400px] w-[400px] rounded-t-lg"
@@ -24,7 +24,7 @@ export default function GalleryCard({ work }: { work: WorkType }) {
             />
           ) : (
             <Image
-              src={url}
+              src={thumbnailURL}
               alt={title}
               width={400}
               height={400}

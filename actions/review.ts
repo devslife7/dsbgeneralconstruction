@@ -43,7 +43,11 @@ export async function addReview(data: unknown) {
 
   try {
     await prisma.review.create({ data: parsedData.data })
-    const rating = await prisma.review.aggregate({ _avg: { rating: true }, where: { workId } })
+    const rating = await prisma.review.aggregate({
+      _avg: { rating: true },
+      where: { workId },
+      _count: { rating: true }
+    })
     await prisma.work.update({
       where: { id: workId },
       data: { rating: rating._avg.rating }
@@ -54,4 +58,17 @@ export async function addReview(data: unknown) {
     console.error(e)
     return { status: 500, message: "Failed to add Review" }
   }
+}
+
+const updateReviewRating = async (workId: number) => {
+  const ratingAggregate = await prisma.review.aggregate({
+    _avg: { rating: true },
+    where: { workId },
+    _count: { rating: true }
+  })
+  const ratingValue = ratingAggregate._avg.rating ? ratingAggregate._avg.rating : 0
+  // await prisma.work.update({
+  //   where: { id: workId },
+  //   data: { ratingAvg: ratingAggregate._avg.rating, ratingCount: ratingAggregate._count.rating }
+  // })
 }

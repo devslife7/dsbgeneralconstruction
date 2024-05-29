@@ -15,7 +15,7 @@ type WorkPageProps = {
 export default async function WorkPage({ params: { id } }: WorkPageProps) {
   const work = await getWork(+id)
   if (!work) return redirect("/")
-  const { title, description, files, rating, Reviews, id: workId } = work
+  const { title, description, files, ratingAvg, ratingCount, Reviews, id: workId } = work
 
   return (
     <div className="my-container justify-center lg:flex">
@@ -33,7 +33,13 @@ export default async function WorkPage({ params: { id } }: WorkPageProps) {
           </div>
           <div className="mt-1 text-gray-500">{description}</div>
           <div className="mt-2 flex items-center">
-            <Rating size={20} readOnly ratings={[0, 1, 2, 3, 4, 5]} className="text-base" />
+            <Rating
+              size={20}
+              readOnly
+              ratingCount={ratingCount}
+              ratingAvg={ratingAvg}
+              className="text-base"
+            />
           </div>
         </div>
         {/* Reviews section */}
