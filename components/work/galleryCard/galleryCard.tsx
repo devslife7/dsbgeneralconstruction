@@ -38,7 +38,7 @@ export default function GalleryCard({ work }: { work: WorkType }) {
             <div className="flex items-center ">
               <StarFilledSVG className="text-primary" />
               <span className="ml-[0.2rem] mt-[0.1rem] text-center text-sm opacity-70">
-                {ratingAvg}({ratingCount})
+                {ratingAvg.toFixed(1)}({ratingCount})
               </span>
             </div>
           </div>
