@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "npx prisma generate",
-    "playground": "node --watch playground.js"
+    "postinstall": "prisma generate && prisma migrate deploy"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.465.0",
