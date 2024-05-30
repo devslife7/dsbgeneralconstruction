@@ -164,16 +164,19 @@ async function uploadFile(file: File, url: string) {
 // Preview first file in array of selected items
 const previewFile = (previewMediaObj: PreviewMedia[], isSubmiting: boolean) => {
   return (
-    // <div className="flex w-full flex-wrap items-start gap-1 pb-4 opacity-50">
-    <div className={cn("flex w-full flex-wrap items-start gap-1 pb-4", { "opacity-50": isSubmiting })}>
+    <div
+      className={cn("mb-4 grid grid-cols-4 gap-1", {
+        "opacity-50": isSubmiting
+      })}
+    >
       {previewMediaObj.map((file, idx) =>
         file.type.startsWith("image/") ? (
-          <div key={idx} className="relative h-32 w-32 overflow-hidden rounded-lg">
-            <Image className="object-cover" src={file.url} alt="preview" priority fill />
+          <div key={idx} className="relative h-24 overflow-hidden rounded-lg bg-blue-500">
+            <Image className="items-center object-cover object-center" src={file.url} alt="preview" fill />
           </div>
         ) : (
-          <div key={idx} className="w-200 h-300 relative overflow-hidden rounded-lg">
-            <video className="object-cover" src={file.url} autoPlay loop muted />
+          <div key={idx} className="relative h-24 overflow-hidden rounded-lg">
+            <video className="object-cover" src={file.url} autoPlay playsInline loop muted />
           </div>
         )
       )}

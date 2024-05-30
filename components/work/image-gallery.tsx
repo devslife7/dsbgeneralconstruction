@@ -100,7 +100,7 @@ export default function ImageGallery({ urlList }: { urlList: string[] }) {
 const renderFullGallery = (urlList: string[], open: boolean, onOpenChange: (open: boolean) => void) => {
   return (
     <Modal open={open} onOpenChange={onOpenChange}>
-      <Modal.Content title="Full Gallery" className="h-screen overflow-auto">
+      <Modal.Content title="Full Gallery" className="h-[100dvh] overflow-scroll">
         {urlList.map((url: string, idx: number) =>
           url && !!url.match(/mp4|mov|webm|quicktime/) ? (
             <video
