@@ -13,7 +13,7 @@ import "swiper/css/navigation"
 import "swiper/css/thumbs"
 import { cn } from "@/lib/utils"
 import { Modal } from "../ui/modal"
-import Button from "../ui/button"
+import Button from "../ui/my-button"
 
 export default function ImageGallery({ urlList }: { urlList: string[] }) {
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null)

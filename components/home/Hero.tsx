@@ -2,7 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import heroBackground from "@/public/images//hero-house.webp"
 import { cn } from "@/lib/utils"
-import { buttonStyles } from "../ui/button"
+import { buttonStyles } from "../ui/my-button"
 
 export default function Hero() {
   return (

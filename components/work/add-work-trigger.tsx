@@ -1,10 +1,10 @@
 "use client"
 import { useState } from "react"
 import { Modal } from "../ui/modal"
-import Button from "../ui/button"
+import Button from "../ui/my-button"
 import WorkForm from "./forms/WorkForm"
 
-export default function AddWorkInterface() {
+export default function AddWorkTrigger() {
   const [open, setOpen] = useState(false)
 
   return (

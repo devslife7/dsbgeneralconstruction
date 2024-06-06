@@ -6,7 +6,7 @@ import interior from "@/public/images/interior-service.webp"
 import interiorMobile from "@/public/images/interior-service-mobile.webp"
 import Image from "next/image"
 import Link from "next/link"
-import { buttonStyles } from "../ui/button"
+import { buttonStyles } from "../ui/my-button"
 import { cn } from "@/lib/utils"
 
 export default function Services() {

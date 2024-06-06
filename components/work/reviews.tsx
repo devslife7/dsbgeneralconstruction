@@ -3,7 +3,7 @@ import { deleteReview } from "@/actions/review"
 import { DeleteSVG, PlusSVG, StarFilledSVG } from "@/public/svgs"
 import { useState } from "react"
 import ReviewForm from "./forms/ReviewForm"
-import Button from "../ui/button"
+import Button from "../ui/my-button"
 import { Modal } from "../ui/modal"
 
 export default function ReviewList({ reviews, workId }: { reviews: any; workId: number }) {

@@ -14,14 +14,14 @@ import Image from "next/image"
 import { useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
-import Button from "../../ui/button"
+import Button from "../../ui/my-button"
 import { Label } from "@/components/ui/label"
 import { AddWorkClientSchema, AddWorkSchemaClientType, FileArraySchema } from "@/lib/validators/client"
 import { z } from "zod"
 
 type FormType = {
   onOpenChange: (open: boolean) => void
-  work: WorkType | null
+  work?: WorkType | null
 }
 
 // const AddWorkFormSchema = z.object({
@@ -182,7 +182,7 @@ export default function WorkForm({ onOpenChange, work = null }: FormType) {
         <Label>Photos/Videos</Label>
         {previewMediaObj ? previewFile(previewMediaObj, isSubmitting) : null}
         <Input
-          {...register("files")}
+          // {...register("files")}
           name="files"
           type="file"
           multiple
@@ -190,7 +190,7 @@ export default function WorkForm({ onOpenChange, work = null }: FormType) {
           onChange={handleFilesChange}
           disabled={isSubmitting}
         />
-        {errors.files && <span className="text-sm text-red-400">{errors.files.message}</span>}
+        {/* {errors.files && <span className="text-sm text-red-400">{errors.files.message}</span>} */}
       </div>
 
       <Modal.Footer>
