@@ -1,4 +1,4 @@
-import { buttonStyles } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { BackArrowSVG } from "@/public/svgs"
 import Link from "next/link"
 
@@ -12,7 +12,7 @@ export default function NotFound() {
 
         <p className="mt-4 text-gray-500">Page not found.</p>
 
-        <Link href="/" className={buttonStyles()}>
+        <Link href="/" className={buttonVariants()}>
           <BackArrowSVG />
           Go Home
         </Link>

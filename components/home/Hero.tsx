@@ -2,7 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import heroBackground from "@/public/images//hero-house.webp"
 import { cn } from "@/lib/utils"
-import { buttonStyles } from "../ui/my-button"
+import { buttonVariants } from "../ui/button"
 
 export default function Hero() {
   return (
@@ -22,7 +22,7 @@ export default function Hero() {
             <p className="font-roboto text-4xl font-semibold leading-tight md:text-5xl lg:text-7xl lg:leading-tight">
               Exceptional Home Remodeling & Renovations
             </p>
-            <Link href="/work" className={cn(buttonStyles(), "mt-10 font-light lg:text-lg")}>
+            <Link href="/work" className={cn(buttonVariants(), "mt-10 font-light lg:text-lg")}>
               Explore Gallery
             </Link>
           </div>

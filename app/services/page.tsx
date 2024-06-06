@@ -1,7 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
-import { buttonStyles } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { servicesData } from "@/lib/data/services"
 
 export default function page() {
@@ -50,7 +50,7 @@ export default function page() {
         </h2>
 
         <div className="my-container text-center">
-          <Link href="/contact" className={cn(buttonStyles(), "mt-10 font-light lg:text-lg")}>
+          <Link href="/contact" className={cn(buttonVariants(), "mt-10 font-light lg:text-lg")}>
             Get A Free Estimate
           </Link>
         </div>

@@ -1,6 +1,6 @@
 "use client"
 
-import Button, { buttonStyles } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { BackArrowSVG, RefreshSVG } from "@/public/svgs"
 import Link from "next/link"
 
@@ -19,7 +19,7 @@ export default function ErrorBoundary({ error, reset }: { error: Error; reset: (
           <RefreshSVG />
           Try again
         </Button>
-        <Link href="/" className={buttonStyles({ variant: "inverted" })}>
+        <Link href="/" className={buttonVariants({ variant: "inverted" })}>
           <BackArrowSVG />
           Go Home
         </Link>

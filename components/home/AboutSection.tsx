@@ -1,8 +1,8 @@
 import KitchenBg from "@/public/images/kitchen-bg.webp"
 import Image from "next/image"
-import Button, { buttonStyles } from "../ui/my-button"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
+import { buttonVariants } from "../ui/button"
 
 export default function AboutSection() {
   return (
@@ -16,7 +16,7 @@ export default function AboutSection() {
           craftsmanship. From kitchen makeovers that leave taste buds tingling to bathroom remodels that feel
           like a spa day at home.
         </p>
-        <Link href="/about" className={cn(buttonStyles(), "mt-10 font-light lg:text-lg")}>
+        <Link href="/about" className={cn(buttonVariants(), "mt-10 font-light lg:text-lg")}>
           More About Us
         </Link>
       </div>

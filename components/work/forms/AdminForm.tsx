@@ -1,4 +1,4 @@
-import Button from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 
 type Props = {
   password: string
@@ -23,7 +23,7 @@ export default function AdminLoginForm({ password, setPassword, closeModal, hand
         <Button type="submit" variant="secondary">
           Submit
         </Button>
-        <Button onClick={closeModal} variant="danger">
+        <Button onClick={closeModal} variant="destructive">
           Cancel
         </Button>
       </div>

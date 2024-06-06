@@ -2,7 +2,7 @@ import Image from "next/image"
 import AboutPage from "@/public/images/about-page.webp"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
-import { buttonStyles } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 
 export default function About() {
   return (
@@ -27,7 +27,7 @@ export default function About() {
         </h2>
 
         <div className="my-container text-center">
-          <Link href="/contact" className={cn(buttonStyles(), "mt-10 font-light lg:text-lg")}>
+          <Link href="/contact" className={cn(buttonVariants(), "mt-10 font-light lg:text-lg")}>
             Get A Free Estimate
           </Link>
         </div>
