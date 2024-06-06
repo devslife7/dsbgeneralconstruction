@@ -1,6 +1,7 @@
 import { getWorkList } from "@/actions/work"
 import AddWorkInterface from "@/components/work/addWorkInterface"
 import GalleryCard from "@/components/work/galleryCard/galleryCard"
+import WorkList from "@/components/work/work-list"
 
 export default async function page() {
   const gallery = await getWorkList()
@@ -14,11 +15,12 @@ export default async function page() {
         <AddWorkInterface />
       </div>
 
-      <div className="flex flex-wrap justify-center gap-6 lg:justify-center lg:gap-4">
+      {/* <div className="flex flex-wrap justify-center gap-6 lg:justify-center lg:gap-4">
         {gallery.map((work: any, index: number) => (
           <GalleryCard key={index} work={work} />
         ))}
-      </div>
+      </div> */}
+      <WorkList />
     </div>
   )
 }
