@@ -7,7 +7,7 @@ import { TextArea } from "@/components/ui/textArea"
 import { ACCEPTED_FILE_TYPES } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 import { PreviewMedia } from "@/lib/validators/types"
-import { AddWorkSchema, AddWorkType, EditWorkSchema, WorkType } from "@/lib/validators/work"
+import { EditWorkSchema, WorkType } from "@/lib/validators/work"
 import { SpinnerSVG } from "@/public/svgs"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Image from "next/image"
@@ -16,25 +16,46 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import Button from "../../ui/button"
 import { Label } from "@/components/ui/label"
+import { AddWorkClientSchema, AddWorkSchemaClientType, FileArraySchema } from "@/lib/validators/client"
+import { z } from "zod"
 
 type FormType = {
   onOpenChange: (open: boolean) => void
-  work?: WorkType
+  work: WorkType | null
 }
 
-export default function WorkForm({ onOpenChange, work }: FormType) {
+// const AddWorkFormSchema = z.object({
+//   title: z.any(),
+//   description: z.any(),
+//   files: z.any()
+// })
+
+type AddWorkFormType = {
+  title: string
+  description: string
+  files: FileList
+}
+type FormFields = {
+  title: string
+  description: string
+}
+
+export default function WorkForm({ onOpenChange, work = null }: FormType) {
   const [previewMediaObj, setPreviewMediaObj] = useState<PreviewMedia[] | undefined>(undefined)
+  const [formErrors, setFormErrors] = useState<string[]>([])
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset
-  } = useForm<AddWorkType>({
-    defaultValues: { title: work?.title, description: work?.description },
-    resolver: zodResolver(work ? EditWorkSchema : AddWorkSchema)
+  } = useForm<FormFields>({
+    defaultValues: { title: work?.title, description: work?.description }
+    // resolver: zodResolver(work ? EditWorkSchema : AddWorkFormSchema)
+    // resolver: zodResolver(work ? EditWorkSchema : AddWorkClientSchema)
   })
 
   const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("e:::::", e.target.files)
     const fileArr: FileList | null = e.target.files as FileList
     if (previewMediaObj) {
       setPreviewMediaObj(undefined)
@@ -52,32 +73,80 @@ export default function WorkForm({ onOpenChange, work }: FormType) {
     setPreviewMediaObj(fileUrlArr)
   }
 
-  const onSubmit: SubmitHandler<AddWorkType> = async ({ title, description, files }) => {
+  const onSubmit: SubmitHandler<FormFields> = async data => {
     // update work if work exists
-    if (work) {
-      const response = await updateWork({ title, description, id: work.id })
-      if (!response.success) {
-        console.log("Server Error: ", response.errors)
-        toast.error("Failed to update Work. Check console logs for more info.")
-        return
-      }
-      toast.success("Work updated.")
-      resetForm()
-      return
-    }
-    // upload files to s3
-    const responseFiles = await uploadFiles(files)
-    if (!responseFiles.success) return toast.error("Failed to upload files.")
-    // server action add work
-    const responseWork = await addWork({
-      title,
-      description,
-      files: responseFiles.urlList
-    })
-    if (!responseWork.success) return toast.error("Failed to add Work.")
-    toast.success("Upload complete.")
-    resetForm()
+    // const fileList = Array.from(files)
+    // console.log("files:::::", fileList)
+    // const validatedFileList = FileArraySchema.safeParse(fileList)
+    // if (!validatedFileList.success) {
+    //   console.log("validatedFileList:::::", validatedFileList.error.flatten().formErrors)
+    //   setFormErrors(validatedFileList.error.flatten().formErrors)
+    // }
+    console.log("Enters Submit with data:", data)
+    return
+    // if (work) {
+    //   const response = await updateWork({ title, description, id: work.id })
+    //   if (!response.success) {
+    //     console.log("Server Error: ", response.errors)
+    //     toast.error("Failed to update Work. Check console logs for more info.")
+    //     return
+    //   }
+    //   toast.success("Work updated.")
+    //   resetForm()
+    //   return
+    // }
+    // // upload files to s3
+    // // TODO: change to files array from FileList then validate
+    // const responseFiles = await uploadFiles(files)
+    // if (!responseFiles.success) return toast.error("Failed to upload files.")
+    // // server action add work
+    // const responseWork = await addWork({
+    //   title,
+    //   description,
+    //   files: responseFiles.urlList
+    // })
+    // if (!responseWork.success) return toast.error("Failed to add Work.")
+    // toast.success("Upload complete.")
+    // resetForm()
   }
+
+  // const onSubmit: SubmitHandler<AddWorkFormType> = async ({ title, description, files }) => {
+  //   // update work if work exists
+  //   const fileList = Array.from(files)
+  //   console.log("files:::::", fileList)
+  //   const validatedFileList = FileArraySchema.safeParse(fileList)
+  //   if (!validatedFileList.success) {
+  //     console.log("validatedFileList:::::", validatedFileList.error.flatten().formErrors)
+  //     setFormErrors(validatedFileList.error.flatten().formErrors)
+  //   }
+
+  //   return
+
+  //   if (work) {
+  //     const response = await updateWork({ title, description, id: work.id })
+  //     if (!response.success) {
+  //       console.log("Server Error: ", response.errors)
+  //       toast.error("Failed to update Work. Check console logs for more info.")
+  //       return
+  //     }
+  //     toast.success("Work updated.")
+  //     resetForm()
+  //     return
+  //   }
+  //   // upload files to s3
+  //   // TODO: change to files array from FileList then validate
+  //   const responseFiles = await uploadFiles(files)
+  //   if (!responseFiles.success) return toast.error("Failed to upload files.")
+  //   // server action add work
+  //   const responseWork = await addWork({
+  //     title,
+  //     description,
+  //     files: responseFiles.urlList
+  //   })
+  //   if (!responseWork.success) return toast.error("Failed to add Work.")
+  //   toast.success("Upload complete.")
+  //   resetForm()
+  // }
 
   const resetForm = () => {
     onOpenChange(false)
@@ -90,7 +159,12 @@ export default function WorkForm({ onOpenChange, work }: FormType) {
     <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
       <div>
         <Label>Title</Label>
-        <Input {...register("title")} name="title" placeholder="Title*" disabled={isSubmitting} />
+        <Input
+          {...register("title", { required: "Password is required", minLength: 3 })}
+          name="title"
+          placeholder="Title*"
+          disabled={isSubmitting}
+        />
         {errors.title && <span className="text-sm text-red-400">{errors.title.message}</span>}
       </div>
       <div>
@@ -135,6 +209,8 @@ export default function WorkForm({ onOpenChange, work }: FormType) {
 
 // Upload multiple files to AWS S3
 const uploadFiles = async (files: FileList) => {
+  console.log("files:::::", files)
+  console.log("filesARRAY:::::", Array.from(files))
   const promiseArray = Array.from(files).map(file => getPresignedURL(file.type))
   const presignedURLS = await Promise.all(promiseArray)
 

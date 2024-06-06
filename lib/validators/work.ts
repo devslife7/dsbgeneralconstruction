@@ -17,6 +17,19 @@ export const WorkSchema = z.object({
 })
 
 export type AddWorkType = z.infer<typeof AddWorkSchema>
+
+const ACCEPTED_FILES_TYPES: [string, ...string[]] = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+  "video/mp4",
+  "video/mov",
+  "video/quicktime",
+  "video/webm"
+]
+
 export const AddWorkSchema = z.object({
   title: z
     .string()
@@ -55,6 +68,7 @@ export const EditWorkSchema = z.object({
     .min(3, "Description must be at least 3 characters long.")
     .max(128, "Description must be less than 128 characters long.")
 })
+
 export const EditWorkSchemaServer = z.object({
   id: z.number(),
   title: z
