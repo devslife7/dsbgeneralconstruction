@@ -1,4 +1,3 @@
-import Button from "@/components/ui/button"
 import { useRef, useState } from "react"
 import { SpinnerSVG } from "@/public/svgs"
 import { cn } from "@/lib/utils"
@@ -10,6 +9,7 @@ import Rating from "@/components/ui/rating"
 import { TextArea } from "@/components/ui/textArea"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
 
 type ReviewFormProps = {
   setFormOpen: (open: boolean) => void
@@ -103,12 +103,17 @@ const FormButtons = ({ resetForm }: { resetForm: () => void }) => {
   const { pending } = useFormStatus()
   return (
     <div className="space-y-4">
-      <Button responsive aria-disabled={pending} disabled={pending}>
+      <Button
+        // responsive
+
+        aria-disabled={pending}
+        disabled={pending}
+      >
         {pending ? <SpinnerSVG className="animate-spin" /> : "Post"}
       </Button>
       <Button
-        responsive
-        variant="cancel"
+        // responsive
+        variant="destructive"
         type="button"
         onClick={resetForm}
         aria-disabled={pending}
