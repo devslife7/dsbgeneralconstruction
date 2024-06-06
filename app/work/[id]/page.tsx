@@ -1,9 +1,9 @@
 import { getWork } from "@/actions/work"
+import BackButton from "@/components/ui/back-button"
 import Rating from "@/components/ui/rating"
-import WorkOptions from "@/components/work/galleryCard/workOptions"
 import ImageGallery from "@/components/work/image-gallery"
 import ReviewList from "@/components/work/reviews"
-import BackButton from "@/components/work/ui/back-button"
+import WorkOptions from "@/components/work/work-options"
 import { redirect } from "next/navigation"
 
 type WorkPageProps = {
