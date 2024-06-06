@@ -2,7 +2,7 @@ import { getWork } from "@/actions/work"
 import BackButton from "@/components/ui/back-button"
 import Rating from "@/components/ui/rating"
 import ImageGallery from "@/components/work/image-gallery"
-import ReviewList from "@/components/work/reviews"
+import ReviewList from "@/components/work/review-list"
 import WorkOptions from "@/components/work/work-options"
 import { redirect } from "next/navigation"
 

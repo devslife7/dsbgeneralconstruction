@@ -3,8 +3,8 @@ import { deleteReview } from "@/actions/review"
 import { DeleteSVG, PlusSVG, StarFilledSVG } from "@/public/svgs"
 import { useState } from "react"
 import ReviewForm from "./forms/ReviewForm"
-import Button from "../ui/my-button"
 import { Modal } from "../ui/modal"
+import { Button } from "../ui/button"
 
 export default function ReviewList({ reviews, workId }: { reviews: any; workId: number }) {
   const [formOpen, setFormOpen] = useState<boolean>(false)
@@ -44,8 +44,8 @@ export default function ReviewList({ reviews, workId }: { reviews: any; workId: 
 
   return (
     <>
-      <Button size={"sm"} responsive className="mt-6 font-semibold" onClick={() => setFormOpen(true)}>
-        Add Review <span className="-mt-[2px] text-lg">+</span>
+      <Button size={"sm"} className="mt-6 font-semibold" onClick={() => setFormOpen(true)}>
+        Add Review <span className="-mt-[2px] ml-1 text-lg">+</span>
       </Button>
       <Modal open={formOpen} onOpenChange={setFormOpen}>
         <Modal.Content title="Add Review">

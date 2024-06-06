@@ -1,7 +1,7 @@
 "use client"
 
 import { useForm } from "react-hook-form"
-import { z } from "zod"
+// import { z } from "zod"
 
 import {
   Form,
@@ -14,11 +14,11 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters."
-  })
-})
+// const formSchema = z.object({
+//   username: z.string().min(2, {
+//     message: "Username must be at least 2 characters."
+//   })
+// })
 
 export function WorkFormRevised() {
   // ...

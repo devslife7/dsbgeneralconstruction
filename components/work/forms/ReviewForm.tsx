@@ -113,7 +113,7 @@ const FormButtons = ({ resetForm }: { resetForm: () => void }) => {
       </Button>
       <Button
         // responsive
-        variant="destructive"
+        variant="secondary"
         type="button"
         onClick={resetForm}
         aria-disabled={pending}
