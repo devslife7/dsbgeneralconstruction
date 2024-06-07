@@ -27,7 +27,6 @@ module.exports = {
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
-          // + success: "hsl(var(--success) / <alpha-value>)"
           // DEFAULT: "#FF9001",
           foreground: "hsl(var(--primary-foreground))",
           100: "#ffe1b9",
