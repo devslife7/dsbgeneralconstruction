@@ -10,8 +10,6 @@ export default function ReviewList({ reviews, workId }: { reviews: any; workId: 
   const [formOpen, setFormOpen] = useState<boolean>(false)
 
   const removeReview = async (reviewId: number) => {
-    const test = 3
-    debugger
     confirm("Are you sure you want to delete this review?") && (await deleteReview(reviewId))
   }
   const RenderReviews = () => {

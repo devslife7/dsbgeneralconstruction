@@ -15,6 +15,7 @@ import {
   FormMessage
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { cn } from "@/lib/utils"
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -23,20 +24,28 @@ const formSchema = z.object({
 })
 
 export function WorkFormRevised() {
-  // ...
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: ""
     }
   })
+  const { isSubmitting, errors } = form.formState
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values)
+
+    // create a timer using async/await
+    console.log("form.formState.isSubmitting", form.formState.isSubmitting)
+    const timer = await setTimeout(async () => {
+      console.log("Timer is done")
+      console.log(values)
+      console.log("form.formState.isSubmitting", form.formState.isSubmitting)
+    }, 2000)
+
+    console.log("form.formState.isSubmitting", form.formState.isSubmitting)
   }
 
   return (
@@ -47,11 +56,16 @@ export function WorkFormRevised() {
           name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Title</FormLabel>
+              <FormLabel required>Title</FormLabel>
               <FormControl>
-                <Input placeholder="Project Title..." {...field} />
+                <Input
+                  placeholder="Project Title..."
+                  {...field}
+                  className={errors.username && "border-destructive"}
+                  disabled={isSubmitting}
+                />
               </FormControl>
-              <FormMessage className="font-light" />
+              <FormMessage />
             </FormItem>
           )}
         />

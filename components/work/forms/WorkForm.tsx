@@ -38,6 +38,7 @@ type AddWorkFormType = {
 type FormFields = {
   title: string
   description: string
+  files: FileList
 }
 
 export default function WorkForm({ onOpenChange, work = null }: FormType) {
@@ -155,42 +156,58 @@ export default function WorkForm({ onOpenChange, work = null }: FormType) {
     reset()
   }
 
+  const RequiredTag = () => {
+    return <span className="text-sm opacity-40">*</span>
+  }
+
+  const ValidationMessage = ({ error }: { error: any }) => {
+    return <>{error && <span className="text-sm text-red-400">{error.message}</span>}</>
+  }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
       <div>
-        <Label>Title</Label>
+        <Label>
+          Title <RequiredTag />
+        </Label>
         <Input
-          {...register("title", { required: "Password is requiredsdfsdf", minLength: 3 })}
+          {...register("title", { required: "Password is required", minLength: 3 })}
           name="title"
-          placeholder="Title*"
           disabled={isSubmitting}
+          // errors={errors.title}
+          className={errors.title && "border-destructive"}
         />
-        {errors.title && <span className="text-sm text-red-400">{errors.title.message}</span>}
+        <ValidationMessage error={errors.title} />
       </div>
       <div>
-        <Label>Description</Label>
+        <Label>
+          Description <RequiredTag />
+        </Label>
         <Textarea
-          {...register("description")}
+          {...register("description", { required: "Password is required description", minLength: 3 })}
           name="description"
-          placeholder="Description*"
           disabled={isSubmitting}
+          className={errors.description && "border-destructive"}
         />
-        {errors.description && <span className="text-sm text-red-400">{errors.description.message}</span>}
+        <ValidationMessage error={errors.description} />
       </div>
 
       <div className={cn({ hidden: work })}>
-        <Label>Photos/Videos</Label>
+        <Label>
+          Photos/Videos <RequiredTag />
+        </Label>
         {previewMediaObj ? previewFile(previewMediaObj, isSubmitting) : null}
         <Input
-          // {...register("files")}
+          {...register("files", { required: "Password is required" })}
           name="files"
           type="file"
           multiple
           accept={ACCEPTED_FILE_TYPES.join(", ")}
           onChange={handleFilesChange}
           disabled={isSubmitting}
+          className={errors.files && "border-destructive"}
         />
-        {/* {errors.files && <span className="text-sm text-red-400">{errors.files.message}</span>} */}
+        {errors.files && <span className="text-sm text-red-400">{errors.files.message}</span>}
       </div>
 
       <Modal.Footer>
