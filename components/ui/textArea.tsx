@@ -1,21 +1,30 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 import { useFormStatus } from "react-dom"
+import { FieldError } from "react-hook-form"
 
-export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  error?: FieldError
+}
 
-const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(({ className, ...props }, ref) => {
-  return (
-    <textarea
-      className={cn(
-        "flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
-        className
-      )}
-      ref={ref}
-      {...props}
-    />
-  )
-})
+const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ error, className, ...props }, ref) => {
+    return (
+      <>
+        <textarea
+          className={cn(
+            "flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
+            className,
+            { "border-destructive": error }
+          )}
+          ref={ref}
+          {...props}
+        />
+        {error && <span className="text-sm text-destructive">{error.message}</span>}
+      </>
+    )
+  }
+)
 Textarea.displayName = "Textarea"
 
 export { Textarea }

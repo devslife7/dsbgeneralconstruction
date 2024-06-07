@@ -3,7 +3,7 @@ import { getPresignedURL } from "@/actions/s3Upload"
 import { addWork, updateWork } from "@/actions/work"
 import { Input } from "@/components/ui/input"
 import { Modal } from "@/components/ui/modal"
-import { ACCEPTED_FILE_TYPES } from "@/lib/constants"
+import { ACCEPTED_FILE_TYPES, ACCEPTED_FILE_TYPES_EXTENTION, MAX_FILE_SIZE } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 import { PreviewMedia } from "@/lib/validators/types"
 import { EditWorkSchema, WorkType } from "@/lib/validators/work"
@@ -18,6 +18,18 @@ import { Label } from "@/components/ui/label"
 import { AddWorkClientSchema, AddWorkSchemaClientType, FileArraySchema } from "@/lib/validators/client"
 import { z } from "zod"
 import { Textarea } from "@/components/ui/textarea"
+
+const ACCEPTED_FILES_TYPES: [string, ...string[]] = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+  "video/mp4",
+  "video/mov",
+  "video/quicktime",
+  "video/webm"
+]
 
 type FormType = {
   onOpenChange: (open: boolean) => void
@@ -156,40 +168,66 @@ export default function WorkForm({ onOpenChange, work = null }: FormType) {
     reset()
   }
 
-  const ValidationMessage = ({ error }: { error: any }) => {
-    return <>{error && <span className="text-sm text-destructive">{error.message}</span>}</>
-  }
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
       <div>
         <Label required>Title</Label>
         <Input
-          {...register("title", { required: "Password is required", minLength: 3 })}
+          {...register("title", {
+            required: "Title is required.",
+            minLength: { value: 2, message: "Title must be at least 2 characters long." },
+            maxLength: { value: 30, message: "Title must be less than 80 characters long." }
+          })}
           name="title"
           disabled={isSubmitting}
-          // errors={errors.title}
-          // erros
-          className={errors.title && "border-destructive"}
+          error={errors && errors.title}
         />
-        <ValidationMessage error={errors.title} />
       </div>
       <div>
         <Label required>Description</Label>
         <Textarea
-          {...register("description", { required: "Password is required description", minLength: 3 })}
+          {...register("description", {
+            required: "Description is required.",
+            minLength: { value: 2, message: "Description must be at least 2 characters long." },
+            maxLength: { value: 90, message: "Description must be less than 90 characters long." }
+          })}
           name="description"
           disabled={isSubmitting}
-          className={errors.description && "border-destructive"}
+          error={errors && errors.description}
         />
-        <ValidationMessage error={errors.description} />
       </div>
 
       <div className={cn({ hidden: work })}>
         <Label required>Photos/Videos</Label>
         {previewMediaObj ? previewFile(previewMediaObj, isSubmitting) : null}
         <Input
-          {...register("files", { required: "Password is required" })}
+          {...register("files", {
+            required: "Photos/Videos are required.",
+            validate: files => {
+              if (files.length >= 15) {
+                return "Photos/Videos must be less than 15 files."
+              }
+
+              let message = ""
+              const result = Array.from(files).every(file => {
+                if (file.size > MAX_FILE_SIZE) {
+                  message = `One or more files are too large. (Max ${MAX_FILE_SIZE / 1000000}MB)`
+                  return false
+                }
+
+                if (!ACCEPTED_FILE_TYPES.includes(file.type)) {
+                  message = `Accepted file types are: ${ACCEPTED_FILE_TYPES_EXTENTION.join(", ")}.`
+                  return false
+                }
+                return true
+              })
+
+              if (!result) {
+                return message
+              }
+              return true
+            }
+          })}
           name="files"
           type="file"
           multiple
@@ -198,16 +236,16 @@ export default function WorkForm({ onOpenChange, work = null }: FormType) {
           disabled={isSubmitting}
           className={errors.files && "border-destructive"}
         />
-        {errors.files && <span className="text-sm text-red-400">{errors.files.message}</span>}
+        {errors.files && <span className="text-sm text-destructive">{errors.files.message}</span>}
       </div>
 
       <Modal.Footer>
         <Modal.Close asChild>
-          <Button aria-disabled={isSubmitting} disabled={isSubmitting} variant="cancel">
+          <Button disabled={isSubmitting} variant="cancel">
             Close
           </Button>
         </Modal.Close>
-        <Button type="submit" aria-disabled={isSubmitting} disabled={isSubmitting}>
+        <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? <SpinnerSVG className="animate-spin" /> : "Submit"}
         </Button>
       </Modal.Footer>

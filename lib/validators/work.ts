@@ -48,7 +48,7 @@ export const AddWorkSchema = z.object({
     .refine(files => files.length <= 15, "Media must be less than 15 files.")
     .refine(
       files => Array.from(files).every(file => file.size < MAX_FILE_SIZE),
-      `One or more files are too large. (Max ${MAX_FILE_SIZE / 1000000}MB) `
+      `One or more files are too large. (Max ${MAX_FILE_SIZE / 1000000}MB)`
     )
     .refine(
       files => Array.from(files).every(file => ACCEPTED_FILE_TYPES.includes(file.type)),
