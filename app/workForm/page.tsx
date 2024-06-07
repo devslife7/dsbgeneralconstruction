@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button"
 import { WorkFormRevised } from "@/components/work/forms/work-form-revised"
 
 export default function WorkForm() {
@@ -5,6 +6,11 @@ export default function WorkForm() {
     <div>
       {/* <WorkFormRevised /> */}
       workForm
+      {/* <div className="h-32 w-32 bg-white"> */}
+      <Button variant={"outline"} size={"lg"}>
+        test
+      </Button>
+      {/* </div> */}
     </div>
   )
 }
