@@ -64,7 +64,7 @@ export default function ImageGallery({ urlList }: { urlList: string[] }) {
     <>
       <Swiper
         className="mb-2 rounded-lg"
-        loop
+        loop={urlList.length > 4}
         style={
           {
             "--swiper-navigation-color": "#fff",
@@ -81,7 +81,7 @@ export default function ImageGallery({ urlList }: { urlList: string[] }) {
       <div className={cn({ hidden: urlList.length === 1 })}>
         <Swiper
           onSwiper={setThumbsSwiper}
-          loop
+          loop={urlList.length > 4}
           freeMode
           watchSlidesProgress
           spaceBetween={10}

@@ -3,7 +3,6 @@ import { getPresignedURL } from "@/actions/s3Upload"
 import { addWork, updateWork } from "@/actions/work"
 import { Input } from "@/components/ui/input"
 import { Modal } from "@/components/ui/modal"
-import { TextArea } from "@/components/ui/textarea"
 import { ACCEPTED_FILE_TYPES } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 import { PreviewMedia } from "@/lib/validators/types"
@@ -18,6 +17,7 @@ import Button from "../../ui/my-button"
 import { Label } from "@/components/ui/label"
 import { AddWorkClientSchema, AddWorkSchemaClientType, FileArraySchema } from "@/lib/validators/client"
 import { z } from "zod"
+import { Textarea } from "@/components/ui/textarea"
 
 type FormType = {
   onOpenChange: (open: boolean) => void
@@ -160,7 +160,7 @@ export default function WorkForm({ onOpenChange, work = null }: FormType) {
       <div>
         <Label>Title</Label>
         <Input
-          {...register("title", { required: "Password is required", minLength: 3 })}
+          {...register("title", { required: "Password is requiredsdfsdf", minLength: 3 })}
           name="title"
           placeholder="Title*"
           disabled={isSubmitting}
@@ -169,7 +169,7 @@ export default function WorkForm({ onOpenChange, work = null }: FormType) {
       </div>
       <div>
         <Label>Description</Label>
-        <TextArea
+        <Textarea
           {...register("description")}
           name="description"
           placeholder="Description*"

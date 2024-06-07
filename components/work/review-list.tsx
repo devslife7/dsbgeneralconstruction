@@ -10,6 +10,8 @@ export default function ReviewList({ reviews, workId }: { reviews: any; workId: 
   const [formOpen, setFormOpen] = useState<boolean>(false)
 
   const removeReview = async (reviewId: number) => {
+    const test = 3
+    debugger
     confirm("Are you sure you want to delete this review?") && (await deleteReview(reviewId))
   }
   const RenderReviews = () => {
@@ -44,7 +46,7 @@ export default function ReviewList({ reviews, workId }: { reviews: any; workId: 
 
   return (
     <>
-      <Button size={"sm"} className="mt-6 font-semibold" onClick={() => setFormOpen(true)}>
+      <Button size={"sm"} className="mt-6 w-full" onClick={() => setFormOpen(true)}>
         Add Review <span className="-mt-[2px] ml-1 text-lg">+</span>
       </Button>
       <Modal open={formOpen} onOpenChange={setFormOpen}>

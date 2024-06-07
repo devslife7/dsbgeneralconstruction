@@ -102,7 +102,7 @@ export default function ReviewForm({ setFormOpen, workId }: ReviewFormProps) {
 const FormButtons = ({ resetForm }: { resetForm: () => void }) => {
   const { pending } = useFormStatus()
   return (
-    <div className="space-y-4">
+    <div className="space-x-4">
       <Button
         // responsive
 
@@ -113,7 +113,7 @@ const FormButtons = ({ resetForm }: { resetForm: () => void }) => {
       </Button>
       <Button
         // responsive
-        variant="secondary"
+        variant={"secondary"}
         type="button"
         onClick={resetForm}
         aria-disabled={pending}
