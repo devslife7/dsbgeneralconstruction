@@ -23,16 +23,18 @@ module.exports = {
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
+        // background: "#f5f5f5",
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
+          // + success: "hsl(var(--success) / <alpha-value>)"
           // DEFAULT: "#FF9001",
           foreground: "hsl(var(--primary-foreground))",
           100: "#ffe1b9",
           200: "#ffcc8b",
           300: "#ffb85d",
           400: "#ffa42e",
-          500: "#ff9000",
+          500: "#ff9001",
           600: "#ef8700",
           700: "#a25b00",
           800: "#744100",
@@ -92,26 +94,6 @@ module.exports = {
         roboto: ["var(--font-roboto)", "sans-serif"],
         titillium: ["var(--font-titillium)", "sans-serif"]
       }
-      // colors: {
-      //   background: "#f5f5f5",
-      //   primary: {
-      //     DEFAULT: "#FF9001",
-      //     // DEFAULT: "#ffcd11",
-      //     100: "#ffe1b9",
-      //     200: "#ffcc8b",
-      //     300: "#ffb85d",
-      //     400: "#ffa42e",
-      //     500: "#ff9000",
-      //     600: "#ef8700",
-      //     700: "#a25b00",
-      //     800: "#744100",
-      //     900: "#462700"
-      //   },
-      //   custom: {
-      //     white: "#f5f5f5",
-      //     black: "#232323"
-      //   }
-      // }
     }
   },
 

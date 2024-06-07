@@ -6,11 +6,13 @@ export default function WorkForm() {
     <div>
       {/* <WorkFormRevised /> */}
       workForm
-      {/* <div className="h-32 w-32 bg-white"> */}
-      <Button variant={"outline"} size={"lg"}>
+      {/* <Button variant={"destructive"} className="bg-primary hover:bg-opacity-90">
         test
-      </Button>
-      {/* </div> */}
+      </Button> */}
+      {/* <Button variant={"destructive"} className="bg-primary-500 hover:bg-primary/90">
+        test
+      </Button> */}
+      <Button>test</Button>
     </div>
   )
 }
