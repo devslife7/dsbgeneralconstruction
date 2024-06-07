@@ -156,33 +156,26 @@ export default function WorkForm({ onOpenChange, work = null }: FormType) {
     reset()
   }
 
-  const RequiredTag = () => {
-    return <span className="text-sm opacity-40">*</span>
-  }
-
   const ValidationMessage = ({ error }: { error: any }) => {
-    return <>{error && <span className="text-sm text-red-400">{error.message}</span>}</>
+    return <>{error && <span className="text-sm text-destructive">{error.message}</span>}</>
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
       <div>
-        <Label>
-          Title <RequiredTag />
-        </Label>
+        <Label required>Title</Label>
         <Input
           {...register("title", { required: "Password is required", minLength: 3 })}
           name="title"
           disabled={isSubmitting}
           // errors={errors.title}
+          // erros
           className={errors.title && "border-destructive"}
         />
         <ValidationMessage error={errors.title} />
       </div>
       <div>
-        <Label>
-          Description <RequiredTag />
-        </Label>
+        <Label required>Description</Label>
         <Textarea
           {...register("description", { required: "Password is required description", minLength: 3 })}
           name="description"
@@ -193,9 +186,7 @@ export default function WorkForm({ onOpenChange, work = null }: FormType) {
       </div>
 
       <div className={cn({ hidden: work })}>
-        <Label>
-          Photos/Videos <RequiredTag />
-        </Label>
+        <Label required>Photos/Videos</Label>
         {previewMediaObj ? previewFile(previewMediaObj, isSubmitting) : null}
         <Input
           {...register("files", { required: "Password is required" })}
@@ -258,7 +249,7 @@ async function uploadFile(file: File, url: string) {
 const previewFile = (previewMediaObj: PreviewMedia[], isSubmiting: boolean) => {
   return (
     <div
-      className={cn("mb-4 grid grid-cols-4 gap-1", {
+      className={cn("mb-4 mt-2 grid grid-cols-4 gap-1", {
         "opacity-50": isSubmiting
       })}
     >
