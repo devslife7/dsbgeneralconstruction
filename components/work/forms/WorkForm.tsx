@@ -20,10 +20,6 @@ type FormType = {
   onOpenChange: (open: boolean) => void
   work?: WorkType | null
 }
-type EditWorkType = {
-  title: string
-  description: string
-}
 type FormFields = {
   title: string
   description: string
@@ -126,7 +122,7 @@ export default function WorkForm({ onOpenChange, work = null }: FormType) {
         <Input
           {...register("title")}
           name="title"
-          placeholder="ex. Fence Replacement"
+          placeholder="Fence Replacement"
           disabled={isSubmitting}
           error={errors && errors.title}
         />
@@ -136,7 +132,7 @@ export default function WorkForm({ onOpenChange, work = null }: FormType) {
         <Textarea
           {...register("description")}
           name="description"
-          placeholder="ex. Replacement for a fence that was damaged by a storm."
+          placeholder="Replacement for a fence that was damaged by a storm."
           disabled={isSubmitting}
           error={errors && errors.description}
         />
