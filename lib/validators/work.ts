@@ -34,7 +34,8 @@ export const AddWorkSchema = z.object({
   title: z
     .string()
     .trim()
-    .min(3, "Title must be at least 3 characters long.")
+    .min(3, "Title must be at least 3 characters longdd.")
+    .min(4, "Title must be at least 4 characters long.")
     .max(80, "Name must be less than 80 characters long."),
   description: z
     .string()
@@ -54,6 +55,39 @@ export const AddWorkSchema = z.object({
       files => Array.from(files).every(file => ACCEPTED_FILE_TYPES.includes(file.type)),
       `Accepted file types: ${ACCEPTED_FILE_TYPES.join(", ")}.`
     )
+  // files: z
+  //   .array(
+  //     z.object({
+  //       type: z.string(),
+  //       name: z.string(),
+  //       size: z.number()
+  //     })
+  //   )
+  //   .min(1, "Media files are required.")
+  // .transform(files => files as FileList)
+  // .refine(files => files.length > 0, "Media files are required.")
+  // .refine(files => files.length <= 15, "Media must be less than 15 files.")
+  // .refine(
+  //   files => Array.from(files).every(file => file.size < MAX_FILE_SIZE),
+  //   `One or more files are too large. (Max ${MAX_FILE_SIZE / 1000000}MB)`
+  // )
+  // .refine(
+  //   files => Array.from(files).every(file => ACCEPTED_FILE_TYPES.includes(file.type)),
+  //   `Accepted file types: ${ACCEPTED_FILE_TYPES.join(", ")}.`
+  // )
+  // files: z
+  //   .unknown()
+  //   .transform(files => files as FileList)
+  //   .refine(files => files.length > 0, "Media files are required.")
+  //   .refine(files => files.length <= 15, "Media must be less than 15 files.")
+  //   .refine(
+  //     files => Array.from(files).every(file => file.size < MAX_FILE_SIZE),
+  //     `One or more files are too large. (Max ${MAX_FILE_SIZE / 1000000}MB)`
+  //   )
+  //   .refine(
+  //     files => Array.from(files).every(file => ACCEPTED_FILE_TYPES.includes(file.type)),
+  //     `Accepted file types: ${ACCEPTED_FILE_TYPES.join(", ")}.`
+  //   )
 })
 
 export const EditWorkSchema = z.object({
