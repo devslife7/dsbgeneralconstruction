@@ -1,6 +1,6 @@
 "use client"
 import { getPresignedURL } from "@/actions/s3Upload"
-import { addWork, updateWork } from "@/actions/work"
+import { addWork as addWorkAction, updateWork as updateWorkAction } from "@/actions/work"
 import { Input } from "@/components/ui/input"
 import { Modal } from "@/components/ui/modal"
 import { ACCEPTED_FILE_TYPES, ACCEPTED_FILE_TYPES_EXTENTION, MAX_FILE_SIZE } from "@/lib/constants"
@@ -8,45 +8,21 @@ import { cn } from "@/lib/utils"
 import { PreviewMedia } from "@/lib/validators/types"
 import { AddWorkSchema, EditWorkSchema, WorkType } from "@/lib/validators/work"
 import { SpinnerSVG } from "@/public/svgs"
-import { zodResolver } from "@hookform/resolvers/zod"
 import Image from "next/image"
 import { useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import Button from "../../ui/my-button"
 import { Label } from "@/components/ui/label"
-import { AddWorkClientSchema, AddWorkSchemaClientType, FileArraySchema } from "@/lib/validators/client"
-import { z } from "zod"
 import { Textarea } from "@/components/ui/textarea"
-import { title } from "process"
-
-const ACCEPTED_FILES_TYPES: [string, ...string[]] = [
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/webp",
-  "image/gif",
-  "video/mp4",
-  "video/mov",
-  "video/quicktime",
-  "video/webm"
-]
 
 type FormType = {
   onOpenChange: (open: boolean) => void
   work?: WorkType | null
 }
-
-const AddWorkFormSchema = z.object({
-  title: z.any(),
-  description: z.any(),
-  files: z.any()
-})
-
-type AddWorkFormType = {
+type EditWorkType = {
   title: string
   description: string
-  files: FileList
 }
 type FormFields = {
   title: string
@@ -56,12 +32,6 @@ type FormFields = {
 
 export default function WorkForm({ onOpenChange, work = null }: FormType) {
   const [previewMediaObj, setPreviewMediaObj] = useState<PreviewMedia[]>([])
-  const [formErrors, setFormErrors] = useState<string[]>([])
-  const [formDataTest, setFormDataTest] = useState<any>({})
-
-  const [formTitle, setFormTitle] = useState<string>("")
-  const [formDescription, setFormDescription] = useState<string>("")
-
   const {
     register,
     handleSubmit,
@@ -92,87 +62,57 @@ export default function WorkForm({ onOpenChange, work = null }: FormType) {
     setPreviewMediaObj(fileUrlArr)
   }
 
-  const onSubmit: SubmitHandler<FormFields> = async ({ title, description, files }) => {
+  const setValidationErrors = (errors: any) => {
+    Object.keys(errors).forEach(key => {
+      if (errors[key]) {
+        setError(key as keyof FormFields, { message: errors[key]![0] })
+      }
+    })
+  }
+
+  const editWorkData = async ({ title, description }: FormFields) => {
+    const validData = EditWorkSchema.safeParse({ title, description })
+    if (!validData.success) {
+      setValidationErrors(validData.error.flatten().fieldErrors)
+      return { errorMessage: "Validation Error" }
+    }
+
+    const response = await updateWorkAction({
+      title: validData.data.title,
+      description: validData.data.description,
+      id: work?.id
+    })
+    if (!response.success) {
+      console.log("Server Error while updating work: ", response.errors)
+      return { errorMessage: "Failed to update Work. Check console logs for more info." }
+    }
+
+    return { success: true, message: "Successfully updated Work." }
+  }
+
+  const addWorkData = async ({ title, description, files }: FormFields) => {
     const validData = AddWorkSchema.safeParse({ title, description, files: Array.from(files) })
     if (!validData.success) {
-      const errorMessages = validData.error.flatten().fieldErrors
-      Object.keys(errorMessages).forEach(key => {
-        if (errorMessages[key as keyof FormFields]) {
-          setError(key as keyof FormFields, { message: errorMessages[key as keyof FormFields]![0] })
-        }
-      })
-      return
+      setValidationErrors(validData.error.flatten().fieldErrors)
+      return { errorMessage: "Validation Error" }
     }
 
-    // if work exists update work
-    if (work) {
-      const response = await updateWork({
-        title: validData.data.title,
-        description: validData.data.description,
-        id: work.id
-      })
-      if (!response.success) {
-        console.log("Server Error: ", response.errors)
-        toast.error("Failed to update Work. Check console logs for more info.")
-        return
-      }
-      toast.success("Work updated.")
-      resetForm()
-      return
-    }
-
-    // if work already doesn't exist upload files and add work
     const responseFiles = await uploadFiles(validData.data.files)
-    if (!responseFiles.success) return toast.error("Failed to upload files.")
-    const responseWork = await addWork({
+    if (!responseFiles.success) return { errorMessage: "Failed to upload files." }
+    const responseWork = await addWorkAction({
       title: validData.data.title,
       description: validData.data.description,
       files: responseFiles.urlList
     })
-    if (!responseWork.success) return toast.error("Failed to add Work.")
-    toast.success("Upload complete.")
-    resetForm()
+    if (!responseWork.success) return { errorMessage: "Failed to add Work." }
+    return { success: true, message: "Successfully added Work." }
   }
 
-  // const onSubmit: SubmitHandler<AddWorkFormType> = async ({ title, description, files }) => {
-  //   // update work if work exists
-  //   const fileList = Array.from(files)
-  //   console.log("files:::::", fileList)
-  //   const validatedFileList = FileArraySchema.safeParse(fileList)
-  //   if (!validatedFileList.success) {
-  //     console.log("validatedFileList:::::", validatedFileList.error.flatten().formErrors)
-  //     setFormErrors(validatedFileList.error.flatten().formErrors)
-  //   }
+  const onSubmit: SubmitHandler<FormFields> = async (data: FormFields) => {
+    const resp = work ? await editWorkData(data) : await addWorkData(data)
+    if (!resp.success) return console.log(resp.errorMessage)
+    toast.success(resp.message)
 
-  //   return
-
-  //   if (work) {
-  //     const response = await updateWork({ title, description, id: work.id })
-  //     if (!response.success) {
-  //       console.log("Server Error: ", response.errors)
-  //       toast.error("Failed to update Work. Check console logs for more info.")
-  //       return
-  //     }
-  //     toast.success("Work updated.")
-  //     resetForm()
-  //     return
-  //   }
-  //   // upload files to s3
-  //   // TODO: change to files array from FileList then validate
-  //   const responseFiles = await uploadFiles(files)
-  //   if (!responseFiles.success) return toast.error("Failed to upload files.")
-  //   // server action add work
-  //   const responseWork = await addWork({
-  //     title,
-  //     description,
-  //     files: responseFiles.urlList
-  //   })
-  //   if (!responseWork.success) return toast.error("Failed to add Work.")
-  //   toast.success("Upload complete.")
-  //   resetForm()
-  // }
-
-  const resetForm = () => {
     onOpenChange(false)
     setPreviewMediaObj([])
     window.scrollTo(0, 0)
@@ -182,79 +122,31 @@ export default function WorkForm({ onOpenChange, work = null }: FormType) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
       <div>
-        {/* <div>
-          Data:
-          {Object.keys(formDataTest).map(key => {
-            if (key in formDataTest) {
-              return (
-                <div key={key}>
-                  {key}: {formDataTest[key]}
-                </div>
-              )
-            }
-            return <div>No data</div>
-          })}
-        </div> */}
         <Label required>Title</Label>
         <Input
-          {...register("title", {
-            // required: "Title is required.",
-            // minLength: { value: 2, message: "Title must be at least 2 characters long." },
-            // pattern: {
-            //   value: /^[a-zA-Z0-9\s]+$/,
-            //   message: "Title must only contain letters, numbers, and spaces."
-            // },
-            // maxLength: { value: 30, message: "Title must be less than 80 characters long." }
-          })}
+          {...register("title")}
           name="title"
+          placeholder="ex. Fence Replacement"
           disabled={isSubmitting}
           error={errors && errors.title}
-          onChange={e => setFormTitle(e.target.value)}
         />
       </div>
       <div>
         <Label required>Description</Label>
         <Textarea
-          {...register("description", {
-            // required: "Description is required.",
-            // minLength: { value: 2, message: "Description must be at least 2 characters long." },
-            // maxLength: { value: 90, message: "Description must be less than 90 characters long." }
-          })}
+          {...register("description")}
           name="description"
+          placeholder="ex. Replacement for a fence that was damaged by a storm."
           disabled={isSubmitting}
           error={errors && errors.description}
-          onChange={e => setFormDescription(e.target.value)}
         />
       </div>
 
       <div className={cn({ hidden: work })}>
         <Label required>Photos/Videos</Label>
-        {previewMediaObj ? previewFile(previewMediaObj, isSubmitting) : null}
+        {previewMediaObj.length > 0 && previewFile(previewMediaObj, isSubmitting)}
         <Input
-          {...register("files", {
-            // required: "Photos/Videos are required.",
-            // validate: files => {
-            //   if (files.length >= 15) {
-            //     return "Photos/Videos must be less than 15 files."
-            //   }
-            //   let message = ""
-            //   const result = Array.from(files).every(file => {
-            //     if (file.size > MAX_FILE_SIZE) {
-            //       message = `One or more files are too large. (Max ${MAX_FILE_SIZE / 1000000}MB)`
-            //       return false
-            //     }
-            //     if (!ACCEPTED_FILE_TYPES.includes(file.type)) {
-            //       message = `Accepted file types are: ${ACCEPTED_FILE_TYPES_EXTENTION.join(", ")}.`
-            //       return false
-            //     }
-            //     return true
-            //   })
-            //   if (!result) {
-            //     return message
-            //   }
-            //   return true
-            // }
-          })}
+          {...register("files")}
           name="files"
           type="file"
           multiple

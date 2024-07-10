@@ -34,7 +34,7 @@ export const AddWorkSchema = z.object({
   title: z
     .string()
     .trim()
-    .min(3, "Title must be at least 3 characters longdd.")
+    .min(3, "Title must be at least 3 characters longd.")
     .min(4, "Title must be at least 4 characters long.")
     .max(80, "Name must be less than 80 characters long."),
   description: z
