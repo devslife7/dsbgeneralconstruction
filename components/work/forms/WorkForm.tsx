@@ -67,7 +67,8 @@ export default function WorkForm({ onOpenChange, work = null }: FormType) {
   }
 
   const editWorkData = async ({ title, description }: FormFields) => {
-    const validData = EditWorkSchema.safeParse({ title, description })
+    const validData = EditWorkSchema.safeParse({ title, description, id: work?.id })
+    console.log("validData", validData)
     if (!validData.success) {
       setValidationErrors(validData.error.flatten().fieldErrors)
       return { errorMessage: "Validation Error" }

@@ -1,5 +1,5 @@
 "use server"
-import { EditWorkSchemaServer, WorkSchemaServer } from "@/lib/validators/work"
+import { EditWorkSchema, WorkSchemaServer } from "@/lib/validators/work"
 import { revalidatePath } from "next/cache"
 import { prisma } from "../lib/db"
 import { deleteFilesFromS3 } from "./s3Upload"
@@ -62,7 +62,7 @@ export async function addWork(workData: unknown) {
 
 export async function updateWork(data: unknown) {
   // server-side validation
-  const validatedData = EditWorkSchemaServer.safeParse(data)
+  const validatedData = EditWorkSchema.safeParse(data)
   if (!validatedData.success) {
     return {
       errors: validatedData.error.flatten().fieldErrors

@@ -22,5 +22,3 @@ export const ACCEPTED_FILE_TYPES_EXTENTION = [
   ".quicktime",
   ".webm"
 ]
-// export const ACCEPTED_FILE_TYPES = ["video/mp4", "video/mov", "video/quicktime", "video/webm"]
-// export const ACCEPTED_FILE_TYPES_EXTENTION = [".mp4", ".mov", ".quicktime", ".webm"]
