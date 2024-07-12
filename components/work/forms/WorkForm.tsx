@@ -29,23 +29,29 @@ export default function WorkForm({ onOpenChange, work = null }: WorkFormType) {
   })
 
   const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const fileArr: FileList | null = e.target.files as FileList
-    if (previewMediaObj.length > 0) {
+    if (!e.target.files) return
+    const filesArray: File[] = Array.from(e.target.files)
+
+    // Revokes all the previous files
+    if (previewMediaObj.length) {
       // TODO: change only if files are changed, compare objects.
-      setPreviewMediaObj([])
       previewMediaObj.forEach(file => {
         URL.revokeObjectURL(file.url)
       })
-      console.log("revokes files urls")
+      setPreviewMediaObj([])
     }
-    let fileUrlArr: PreviewMedia[] = []
-    for (let i = 0; i < fileArr.length; i++) {
-      fileUrlArr.push({
-        type: fileArr[i].type,
-        url: URL.createObjectURL(fileArr[i])
-      })
-    }
-    setPreviewMediaObj(fileUrlArr)
+
+    // check for an arary to be empty
+
+    // Creates a new array of objects with file type and url
+    const filePreviewOjbect = filesArray.map(file => {
+      return {
+        type: file.type,
+        url: URL.createObjectURL(file),
+        size: file.size
+      }
+    })
+    setPreviewMediaObj(filePreviewOjbect)
   }
 
   const setValidationErrors = (errors: any) => {
