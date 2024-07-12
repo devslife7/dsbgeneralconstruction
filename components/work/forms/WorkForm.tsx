@@ -30,7 +30,7 @@ export default function WorkForm({ onOpenChange, work = null }: WorkFormType) {
 
   const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return
-    const filesArray: File[] = Array.from(e.target.files)
+    const filesArray = Array.from(e.target.files)
 
     // Revokes all the previous files
     if (previewMediaObj.length) {
@@ -41,16 +41,20 @@ export default function WorkForm({ onOpenChange, work = null }: WorkFormType) {
       setPreviewMediaObj([])
     }
 
-    // check for an arary to be empty
-
     // Creates a new array of objects with file type and url
     const filePreviewOjbect = filesArray.map(file => {
+      console.log("file", file)
       return {
+        name: file.name,
+        size: file.size,
         type: file.type,
-        url: URL.createObjectURL(file),
-        size: file.size
+        url: URL.createObjectURL(file)
       }
     })
+
+    console.log("previewMediaObj", previewMediaObj)
+    console.log("filesArray", filesArray)
+
     setPreviewMediaObj(filePreviewOjbect)
   }
 
@@ -170,14 +174,12 @@ const uploadFiles = async (files: File[]) => {
   const promiseArray = files.map(file => getPresignedURL(file.type))
   const presignedURLS = await Promise.all(promiseArray)
 
-  const fileUrlArr = []
-  for (let i = 0; i < files.length; i++) {
-    const url = presignedURLS[i].uploadUrl as string
-    const file = files[i]
-    fileUrlArr.push(uploadFile(file, url))
-  }
+  const fileURLArr = files.map((file, idx) => {
+    const url = presignedURLS[idx].uploadUrl
+    return uploadFile(file, url)
+  })
 
-  const urlList = await Promise.all(fileUrlArr)
+  const urlList = await Promise.all(fileURLArr)
   return { success: true, urlList }
 }
 
