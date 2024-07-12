@@ -9,12 +9,8 @@ export const ReviewSchema = z.object({
 
 export type ReviewFormType = z.infer<typeof ReviewSchema>
 
-export type ReviewType = {
+export interface ReviewType extends ReviewFormType {
   id: number
-  name: string
-  comment: string
-  rating: number
-  workId: number
 }
 
 export type ReviewErrors = {
