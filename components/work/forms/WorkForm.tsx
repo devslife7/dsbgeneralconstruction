@@ -18,6 +18,7 @@ import { Textarea } from "@/components/ui/textarea"
 
 export default function WorkForm({ onOpenChange, work = null }: WorkFormType) {
   const [previewMediaObj, setPreviewMediaObj] = useState<PreviewMedia[]>([])
+  const [currentFiles, setCurrentFiles] = useState<FileList>()
   const {
     register,
     handleSubmit,
@@ -32,9 +33,15 @@ export default function WorkForm({ onOpenChange, work = null }: WorkFormType) {
     if (!e.target.files) return
     const filesArray = Array.from(e.target.files)
 
+    // If no files are selected, reset the files to the previous files
+    if (filesArray.length === 0) {
+      setPreviewMediaObj(previewMediaObj)
+      e.target.files = currentFiles ?? new DataTransfer().files
+      return
+    }
+
     // Revokes all the previous files
-    if (previewMediaObj.length) {
-      // TODO: change only if files are changed, compare objects.
+    if (previewMediaObj.length !== 0) {
       previewMediaObj.forEach(file => {
         URL.revokeObjectURL(file.url)
       })
@@ -43,7 +50,6 @@ export default function WorkForm({ onOpenChange, work = null }: WorkFormType) {
 
     // Creates a new array of objects with file type and url
     const filePreviewOjbect = filesArray.map(file => {
-      console.log("file", file)
       return {
         name: file.name,
         size: file.size,
@@ -52,13 +58,13 @@ export default function WorkForm({ onOpenChange, work = null }: WorkFormType) {
       }
     })
 
-    console.log("previewMediaObj", previewMediaObj)
-    console.log("filesArray", filesArray)
-
     setPreviewMediaObj(filePreviewOjbect)
+    setCurrentFiles(e.target.files)
   }
 
   const setValidationErrors = (errors: any) => {
+    console.log("errors", errors)
+    alert("Errors" + JSON.stringify(errors))
     Object.keys(errors).forEach(key => {
       if (errors[key]) {
         setError(key as keyof WorkFormFields, { message: errors[key]![0] })
@@ -88,8 +94,13 @@ export default function WorkForm({ onOpenChange, work = null }: WorkFormType) {
   }
 
   const addWorkData = async ({ title, description, files }: WorkFormFields) => {
-    const validData = AddWorkSchema.safeParse({ title, description, files: Array.from(files) })
+    alert(JSON.stringify(currentFiles))
+    console.log("currentFiles", currentFiles)
+    const validData = AddWorkSchema.safeParse({ title, description, files: Array.from(currentFiles ?? []) })
+    // const validData = AddWorkSchema.safeParse({ title, description, files: Array.from(files) })
     if (!validData.success) {
+      // console.log("currentFiles", currentFiles)
+      // alert(JSON.stringify(currentFiles))
       setValidationErrors(validData.error.flatten().fieldErrors)
       return { errorMessage: "Validation Error" }
     }
