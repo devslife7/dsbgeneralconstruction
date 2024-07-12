@@ -40,6 +40,15 @@ const FileArraySchema = z.object({
     )
 })
 
+export type WorkFormType = {
+  onOpenChange: (open: boolean) => void
+  work?: WorkType | null
+}
+export type WorkFormFields = {
+  title: string
+  description: string
+  files: FileList
+}
 export const AddWorkSchema = WorkSchema.merge(FileArraySchema)
 export const WorkSchemaServer = WorkSchema.extend({ files: z.array(z.string()) })
 export const EditWorkSchema = WorkSchema.extend({ id: z.number() })

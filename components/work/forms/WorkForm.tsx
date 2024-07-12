@@ -3,10 +3,10 @@ import { getPresignedURL } from "@/actions/s3Upload"
 import { addWork as addWorkAction, updateWork as updateWorkAction } from "@/actions/work"
 import { Input } from "@/components/ui/input"
 import { Modal } from "@/components/ui/modal"
-import { ACCEPTED_FILE_TYPES, ACCEPTED_FILE_TYPES_EXTENTION, MAX_FILE_SIZE } from "@/lib/constants"
+import { ACCEPTED_FILE_TYPES } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 import { PreviewMedia } from "@/lib/validators/types"
-import { AddWorkSchema, EditWorkSchema, WorkType } from "@/lib/validators/work"
+import { AddWorkSchema, EditWorkSchema, WorkFormFields, WorkFormType } from "@/lib/validators/work"
 import { SpinnerSVG } from "@/public/svgs"
 import Image from "next/image"
 import { useState } from "react"
@@ -16,17 +16,7 @@ import Button from "../../ui/my-button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 
-type FormType = {
-  onOpenChange: (open: boolean) => void
-  work?: WorkType | null
-}
-type FormFields = {
-  title: string
-  description: string
-  files: FileList
-}
-
-export default function WorkForm({ onOpenChange, work = null }: FormType) {
+export default function WorkForm({ onOpenChange, work = null }: WorkFormType) {
   const [previewMediaObj, setPreviewMediaObj] = useState<PreviewMedia[]>([])
   const {
     register,
@@ -34,7 +24,7 @@ export default function WorkForm({ onOpenChange, work = null }: FormType) {
     formState: { errors, isSubmitting },
     reset,
     setError
-  } = useForm<FormFields>({
+  } = useForm<WorkFormFields>({
     defaultValues: { title: work?.title, description: work?.description }
   })
 
@@ -61,12 +51,12 @@ export default function WorkForm({ onOpenChange, work = null }: FormType) {
   const setValidationErrors = (errors: any) => {
     Object.keys(errors).forEach(key => {
       if (errors[key]) {
-        setError(key as keyof FormFields, { message: errors[key]![0] })
+        setError(key as keyof WorkFormFields, { message: errors[key]![0] })
       }
     })
   }
 
-  const editWorkData = async ({ title, description }: FormFields) => {
+  const editWorkData = async ({ title, description }: WorkFormFields) => {
     const validData = EditWorkSchema.safeParse({ title, description, id: work?.id })
     console.log("validData", validData)
     if (!validData.success) {
@@ -87,7 +77,7 @@ export default function WorkForm({ onOpenChange, work = null }: FormType) {
     return { success: true, message: "Successfully updated Work." }
   }
 
-  const addWorkData = async ({ title, description, files }: FormFields) => {
+  const addWorkData = async ({ title, description, files }: WorkFormFields) => {
     const validData = AddWorkSchema.safeParse({ title, description, files: Array.from(files) })
     if (!validData.success) {
       setValidationErrors(validData.error.flatten().fieldErrors)
@@ -105,7 +95,7 @@ export default function WorkForm({ onOpenChange, work = null }: FormType) {
     return { success: true, message: "Successfully added Work." }
   }
 
-  const onSubmit: SubmitHandler<FormFields> = async (data: FormFields) => {
+  const onSubmit: SubmitHandler<WorkFormFields> = async (data: WorkFormFields) => {
     const resp = work ? await editWorkData(data) : await addWorkData(data)
     if (!resp.success) return console.log(resp.errorMessage)
     toast.success(resp.message)
