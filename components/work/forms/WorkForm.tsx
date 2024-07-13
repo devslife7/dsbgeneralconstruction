@@ -63,8 +63,6 @@ export default function WorkForm({ onOpenChange, work = null }: WorkFormType) {
   }
 
   const setValidationErrors = (errors: any) => {
-    console.log("errors", errors)
-    alert("Errors" + JSON.stringify(errors))
     Object.keys(errors).forEach(key => {
       if (errors[key]) {
         setError(key as keyof WorkFormFields, { message: errors[key]![0] })
@@ -94,25 +92,26 @@ export default function WorkForm({ onOpenChange, work = null }: WorkFormType) {
   }
 
   const addWorkData = async ({ title, description, files }: WorkFormFields) => {
-    alert(JSON.stringify(currentFiles))
-    console.log("currentFiles", currentFiles)
     const validData = AddWorkSchema.safeParse({ title, description, files: Array.from(currentFiles ?? []) })
     // const validData = AddWorkSchema.safeParse({ title, description, files: Array.from(files) })
     if (!validData.success) {
-      // console.log("currentFiles", currentFiles)
-      // alert(JSON.stringify(currentFiles))
       setValidationErrors(validData.error.flatten().fieldErrors)
       return { errorMessage: "Validation Error" }
     }
 
     const responseFiles = await uploadFiles(validData.data.files)
     if (!responseFiles.success) return { errorMessage: "Failed to upload files." }
+
+    console.log("responseFiles", responseFiles)
+    alert(JSON.stringify(responseFiles))
+
     const responseWork = await addWorkAction({
       title: validData.data.title,
       description: validData.data.description,
       files: responseFiles.urlList
     })
     if (!responseWork.success) return { errorMessage: "Failed to add Work." }
+
     return { success: true, message: "Successfully added Work." }
   }
 
