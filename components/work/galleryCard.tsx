@@ -3,7 +3,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { WorkType } from "@/lib/validators/work"
 
-export default function GalleryCard({ work }: { work: WorkType }) {
+export default function GalleryCard({ work, idx }: { work: WorkType; idx: number }) {
   if (!work.files || work.files.length === 0) return null
   const { title, description, files, id: workId, ratingCount, ratingAvg } = work
   const thumbnailURL = files[0]
@@ -16,7 +16,7 @@ export default function GalleryCard({ work }: { work: WorkType }) {
             <video
               src={thumbnailURL}
               width={400}
-              height={200}
+              height={400}
               className="mx-auto h-[400px] w-[400px] rounded-t-lg"
               autoPlay
               playsInline
@@ -25,10 +25,12 @@ export default function GalleryCard({ work }: { work: WorkType }) {
           ) : (
             <Image
               src={thumbnailURL}
+              priority={idx === 0}
               alt={title}
               width={400}
               height={400}
-              className="h-[400px] w-[400px] rounded-t-lg object-cover"
+              // className="h-[400px] w-[400px] rounded-t-lg object-cover"
+              className="h-[400px] rounded-t-lg object-cover"
             />
           )}
         </div>

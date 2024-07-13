@@ -78,20 +78,18 @@ export default function ReviewForm({ setFormOpen, workId }: ReviewFormProps) {
           name="name"
           className="text-base"
           autoFocus
-          placeholder="Name..."
+          placeholder="John Doe"
           onFocus={() => setErrors({ ...errors, name: "" })}
-          // errors={errors.name}
         />
       </div>
       <div>
         <Label>Comment</Label>
         <Textarea
-          placeholder="Comment..."
+          placeholder="Tell us about your experience..."
           className="text-base"
           rows={4}
           name="comment"
           onFocus={() => setErrors({ ...errors, comment: "" })}
-          // errors={errors.comment}
         />
       </div>
       <FormButtons resetForm={resetForm} />
