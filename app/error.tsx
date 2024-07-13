@@ -19,7 +19,7 @@ export default function ErrorBoundary({ error, reset }: { error: Error; reset: (
           <RefreshSVG />
           Try again
         </Button>
-        <Link href="/" className={buttonVariants({ variant: "inverted" })}>
+        <Link href="/" className={buttonVariants({ variant: "outline" })}>
           <BackArrowSVG />
           Go Home
         </Link>

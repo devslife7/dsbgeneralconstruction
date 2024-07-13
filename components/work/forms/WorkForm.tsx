@@ -91,9 +91,8 @@ export default function WorkForm({ onOpenChange, work = null }: WorkFormType) {
     return { success: true, message: "Successfully updated Work." }
   }
 
-  const addWorkData = async ({ title, description, files }: WorkFormFields) => {
+  const addWorkData = async ({ title, description }: WorkFormFields) => {
     const validData = AddWorkSchema.safeParse({ title, description, files: Array.from(currentFiles ?? []) })
-    // const validData = AddWorkSchema.safeParse({ title, description, files: Array.from(files) })
     if (!validData.success) {
       setValidationErrors(validData.error.flatten().fieldErrors)
       return { errorMessage: "Validation Error" }
@@ -101,9 +100,6 @@ export default function WorkForm({ onOpenChange, work = null }: WorkFormType) {
 
     const responseFiles = await uploadFiles(validData.data.files)
     if (!responseFiles.success) return { errorMessage: "Failed to upload files." }
-
-    console.log("responseFiles", responseFiles)
-    alert(JSON.stringify(responseFiles))
 
     const responseWork = await addWorkAction({
       title: validData.data.title,
