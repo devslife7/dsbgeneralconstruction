@@ -1,10 +1,12 @@
+"use client"
 import { Button } from "@/components/ui/button"
+import { SubmitEvent } from "@/lib/validators/types"
 
 type Props = {
   password: string
   setPassword: (e: string) => void
   closeModal: () => void
-  handlePasswordSubmit: (e: any) => void
+  handlePasswordSubmit: (e: SubmitEvent) => void
 }
 
 export default function AdminLoginForm({ password, setPassword, closeModal, handlePasswordSubmit }: Props) {
