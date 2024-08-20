@@ -9,10 +9,9 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <Points />
       <AboutSection />
-      {/* <Points /> */}
       <Testimonials />
-
       <Services />
       <ContactSection className="lg:mb-36 lg:mt-40" />
     </>
