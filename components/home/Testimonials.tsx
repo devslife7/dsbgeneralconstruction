@@ -41,8 +41,8 @@ export default function Testimonials() {
           />
         ))}
       </div>
-      <div className="mt-8 text-center">
-        <a href="#" className=" underline">
+      <div className="mt-8 text-center text-lg">
+        <a href="#" className="font-semibold underline">
           Check all 215 reviews
         </a>
       </div>
@@ -59,7 +59,7 @@ const Testimonial = ({ quote, author, role, imageUrl }: any) => (
     <div className="mt-8">
       <p className="mb-4 text-lg text-gray-600">"{quote}"</p>
       <p className="font-bold text-gray-900">{author}</p>
-      <p className="text-gray-500">{role}</p>
+      <p className="text-sm text-gray-500">{role}</p>
     </div>
   </div>
 )
