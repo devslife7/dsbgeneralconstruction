@@ -7,7 +7,7 @@ import { SpinnerSVG } from "@/public/svgs"
 import { Input } from "../ui/input"
 import { toast } from "sonner"
 import { ContactFormSchema, ContactFormTypes } from "@/lib/validators/contact"
-import { Textarea } from "../ui/textarea"
+// import { Textarea } from "../ui/textarea"
 import { sendContactEmail } from "@/actions/contact"
 
 export default function ContactForm() {
@@ -70,12 +70,12 @@ export default function ContactForm() {
           />
         </div>
         <div>
-          <Textarea
+          {/* <Textarea
             placeholder="Message*"
             rows={5}
             {...register("message")}
             error={errors.message}
-          />
+          /> */}
         </div>
       </fieldset>
       <Button type="submit" className="flex mt-4" responsive disabled={isLoading}>
