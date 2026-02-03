@@ -1,3 +1,5 @@
+import Image from "next/image"
+
 export default function Testimonials() {
   const testimonialsData = [
     {
@@ -54,10 +56,10 @@ export default function Testimonials() {
 const Testimonial = ({ quote, author, role, imageUrl }: any) => (
   <div className="relative mb-6  border border-gray-200 bg-white p-6 text-center ">
     <div className="absolute -top-4 left-1/2 h-12 w-12 -translate-x-1/2 transform overflow-hidden rounded-full border-2 border-white shadow-md">
-      <img src={imageUrl} alt={author} className="h-full w-full object-cover" />
+      <Image src={imageUrl} alt={author} width={48} height={48} className="h-full w-full object-cover" />
     </div>
     <div className="mt-8">
-      <p className="mb-4 text-lg text-gray-600">"{quote}"</p>
+      <p className="mb-4 text-lg text-gray-600">&ldquo;{quote}&rdquo;</p>
       <p className="font-bold text-gray-900">{author}</p>
       <p className="text-sm text-gray-500">{role}</p>
     </div>
