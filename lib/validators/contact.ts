@@ -8,7 +8,7 @@ export const ContactFormSchema = z.object({
     .max(20),
   email: z.string().email(),
   phone: z.string().optional(),
-  message: z.string().min(1, { message: "Message is required" }).max(50)
+  message: z.string().min(1, { message: "Message is required" }).max(1000)
 })
 
 export type ContactFormTypes = z.infer<typeof ContactFormSchema>
