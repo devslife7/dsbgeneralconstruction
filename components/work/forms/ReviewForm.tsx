@@ -6,7 +6,7 @@ import { addReview } from "@/actions/review"
 import { toast } from "sonner"
 import { useFormStatus } from "react-dom"
 import Rating from "@/components/ui/rating"
-import { Textarea } from "@/components/ui/textarea"
+// import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
@@ -84,13 +84,13 @@ export default function ReviewForm({ setFormOpen, workId }: ReviewFormProps) {
       </div>
       <div>
         <Label>Comment</Label>
-        <Textarea
+        {/* <Textarea
           placeholder="Tell us about your experience..."
           className="text-base"
           rows={4}
           name="comment"
           onFocus={() => setErrors({ ...errors, comment: "" })}
-        />
+        /> */}
       </div>
       <FormButtons resetForm={resetForm} />
     </form>

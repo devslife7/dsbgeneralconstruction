@@ -23,7 +23,7 @@ export default function Footer() {
     <footer className="sticky top-full mt-auto bg-custom-black text-custom-white">
       <div className="my-container flex h-52 flex-col items-center justify-center gap-y-4 md:flex-row md:justify-between">
         <div className="text-center text-xl">
-          <span className="text-primary">DSB</span> General Constructionn
+          <span className="text-primary">DSB</span> General Construction
         </div>
         <div className="text-center ">
           Copyright © {currentYear} <span className="text-primary">DSB</span> General Construction. All
