@@ -14,7 +14,7 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import Button from "../../ui/my-button"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+// import { Textarea } from "@/components/ui/textarea"
 
 export default function WorkForm({ onOpenChange, work = null }: WorkFormType) {
   const [previewMediaObj, setPreviewMediaObj] = useState<PreviewMedia[]>([])
@@ -136,13 +136,13 @@ export default function WorkForm({ onOpenChange, work = null }: WorkFormType) {
       </div>
       <div>
         <Label required>Description</Label>
-        <Textarea
+        {/* <Textarea
           {...register("description")}
           name="description"
           placeholder="Replacement for a fence that was damaged by a storm."
           disabled={isSubmitting}
           error={errors && errors.description}
-        />
+        /> */}
       </div>
 
       <div className={cn({ hidden: work })}>
