@@ -17,7 +17,9 @@ export default function ContactForm() {
     handleSubmit,
     formState: { errors }
   } = useForm<ContactFormTypes>({
-    resolver: zodResolver(ContactFormSchema)
+    resolver: zodResolver(ContactFormSchema),
+    mode: "onBlur",
+    reValidateMode: "onChange"
   })
   const [isLoading, setIsLoading] = useState(false)
 
@@ -42,32 +44,43 @@ export default function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="mx-auto max-w-xl">
+    <form onSubmit={handleSubmit(onSubmit)}>
       <fieldset className="space-y-4" disabled={isLoading}>
-        <Input
-          placeholder="Name*"
-          {...register("name")}
-
-          // errors={errors.name?.message}
-        />
-        <Input
-          placeholder="Email*"
-          {...register("email")}
-
-          // errors={errors.email?.message}
-        />
-        <Input placeholder="Phone (optional)" {...register("phone")} />
-        <Textarea
-          placeholder="Message*"
-          rows={5}
-          {...register("message")}
-
-          // errors={errors.message?.message}
-        />
-        <Button type="submit" className="flex" responsive>
-          {isLoading ? <SpinnerSVG className="animate-spin text-2xl" /> : "Send"}
-        </Button>
+        <div>
+          <Input
+            placeholder="Name*"
+            {...register("name")}
+            error={errors.name}
+          />
+        </div>
+        <div>
+          <Input
+            type="email"
+            placeholder="Email*"
+            {...register("email")}
+            error={errors.email}
+          />
+        </div>
+        <div>
+          <Input
+            type="tel"
+            placeholder="Phone (optional)"
+            {...register("phone")}
+            error={errors.phone}
+          />
+        </div>
+        <div>
+          <Textarea
+            placeholder="Message*"
+            rows={5}
+            {...register("message")}
+            error={errors.message}
+          />
+        </div>
       </fieldset>
+      <Button type="submit" className="flex mt-4" responsive disabled={isLoading}>
+        {isLoading ? <SpinnerSVG className="animate-spin text-2xl" /> : "Send"}
+      </Button>
     </form>
   )
 }

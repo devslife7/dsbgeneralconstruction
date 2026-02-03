@@ -1,6 +1,5 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import { useFormStatus } from "react-dom"
 import { FieldError } from "react-hook-form"
 
 export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -13,14 +12,14 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       <>
         <textarea
           className={cn(
-            "flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
+            "flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background placeholder:text-muted-foreground placeholder:opacity-60 placeholder:transition-opacity placeholder:duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:placeholder:opacity-40 disabled:cursor-not-allowed disabled:opacity-50 resize-y",
             className,
-            { "border-destructive": error }
+            { "border-destructive focus-visible:ring-destructive": error }
           )}
           ref={ref}
           {...props}
         />
-        {error && <span className="text-sm text-destructive">{error.message}</span>}
+        {error && <span className="mt-1 block text-sm text-destructive">{error.message}</span>}
       </>
     )
   }
