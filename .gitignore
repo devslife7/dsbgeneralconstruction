@@ -40,3 +40,6 @@ next-env.d.ts
 
 # playground
 playground.js
+
+# assets
+_assets

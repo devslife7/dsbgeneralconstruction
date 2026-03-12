@@ -20,7 +20,10 @@ const titillium = Titillium_Web({
 
 export const metadata: Metadata = {
   title: "dsbgeneralconstruction",
-  description: "Home improvement contractor"
+  description: "Home improvement contractor",
+  icons: {
+    icon: "/icons/mainLogo.png",
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
